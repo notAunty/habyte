@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-const Color primary = Color(0xFFa167ff);
-const Color accent = Color(0xFFa167ff);
-const Color lightAccent = Color(0xFFfec28f);
+const Color primary = Color(0xFF506CA4);
+const Color accent = Color(0xFF506CA4);
+const Color lightAccent = Color(0xFF506CA4);
 
-const Color bgDark = Color(0xFFa167ff);
+const Color bgDark = Color(0xFF000000);
 const Color bgLight = Color(0xFFF0F0F0);
 
-const Color darkSurface = Color(0xFFcbabff);
-const Color lightSurface = Color(0xFFFDFDFD);
+const Color darkSurface = Color(0xFF111111);
+const Color lightSurface = Color(0xFFFFFFFF);
 
 
 final lightTheme = ThemeData(
@@ -26,6 +26,12 @@ final lightTheme = ThemeData(
   splashColor: Colors.transparent,
   iconTheme: const IconThemeData(color: bgDark),
   buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.accent),
+  snackBarTheme: SnackBarThemeData(
+    backgroundColor: bgDark,
+    contentTextStyle: const TextStyle().copyWith(
+      color: lightSurface,
+    ),
+  ),
   textTheme: TextTheme(
     button: const TextStyle(color: bgDark),
     headline6: TextStyle(
@@ -86,6 +92,12 @@ final darkTheme = ThemeData(
     border: OutlineInputBorder(),
     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 1.5,),),
     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+  ),
+  snackBarTheme: SnackBarThemeData(
+    backgroundColor: lightSurface,
+    contentTextStyle: const TextStyle().copyWith(
+      color: bgDark,
+    ),
   ),
   textTheme: const TextTheme(
     button: TextStyle(color: bgLight),
