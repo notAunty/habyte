@@ -15,7 +15,19 @@ final lightTheme = ThemeData(
   canvasColor: WHITE_01,
   splashColor: Colors.transparent,
   iconTheme: const IconThemeData(color: GREY_01),
-  buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.accent),
+  buttonTheme: const ButtonThemeData(
+    buttonColor: BLUE_02,
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      elevation: 0,
+      primary: BLUE_02,
+      onPrimary: WHITE_01,
+      textStyle: const TextStyle().copyWith(
+        fontWeight: FontWeight.w400,
+      ),
+    ),
+  ),
   snackBarTheme: SnackBarThemeData(
     backgroundColor: BLACK_02,
     contentTextStyle: const TextStyle().copyWith(
@@ -123,7 +135,7 @@ final lightTheme = ThemeData(
   colorScheme: ColorScheme.fromSwatch().copyWith(
     primary: BLUE_01,
     secondary: BLUE_02,
-    secondaryVariant: RED_02,  
+    secondaryVariant: RED_02,
     background: WHITE_02,
     surface: WHITE_01,
     onBackground: BLACK_01,
@@ -149,10 +161,27 @@ final darkTheme = ThemeData(
   splashColor: Colors.transparent,
   disabledColor: GREY_02,
   iconTheme: const IconThemeData(color: WHITE_02),
-  buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.accent),
+  buttonTheme: const ButtonThemeData(
+    buttonColor: BLUE_02,
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      elevation: 0,
+      onPrimary: WHITE_01,
+      primary: BLUE_02,
+      textStyle: const TextStyle().copyWith(
+        fontWeight: FontWeight.w400,
+      ),
+    ),
+  ),
   inputDecorationTheme: const InputDecorationTheme(
     border: OutlineInputBorder(),
-    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 1.5,),),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 1.5,
+      ),
+    ),
     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
   ),
   snackBarTheme: SnackBarThemeData(

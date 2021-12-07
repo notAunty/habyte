@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habyte/utils/theme_mode.dart';
+import 'package:habyte/views/pages/onboarding/onboarding_flow.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +42,8 @@ class MyApp extends StatelessWidget {
                   context.read<Box>().get(BOX_SETTINGS_THEME, defaultValue: ""),
                 ),
                 scaffoldMessengerKey: context.read<GlobalScaffold>().key,
-                home: const MainLayout(),
+                home: OnboardingnFlow(),
+                // home: const MainLayout(),
               );
             });
       }),
