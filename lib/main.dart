@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:habyte/utils/theme_mode.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
