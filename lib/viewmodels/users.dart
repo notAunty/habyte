@@ -7,6 +7,18 @@ class User {
 
   UserModel? currentUser;
 
-  void setCurrentUser(Map<String, String> userJson) =>
+  // create user use same here
+  void setCurrentUser(Map<String, dynamic> userJson) =>
       currentUser = UserModel.fromJson(userJson);
+
+  void updateCurrentUser(Map<String, dynamic> newUserJson) =>
+      currentUser = UserModel.fromJson(newUserJson);
+
+  void minusScore(int numOfScore) {
+    if (currentUser!.scores >= numOfScore) {
+      currentUser!.scores -= numOfScore;
+    } else {
+      currentUser!.scores = 0;
+    }
+  }
 }
