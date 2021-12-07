@@ -4,8 +4,8 @@ class UserModel {
   late final String about;
   late final String phoneNumber;
   late final String emailAddress;
-  late final int point;
-  late final int score;
+  late final int points;
+  late final int scores;
 
   UserModel.fromJson(Map<String, dynamic> json)
       : firstName = json['firstName'],
@@ -13,8 +13,8 @@ class UserModel {
         about = json['about'],
         phoneNumber = json['phoneNumber'],
         emailAddress = json['emailAddress'],
-        point = json['point'],
-        score = json['score'];
+        points = json['points'],
+        scores = json['scores'];
 
   Map<String, dynamic> toMap() => {
         "firstName": firstName,
@@ -22,7 +22,7 @@ class UserModel {
         "about": about,
         "phoneNumber": phoneNumber,
         "emailAddress": emailAddress,
-        "point": point,
-        "score": score
+        "points": points,
+        "scores": scores
       };
 }
