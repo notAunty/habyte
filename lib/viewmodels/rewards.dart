@@ -5,35 +5,44 @@ class Rewards {
   factory Rewards.getInstance() => _rewards;
   Rewards._internal();
 
-  List<RewardModel> currentRewards = [];
+  final List<RewardModel> _currentRewards = [];
 
   void setCurrentRewards(List<Map<String, String>> rewardJsonList) {
     for (Map<String, String> rewardJson in rewardJsonList) {
-      currentRewards.add(RewardModel.fromJson(rewardJson));
+      _currentRewards.add(RewardModel.fromJson(rewardJson));
     }
   }
 
-  void toListOfMap() {
+  List<Map<String, String>> toListOfMap() {
     List<Map<String, String>> rewardsInListOfMap = [];
-    for (RewardModel rewardModel in currentRewards) {
+    for (RewardModel rewardModel in _currentRewards) {
       rewardsInListOfMap.add(rewardModel.toMap());
     }
+    return rewardsInListOfMap;
   }
 
-  void createReward(RewardModel rewardModel) => currentRewards.add(rewardModel);
+  //// CRUD
+  // C
+  void createReward(RewardModel rewardModel) =>
+      _currentRewards.add(rewardModel);
 
-  void retrieveReward(String id) =>
-      currentRewards.where((rewardModel) => rewardModel.id == id);
+  // R
+  List<RewardModel> retrieveAllRewards() => _currentRewards;
 
+  // r
+  // Error Handling need to do for this, either do here or do in main code
+  RewardModel retrieveRewardById(String id) =>
+      _currentRewards.where((rewardModel) => rewardModel.id == id).toList()[0];
+
+  // U
   void updateReward(String id, RewardModel updatedRewardModel) {
     int index =
-        currentRewards.indexWhere((rewardModel) => rewardModel.id == id);
-    currentRewards[index] = updatedRewardModel;
+        _currentRewards.indexWhere((rewardModel) => rewardModel.id == id);
+    _currentRewards[index] = updatedRewardModel;
   }
 
-  void deleteReward(String id) {
-    int index =
-        currentRewards.indexWhere((rewardModel) => rewardModel.id == id);
-    currentRewards.removeAt(index);
-  }
+  // D
+  void deleteReward(String id) =>
+      _currentRewards.removeWhere((rewardModel) => rewardModel.id == id);
+  ////
 }
