@@ -4,3 +4,4 @@
 // Hive Box
 const BOX_NAME = 'default';
 const BOX_SETTINGS_THEME = 'settings-theme';
+const BOX_USER = 'user';
