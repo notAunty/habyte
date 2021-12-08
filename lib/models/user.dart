@@ -1,27 +1,21 @@
 class UserModel {
-  late final String firstName;
-  late final String lastName;
-  late final String about;
-  late final String phoneNumber;
-  late final String emailAddress;
-  late final int points;
-  late final int scores;
+  late String name;
+  late String? about;
+  late String? profilePicPath;
+  late int points;
+  late int scores;
 
   UserModel.fromJson(Map<String, dynamic> json)
-      : firstName = json['firstName'],
-        lastName = json['lastName'],
+      : name = json['name'],
         about = json['about'],
-        phoneNumber = json['phoneNumber'],
-        emailAddress = json['emailAddress'],
+        profilePicPath = json['profilePicPath'],
         points = json['points'],
         scores = json['scores'];
 
   Map<String, dynamic> toMap() => {
-        "firstName": firstName,
-        "lastName": lastName,
+        "name": name,
         "about": about,
-        "phoneNumber": phoneNumber,
-        "emailAddress": emailAddress,
+        "profilePicPath": profilePicPath,
         "points": points,
         "scores": scores
       };
