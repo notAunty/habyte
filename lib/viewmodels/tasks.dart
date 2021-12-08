@@ -1,4 +1,6 @@
+import 'package:habyte/models/entry.dart';
 import 'package:habyte/models/task.dart';
+import 'package:habyte/viewmodels/entries.dart';
 import 'package:habyte/viewmodels/general.dart';
 import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/constants.dart';
@@ -59,15 +61,20 @@ class Tasks {
   ////
 
   void checkSkippedTasks() {
-    User currentUser = User.getInstance();
+    User _user = User.getInstance();
+    Entries _entries = Entries.getInstance();
 
+    int totalMarksToBeDeducted = 0;
     for (TaskModel taskModel in _currentTasks) {
+      EntryModel latestEntry = _entries.getLatestEntryByTaskId(taskModel.id);
       int currentTaskSkippedDays =
-          _daysBetween(taskModel.lastCompleteDate, DateTime.now());
+          _daysBetween(latestEntry.completedDate, DateTime.now());
       if (currentTaskSkippedDays > 0) {
-        currentUser.minusScore(SKIPPED_MARKS_DEDUCTED); // amount to be fixed
+        totalMarksToBeDeducted += SKIPPED_MARKS_DEDUCTED; // amount to be fixed
       }
     }
+
+    _user.minusScore(totalMarksToBeDeducted);
   }
 
   int _daysBetween(DateTime from, DateTime to) {
