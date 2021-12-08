@@ -21,8 +21,7 @@ class TaskModelAdapter extends TypeAdapter<TaskModel> {
       ..name = fields[1] as String
       ..points = fields[2] as int
       ..startDate = fields[3] as DateTime
-      ..endDate = fields[4] as DateTime?
-      ..lastCompleteDate = fields[5] as DateTime;
+      ..endDate = fields[4] as DateTime?;
   }
 
   @override
@@ -38,9 +37,7 @@ class TaskModelAdapter extends TypeAdapter<TaskModel> {
       ..writeByte(3)
       ..write(obj.startDate)
       ..writeByte(4)
-      ..write(obj.endDate)
-      ..writeByte(5)
-      ..write(obj.lastCompleteDate);
+      ..write(obj.endDate);
   }
 
   @override

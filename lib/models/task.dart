@@ -20,25 +20,19 @@ class TaskModel {
   @HiveField(4)
   late final DateTime? endDate;
 
-  // so that we can track how many days left behind to deduct score
-  @HiveField(5)
-  late final DateTime lastCompleteDate;
-
   TaskModel();
 
   TaskModel.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         points = json['points'],
         startDate = json['startDate'],
-        endDate = json['endDate'],
-        lastCompleteDate = json['lastCompleteDate'];
+        endDate = json['endDate'];
 
   Map<String, dynamic> toMap() => {
         "id": id,
         "name": name,
         "points": points,
         "startDate": startDate,
-        "endDate": endDate,
-        "lastCompleteDate": lastCompleteDate
+        "endDate": endDate
       };
 }
