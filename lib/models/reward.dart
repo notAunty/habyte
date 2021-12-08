@@ -17,8 +17,7 @@ class RewardModel {
   RewardModel();
 
   RewardModel.fromJson(Map<String, String> json)
-      : id = json['id']!,
-        name = json['name']!,
+      : name = json['name']!,
         points = json['points']!;
 
   Map<String, String> toMap() => {"id": id, "name": name, "points": points};

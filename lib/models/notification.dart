@@ -17,8 +17,7 @@ class NotificationModel {
   NotificationModel();
 
   NotificationModel.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        taskId = json['taskId'],
+      : taskId = json['taskId'],
         notificationTime = json['notificationTime'];
 
   Map<String, dynamic> toMap() =>

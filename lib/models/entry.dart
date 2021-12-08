@@ -17,8 +17,7 @@ class EntryModel {
   EntryModel();
 
   EntryModel.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        taskId = json['taskId'],
+      : taskId = json['taskId'],
         completedDate = json['completedDate'];
 
   Map<String, dynamic> toMap() =>

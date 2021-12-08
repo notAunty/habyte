@@ -27,8 +27,7 @@ class TaskModel {
   TaskModel();
 
   TaskModel.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json['name'],
+      : name = json['name'],
         points = json['points'],
         startDate = json['startDate'],
         endDate = json['endDate'],
