@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/pages/main_layout.dart';
+import 'package:habyte/views/pages/onboarding/registration_flow.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingnFlow extends StatefulWidget {
@@ -27,7 +28,7 @@ class _OnboardingnFlowState extends State<OnboardingnFlow> {
   void previous() => animateScroll(_currentPage.round() - 1);
   void done() => Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainLayout()),
+        MaterialPageRoute(builder: (context) => RegistationFlow()),
       );
   Future<void> animateScroll(int page) async {
     await _pageController.animateToPage(
@@ -191,7 +192,7 @@ class OnboardingnPage3 extends StatelessWidget {
               Text(
                 'A journey of a thousand miles begins with a single step. Are you ready to kickstart your journey to become better?',
                 style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                      height: 1.5,
+                      height: 1.25,
                       fontWeight: FontWeight.w200,
                     ),
               ),
