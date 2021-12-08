@@ -53,6 +53,7 @@ class _RegistationFlowState extends State<RegistationFlow> {
         });
       }
     }
+    FocusScope.of(context).unfocus();
     animateScroll(toPage);
   }
 
@@ -245,7 +246,7 @@ class RegistationPage3 extends StatelessWidget {
                 ),
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          Image.asset('assets/onboarding/3.png'),
+          Image.asset('assets/registration/3.png'),
         ],
       ),
     );

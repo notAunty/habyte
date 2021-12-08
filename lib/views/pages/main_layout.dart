@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+
 import 'package:habyte/views/pages/dashboard/_dashboard.dart';
 import 'package:habyte/views/pages/profile/_profile.dart';
 import 'package:habyte/views/pages/rewards/_rewards.dart';
@@ -15,22 +17,22 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
-  final List<BottomNavigationBarItem> _bottomNavItems = [
-    const BottomNavigationBarItem(
-      label: 'Dashboard',
-      icon: Icon(FeatherIcons.home),
+  final List<GButton> _bottomNavItems = [
+    const GButton(
+      text: 'Dashboard',
+      icon: FeatherIcons.home,
     ),
-    const BottomNavigationBarItem(
-      label: 'Tasks',
-      icon: Icon(FeatherIcons.checkCircle),
+    const GButton(
+      text: 'Tasks',
+      icon: FeatherIcons.checkCircle,
     ),
-    const BottomNavigationBarItem(
-      label: 'Rewards',
-      icon: Icon(FeatherIcons.award),
+    const GButton(
+      text: 'Rewards',
+      icon: FeatherIcons.award,
     ),
-    const BottomNavigationBarItem(
-      label: 'Profile',
-      icon: Icon(FeatherIcons.user),
+    const GButton(
+      text: 'Profile',
+      icon: FeatherIcons.user,
     ),
   ];
   final List<Widget> _pages = [
@@ -43,15 +45,27 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-        items: _bottomNavItems,
-        currentIndex: _selectedIndex,
-        onTap: (newIndex) => setState(() {
-          _selectedIndex = newIndex;
-        }),
+      bottomNavigationBar: Container(
+        color: Theme.of(context).colorScheme.surface,
+        padding: const EdgeInsets.all(8),
+        child: GNav(
+          gap: 4,
+          haptic: true,
+          tabBorderRadius: 99,
+          duration: Duration(milliseconds: 200),
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          activeColor: Theme.of(context).colorScheme.secondary,
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+          tabActiveBorder: Border.all(
+            width: 1,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+          tabs: _bottomNavItems,
+          selectedIndex: _selectedIndex,
+          onTabChange: (newIndex) => setState(() {
+            _selectedIndex = newIndex;
+          }),
+        ),
       ),
       body: AnimatedIndexedStack(index: _selectedIndex, children: _pages),
     );
