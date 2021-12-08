@@ -8,9 +8,10 @@ class ProfilePictureUpdate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      mini: true,
       heroTag: 'edit-profile-picture',
       backgroundColor: Colors.white,
-      child: const Icon(FeatherIcons.edit2),
+      child: const Icon(FeatherIcons.camera, size: 20,),
       onPressed: () {},
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  CustomTextField({
+  const CustomTextField({
     this.alwaysValidate = false,
     this.isInt = false,
     this.isDone = false,
@@ -55,20 +55,21 @@ class CustomTextField extends StatelessWidget {
 
       validator: (String? str) {
         try {
-          if (isRequired && (str == null || str.isEmpty))
+          if (isRequired && (str == null || str.isEmpty)) {
             return '* This field is required.';
-          else if (isInt && ((int.tryParse(str!) == null) || str.contains('.')))
+          } else if (isInt && ((int.tryParse(str!) == null) || str.contains('.'))) {
             return 'Must be an integer.';
-          else if (isNumeric && double.tryParse(str!) == null)
+          } else if (isNumeric && double.tryParse(str!) == null) {
             return 'Must be a number.';
-          else if (isPositive && double.parse(str!) < 0)
+          } else if (isPositive && double.parse(str!) < 0) {
             return 'Must be a positive number.';
-          else if (divisibleBy != -1 && (double.parse(str!) % divisibleBy != 0))
+          } else if (divisibleBy != -1 && (double.parse(str!) % divisibleBy != 0)) {
             return 'Must be divisible by $divisibleBy.';
-          else if (maxWords > 0 && str!.split(RegExp(r'\s')).length > maxWords)
+          } else if (maxWords > 0 && str!.split(RegExp(r'\s')).length > maxWords) {
             return 'Text length is greater than $maxWords words.';
-          else
+          } else {
             return null;
+          }
         } catch (err) {
           return null;
         }
@@ -77,7 +78,7 @@ class CustomTextField extends StatelessWidget {
       keyboardType: isInt
           ? TextInputType.number
           : (isNumeric
-              ? TextInputType.numberWithOptions(decimal: true)
+              ? const TextInputType.numberWithOptions(decimal: true)
               : (isMultiline ? TextInputType.multiline : TextInputType.text)),
       textInputAction: isDone
           ? TextInputAction.done

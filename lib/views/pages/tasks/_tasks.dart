@@ -7,7 +7,7 @@ class TasksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(child: Text('Tasks'),),
+      child: const Center(child: Text('Tasks'),),
     );
   }
 }

@@ -9,7 +9,7 @@ import 'package:habyte/views/widgets/text_fields.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class RegistationFlow extends StatefulWidget {
-  RegistationFlow({Key? key}) : super(key: key);
+  const RegistationFlow({Key? key}) : super(key: key);
 
   @override
   State<RegistationFlow> createState() => _RegistationFlowState();
@@ -73,8 +73,8 @@ class _RegistationFlowState extends State<RegistationFlow> {
     formKeys = [GlobalKey<FormState>()];
     registrationPages = [
       RegistationPage1(formKey: formKeys[0]),
-      RegistationPage2(),
-      RegistationPage3(),
+      const RegistationPage2(),
+      const RegistationPage3(),
     ];
     _pageController = PageController();
   }
@@ -92,7 +92,7 @@ class _RegistationFlowState extends State<RegistationFlow> {
                   controller: _pageController,
                   children: registrationPages,
                   scrollDirection: Axis.horizontal,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                 ),
               ),
             ),
@@ -159,7 +159,7 @@ class RegistationPage1 extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               CustomTextFieldLabel(
                 label: 'Name',
                 child: CustomTextField(
@@ -195,7 +195,7 @@ class RegistationPage2 extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             'Would you like to add a picture of yours so that we can know you better?',
             style: Theme.of(context).textTheme.subtitle1!.copyWith(
@@ -237,7 +237,7 @@ class RegistationPage3 extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             'You can start organizing your goals in the tasks page.',
             style: Theme.of(context).textTheme.subtitle1!.copyWith(

@@ -52,10 +52,10 @@ class _MainLayoutState extends State<MainLayout> {
           gap: 4,
           haptic: true,
           tabBorderRadius: 99,
-          duration: Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 200),
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           activeColor: Theme.of(context).colorScheme.secondary,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
           tabActiveBorder: Border.all(
             width: 1,
             color: Theme.of(context).colorScheme.secondary,

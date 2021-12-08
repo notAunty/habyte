@@ -7,7 +7,7 @@ class RewardsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(child: Text('Rewards'),),
+      child: const Center(child: Text('Rewards'),),
     );
   }
 }

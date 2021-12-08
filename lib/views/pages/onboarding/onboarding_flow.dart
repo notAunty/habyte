@@ -7,7 +7,7 @@ import 'package:habyte/views/pages/onboarding/registration_flow.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingnFlow extends StatefulWidget {
-  OnboardingnFlow({Key? key}) : super(key: key);
+  const OnboardingnFlow({Key? key}) : super(key: key);
 
   @override
   State<OnboardingnFlow> createState() => _OnboardingnFlowState();
@@ -19,9 +19,9 @@ class _OnboardingnFlowState extends State<OnboardingnFlow> {
   bool _isLastPage = false;
 
   final List<Widget> onboardingPages = [
-    OnboardingnPage1(),
-    OnboardingnPage2(),
-    OnboardingnPage3(),
+    const OnboardingnPage1(),
+    const OnboardingnPage2(),
+    const OnboardingnPage3(),
   ];
 
   void next() => animateScroll(_currentPage.round() + 1);
@@ -80,7 +80,7 @@ class _OnboardingnFlowState extends State<OnboardingnFlow> {
                   children: onboardingPages,
                   scrollDirection: Axis.horizontal,
                   onPageChanged: onPageChanged,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                 ),
               ),
             ),
