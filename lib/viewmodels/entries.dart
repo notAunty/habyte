@@ -59,4 +59,7 @@ class Entries {
     _general.deleteBoxItem(boxType, removedId);
   }
   ////
+
+  EntryModel getLatestEntryByTaskId(String taskId) =>
+      _currentEntries.lastWhere((entryModel) => entryModel.taskId == taskId);
 }
