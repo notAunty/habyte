@@ -1,140 +1,303 @@
 import 'package:flutter/material.dart';
-
-const Color primary = Color(0xFF506CA4);
-const Color accent = Color(0xFF506CA4);
-const Color lightAccent = Color(0xFF506CA4);
-
-const Color bgDark = Color(0xFF000000);
-const Color bgLight = Color(0xFFF0F0F0);
-
-const Color darkSurface = Color(0xFF111111);
-const Color lightSurface = Color(0xFFFFFFFF);
-
+import 'package:habyte/views/constant/colors.dart';
 
 final lightTheme = ThemeData(
-  scaffoldBackgroundColor: bgLight,
+  scaffoldBackgroundColor: WHITE_02,
   appBarTheme: const AppBarTheme(
-    color: bgLight,
+    color: WHITE_02,
     elevation: 0,
   ),
-  disabledColor: const Color(0xFFd0d0d1),
+  disabledColor: GREY_02,
   bottomAppBarTheme: const BottomAppBarTheme(
-    color: lightSurface,
+    color: WHITE_01,
     elevation: 2.0,
   ),
-  canvasColor: lightSurface,
+  canvasColor: WHITE_01,
   splashColor: Colors.transparent,
-  iconTheme: const IconThemeData(color: bgDark),
-  buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.accent),
-  snackBarTheme: SnackBarThemeData(
-    backgroundColor: bgDark,
-    contentTextStyle: const TextStyle().copyWith(
-      color: lightSurface,
+  iconTheme: const IconThemeData(color: GREY_01),
+  buttonTheme: const ButtonThemeData(
+    buttonColor: BLUE_02,
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      elevation: 0,
+      primary: BLUE_02,
+      onPrimary: WHITE_01,
+      textStyle: const TextStyle().copyWith(
+        fontWeight: FontWeight.w400,
+      ),
     ),
   ),
-  textTheme: TextTheme(
-    button: const TextStyle(color: bgDark),
-    headline6: TextStyle(
-      fontSize: 32,
-      fontFamily: "Cabin",
-      fontWeight: FontWeight.w700,
-      color: bgDark.withOpacity(0.8),
+  snackBarTheme: SnackBarThemeData(
+    backgroundColor: BLACK_02,
+    contentTextStyle: const TextStyle().copyWith(
+      color: WHITE_01,
     ),
-    headline5: TextStyle(
-      fontSize: 28,
-      fontFamily: "Cabin",
-      fontWeight: FontWeight.w500,
-      color: bgDark.withOpacity(0.8),
+  ),
+  textTheme: const TextTheme(
+    headline1: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 40,
+      color: BLACK_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: -1.5,
+    ),
+    headline2: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 35,
+      color: BLACK_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: -0.5,
+    ),
+    headline3: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 30,
+      color: BLACK_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: -0.75
     ),
     headline4: TextStyle(
-      fontSize: 24,
-      fontFamily: "Cabin",
-      fontWeight: FontWeight.w500,
-      color: bgDark.withOpacity(0.8),
+      fontFamily: "Poppins",
+      fontSize: 25,
+      color: BLACK_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: 0.25,
+    ),
+    headline5: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 22,
+      color: BLACK_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: -0.45
+    ),
+    headline6: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 19,
+      color: BLACK_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: 0.15,
     ),
     subtitle1: TextStyle(
-      color: bgDark.withOpacity(0.8),
+      fontFamily: "Poppins",
+      fontSize: 14,
+      color: BLACK_02,
+      fontWeight: FontWeight.w400,
+      height: 1.15,
+      // letterSpacing: 0
     ),
-    bodyText1: const TextStyle(
-      color: bgDark,
+    subtitle2: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 12,
+      color: BLACK_02,
+      height: 1.15,
+      // fontWeight: FontWeight.w600,
+      // letterSpacing: 0.1
+    ),
+    bodyText1: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 16,
+      color: BLACK_01,
+      fontWeight: FontWeight.w400,
+      height: 1.15,
+      // letterSpacing: 0.01,
+    ),
+    bodyText2: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 14,
+      color: BLACK_01,
+      height: 1.15,
+    ),
+    button: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 16,
+      color: BLACK_01,
+      fontWeight: FontWeight.w500,
+      height: 1.15,
+      // letterSpacing: 0.5,
+    ),
+    caption: TextStyle(
+      fontFamily: "Poppins",
+      color: BLACK_01,
+      height: 1.15,
+    ),
+    overline: TextStyle(
+      fontFamily: "Poppins",
+      color: BLACK_01,
+      height: 1.15,
     ),
   ),
   colorScheme: ColorScheme.fromSwatch().copyWith(
-    primary: primary,
-    secondary: lightAccent,
-    secondaryVariant: accent,  
-    surface: lightSurface,
-    onBackground: bgDark,
-    onError: bgDark,
-    onPrimary: bgDark,
-    onSecondary: bgDark,
-    onSurface: bgDark,
+    primary: BLUE_01,
+    secondary: BLUE_02,
+    secondaryVariant: RED_02,
+    background: WHITE_02,
+    surface: WHITE_01,
+    onBackground: BLACK_01,
+    onError: BLACK_01,
+    onPrimary: BLACK_01,
+    onSecondary: BLACK_01,
+    onSurface: BLACK_01,
   ),
 );
 
 final darkTheme = ThemeData(
-  backgroundColor: bgDark,
-  scaffoldBackgroundColor: bgDark,
+  backgroundColor: BLACK_02,
+  scaffoldBackgroundColor: BLACK_02,
   appBarTheme: const AppBarTheme(
-    color: bgDark,
+    color: BLACK_02,
     elevation: 0,
   ),
   bottomAppBarTheme: const BottomAppBarTheme(
-    color: bgDark,
+    color: BLACK_02,
     elevation: 0.0,
   ),
-  canvasColor: darkSurface,
+  canvasColor: BLACK_03,
   splashColor: Colors.transparent,
-  disabledColor: const Color(0xFF29282c),
-  iconTheme: const IconThemeData(color: bgLight),
-  buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.accent),
+  disabledColor: GREY_02,
+  iconTheme: const IconThemeData(color: WHITE_02),
+  buttonTheme: const ButtonThemeData(
+    buttonColor: BLUE_02,
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      elevation: 0,
+      onPrimary: WHITE_01,
+      primary: BLUE_02,
+      textStyle: const TextStyle().copyWith(
+        fontWeight: FontWeight.w400,
+      ),
+    ),
+  ),
   inputDecorationTheme: const InputDecorationTheme(
     border: OutlineInputBorder(),
-    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 1.5,),),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 1.5,
+      ),
+    ),
     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
   ),
   snackBarTheme: SnackBarThemeData(
-    backgroundColor: lightSurface,
+    backgroundColor: WHITE_01,
     contentTextStyle: const TextStyle().copyWith(
-      color: bgDark,
+      color: BLACK_02,
     ),
   ),
   textTheme: const TextTheme(
-    button: TextStyle(color: bgLight),
-    headline6: TextStyle(
-      fontSize: 32,
-      fontFamily: "Cabin",
-      fontWeight: FontWeight.w700,
-      color: Colors.white,
+    headline1: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 40,
+      color: WHITE_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: -1.5,
     ),
-    headline5: TextStyle(
-      fontSize: 28,
-      fontFamily: "Cabin",
-      fontWeight: FontWeight.w500,
-      color: bgLight,
+    headline2: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 35,
+      color: WHITE_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: -0.5,
+    ),
+    headline3: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 30,
+      color: WHITE_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: -0.75
     ),
     headline4: TextStyle(
-      fontSize: 24,
-      fontFamily: "Cabin",
-      fontWeight: FontWeight.w500,
-      color: bgLight,
+      fontFamily: "Poppins",
+      fontSize: 25,
+      color: WHITE_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: 0.25,
+    ),
+    headline5: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 22,
+      color: WHITE_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: -0.45
+    ),
+    headline6: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 19,
+      color: WHITE_01,
+      fontWeight: FontWeight.w600,
+      height: 1.15,
+      // letterSpacing: 0.15,
     ),
     subtitle1: TextStyle(
-      color: bgLight,
+      fontFamily: "Poppins",
+      fontSize: 14,
+      color: BLACK_02,
+      fontWeight: FontWeight.w400,
+      height: 1.15,
+      // letterSpacing: 0
+    ),
+    subtitle2: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 12,
+      color: BLACK_02,
+      height: 1.15,
+      // fontWeight: FontWeight.w600,
+      // letterSpacing: 0.1
     ),
     bodyText1: TextStyle(
-      color: bgLight,
+      fontFamily: "Poppins",
+      fontSize: 16,
+      color: WHITE_01,
+      fontWeight: FontWeight.w400,
+      height: 1.15,
+      // letterSpacing: 0.01,
+    ),
+    bodyText2: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 14,
+      color: WHITE_01,
+      height: 1.15,
+    ),
+    button: TextStyle(
+      fontFamily: "Poppins",
+      fontSize: 16,
+      color: WHITE_01,
+      fontWeight: FontWeight.w500,
+      height: 1.15,
+      // letterSpacing: 0.5,
+    ),
+    caption: TextStyle(
+      fontFamily: "Poppins",
+      color: WHITE_01,
+      height: 1.15,
+    ),
+    overline: TextStyle(
+      fontFamily: "Poppins",
+      color: WHITE_01,
+      height: 1.15,
     ),
   ),
   colorScheme: ColorScheme.fromSwatch().copyWith(
-    primary: primary,
-    secondary: accent,
-    secondaryVariant: lightAccent,
-    surface: darkSurface,
-    onBackground: lightSurface,
-    onError: lightSurface,
-    onPrimary: lightSurface,
-    onSecondary: lightSurface,
-    onSurface: lightSurface,
+    primary: BLUE_01,
+    secondary: BLUE_02,
+    secondaryVariant: RED_02,
+    background: BLACK_02,
+    surface: BLACK_03,
+    onBackground: WHITE_01,
+    onError: WHITE_01,
+    onPrimary: WHITE_01,
+    onSecondary: WHITE_01,
+    onSurface: WHITE_01,
   ),
 );
