@@ -1,20 +1,24 @@
 import 'package:habyte/models/task.dart';
-import 'package:habyte/viewmodels/users.dart';
+import 'package:habyte/viewmodels/general.dart';
+import 'package:habyte/viewmodels/user.dart';
+import 'package:habyte/views/constant/constants.dart';
 
 class Tasks {
   static final Tasks _tasks = Tasks._internal();
   factory Tasks.getInstance() => _tasks;
   Tasks._internal();
 
-  final List<TaskModel> _currentTasks = [];
+  BoxType boxType = BoxType.task;
 
-  void setcurrentTasks(List<Map<String, dynamic>> taskJsonList) {
-    for (Map<String, dynamic> taskJson in taskJsonList) {
-      _currentTasks.add(TaskModel.fromJson(taskJson));
-    }
+  final General _general = General.getInstance();
+
+  late final List<TaskModel> _currentTasks;
+
+  void setCurrentTasks(List<TaskModel> taskModelList) {
+    _currentTasks = taskModelList;
   }
 
-  List<Map<String, dynamic>> toListOfMap() {
+  List<Map<String, dynamic>> _toListOfMap() {
     List<Map<String, dynamic>> tasksInListOfMap = [];
     for (TaskModel taskModel in _currentTasks) {
       tasksInListOfMap.add(taskModel.toMap());
@@ -24,25 +28,34 @@ class Tasks {
 
   //// CRUD
   // C
-  void createTask(TaskModel taskModel) => _currentTasks.add(taskModel);
+  void createTask(TaskModel taskModel) {
+    taskModel.id = _general.getBoxItemNewId(boxType);
+    _currentTasks.add(taskModel);
+    _general.addBoxItem(boxType, taskModel.id, taskModel);
+  }
 
   // R
   List<TaskModel> retrieveAllTasks() => _currentTasks;
+  List<Map<String, dynamic>> retrieveAllTasksInListOfMap() => _toListOfMap();
 
   // r
-  // Error Handling need to do for this, either do here or do in main code
   TaskModel retrieveTaskById(String id) =>
-      _currentTasks.where((taskModel) => taskModel.id == id).toList()[0];
+      _currentTasks.singleWhere((taskModel) => taskModel.id == id);
 
   // U
   void updateTask(String id, TaskModel updatedTaskModel) {
     int index = _currentTasks.indexWhere((taskModel) => taskModel.id == id);
+    updatedTaskModel.id = _currentTasks[index].id;
     _currentTasks[index] = updatedTaskModel;
+    _general.updateBoxItem(boxType, updatedTaskModel.id, updatedTaskModel);
   }
 
   // D
-  void deleteTask(String id) =>
-      _currentTasks.removeWhere((taskModel) => taskModel.id == id);
+  void deleteTask(String id) {
+    int index = _currentTasks.indexWhere((taskModel) => taskModel.id == id);
+    String removedId = _currentTasks.removeAt(index).id;
+    _general.deleteBoxItem(boxType, removedId);
+  }
   ////
 
   void checkSkippedTasks() {
@@ -52,7 +65,7 @@ class Tasks {
       int currentTaskSkippedDays =
           _daysBetween(taskModel.lastCompleteDate, DateTime.now());
       if (currentTaskSkippedDays > 0) {
-        currentUser.minusScore(0); // amount to be fixed
+        currentUser.minusScore(SKIPPED_MARKS_DEDUCTED); // amount to be fixed
       }
     }
   }
