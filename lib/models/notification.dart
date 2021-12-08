@@ -11,6 +11,7 @@ class NotificationModel {
   @HiveField(1)
   late final String taskId;
 
+  // daily time
   @HiveField(2)
   late final DateTime notificationTime;
 
