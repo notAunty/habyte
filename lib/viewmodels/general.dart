@@ -2,6 +2,7 @@ import 'package:habyte/models/entry.dart';
 import 'package:habyte/models/notification.dart';
 import 'package:habyte/models/reward.dart';
 import 'package:habyte/models/task.dart';
+// import 'package:habyte/models/user.dart';
 import 'package:habyte/viewmodels/entries.dart';
 import 'package:habyte/viewmodels/notifications.dart';
 import 'package:habyte/viewmodels/rewards.dart';
@@ -30,8 +31,18 @@ class General {
   late Box<EntryModel> _entryBox;
 
   bool retrievePreviousLogin() {
-    Map<String, String>? userJson =
-        Map<String, String>.from(_mainBox.get(BOX_USER) ?? {});
+    // Map<String, dynamic> u = {
+    //   "name": "helloworld",
+    //   "phoneNumber": "01234",
+    //   "emailAddress": "abc@abc.com",
+    //   "points": 0,
+    //   "scores": 0
+    // };
+    // UserModel us = UserModel.fromJson(u);
+    // _mainBox.put(BOX_USER, us.toMap());
+
+    Map<String, dynamic>? userJson =
+        Map<String, dynamic>.from(_mainBox.get(BOX_USER) ?? {});
     if (userJson.isEmpty) return false;
     User.getInstance().setCurrentUser(userJson);
 
