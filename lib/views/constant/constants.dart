@@ -9,3 +9,7 @@ const BOX_TASK = 'task';
 const BOX_REWARD = 'reward';
 const BOX_ENTRY = 'entry';
 const BOX_NOTIFICATION = 'notification';
+
+// Constant Value
+const MODEL_ID_LENGTH = 4;
+const SKIPPED_MARKS_DEDUCTED = 0;
