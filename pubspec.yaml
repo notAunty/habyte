@@ -37,6 +37,9 @@ dependencies:
   flutter_feather_icons: ^2.0.0+1
 
 dev_dependencies:
+  hive_generator: ^1.1.1
+  build_runner: ^2.1.5
+  analyzer: ^2.8.0
   flutter_test:
     sdk: flutter
 
