@@ -43,3 +43,8 @@ const REWARD_POINTS = "points";
 const NOTIFICATION_ID = "id";
 const NOTIFICATION_TASK_ID = "taskId";
 const NOTIFICATION_TIME = "notificationTime";
+
+// EntryModel Keys
+const ENTRY_ID = "id";
+const ENTRY_TASK_ID = "taskId";
+const ENTRY_COMPLETED_DATE = "completedDate";
