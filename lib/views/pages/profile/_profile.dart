@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:habyte/views/constant/padding.dart';
+import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/widgets/profile_picture.dart';
 
 class ProfilePage extends StatelessWidget {

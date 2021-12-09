@@ -28,7 +28,7 @@ class _OnboardingnFlowState extends State<OnboardingnFlow> {
   void previous() => animateScroll(_currentPage.round() - 1);
   void done() => Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => RegistationFlow()),
+        MaterialPageRoute(builder: (context) => const RegistationFlow()),
       );
   Future<void> animateScroll(int page) async {
     await _pageController.animateToPage(

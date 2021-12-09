@@ -13,3 +13,10 @@ const BOX_NOTIFICATION = 'notification';
 // Constant Value
 const MODEL_ID_LENGTH = 4;
 const SKIPPED_MARKS_DEDUCTED = 0;
+
+const MEMBERSHIP_TIER = [
+  'Novice',
+  'Apprentice',
+  'Expert',
+  'Master'
+];
