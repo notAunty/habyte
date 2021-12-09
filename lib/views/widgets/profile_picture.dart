@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:habyte/models/user.dart';
 import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/colors.dart';
+import 'package:habyte/views/constant/constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -52,9 +54,7 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
     await image!.saveTo(filePath);
     image = null;
 
-    setState(() {
-      _user.editProfilePicture(filePath);
-    });
+    setState(() => _user.updateUser({USER_PROFILE_PIC_PATH: filePath}));
   }
 
   @override
@@ -62,6 +62,8 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
     bool editable = widget.editable;
     double radius = widget.radius;
     String initials = widget.initials;
+
+    UserModel? _userModel = _user.retrieveUser();
 
     return Stack(
       alignment: Alignment.center,
@@ -101,12 +103,12 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
                 ),
               ]),
         ),
-        if (_user.currentUser != null)
-          if (_user.currentUser?.profilePicPath != null ||
-              _user.currentUser?.profilePicPath == "")
+        if (_userModel != null)
+          if (_userModel.profilePicPath != null ||
+              _userModel.profilePicPath == "")
             Container(
               child: Image.file(
-                File(_user.currentUser?.profilePicPath ?? ""),
+                File(_userModel.profilePicPath ?? ""),
                 fit: BoxFit.cover,
               ),
               height: (radius - (radius * 0.05)) * 2,
@@ -118,7 +120,7 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
             )
           else
             Text(
-              _user.currentUser!.name[0],
+              _userModel.name[0].toUpperCase(),
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
