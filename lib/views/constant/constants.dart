@@ -2,6 +2,8 @@
 // ignore_for_file: constant_identifier_names
 
 // Hive Box
+import 'package:habyte/models/task.dart';
+
 const BOX_NAME = 'default';
 const BOX_SETTINGS_THEME = 'settings-theme';
 const BOX_USER = 'user';
@@ -26,3 +28,10 @@ const USER_ABOUT = "about";
 const USER_PROFILE_PIC_PATH = "profilePicPath";
 const USER_POINTS = "points";
 const USER_SCORES = "scores";
+
+// TaskModel Keys
+const TASK_ID = "id";
+const TASK_NAME = "name";
+const TASK_POINTS = "points";
+const TASK_START_DATE = "startDate";
+const TASK_END_DATE = "endDate";
