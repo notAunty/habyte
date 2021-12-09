@@ -1,3 +1,4 @@
+import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
 
 part 'hiveAdapter/notification.g.dart';
@@ -18,9 +19,12 @@ class NotificationModel {
   NotificationModel();
 
   NotificationModel.fromJson(Map<String, dynamic> json)
-      : taskId = json['taskId'],
-        notificationTime = json['notificationTime'];
+      : taskId = json[NOTIFICATION_TASKID],
+        notificationTime = json[NOTIFICATION_TIME];
 
-  Map<String, dynamic> toMap() =>
-      {"id": id, "taskId": taskId, "notificationTime": notificationTime};
+  Map<String, dynamic> toMap() => {
+        NOTIFICATION_ID: id,
+        NOTIFICATION_TASKID: taskId,
+        NOTIFICATION_TIME: notificationTime,
+      };
 }
