@@ -20,6 +20,9 @@ class EntryModel {
       : taskId = json['taskId'],
         completedDate = json['completedDate'];
 
-  Map<String, dynamic> toMap() =>
-      {"id": id, "taskId": taskId, "completedDate": completedDate};
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "taskId": taskId,
+        "completedDate": completedDate,
+      };
 }

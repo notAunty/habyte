@@ -41,5 +41,5 @@ const REWARD_POINTS = "points";
 
 // NotificationModel Keys
 const NOTIFICATION_ID = "id";
-const NOTIFICATION_TASKID = "taskId";
+const NOTIFICATION_TASK_ID = "taskId";
 const NOTIFICATION_TIME = "notificationTime";
