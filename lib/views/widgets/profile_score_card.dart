@@ -70,6 +70,7 @@ class ProfileScoreCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
+                        // TODO
                         '55',
                         style: Theme.of(context)
                             .textTheme
@@ -89,6 +90,7 @@ class ProfileScoreCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
+                        // TODO
                         '159',
                         style: Theme.of(context)
                             .textTheme
