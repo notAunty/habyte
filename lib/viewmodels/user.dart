@@ -22,7 +22,7 @@ class User {
   UserModel? _currentUser;
   Map<String, dynamic> tempUserJson = {};
 
-  /// Everytime login, retrievePreviousLogin() in general need to call this
+  /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
   void setCurrentUser(Map<String, dynamic> userJson) =>
       _currentUser = UserModel.fromJson(userJson);
@@ -78,7 +78,7 @@ class User {
   /// Call this function when user click logout.
   /// 
   /// **Remark:** In our case, `logout` == `clear db` as we don't have cloud
-  /// database
+  /// database for multiple user structure
   void deleteUser() {
     _currentUser = null;
     _general.deleteBoxItem(_boxType, _key);
