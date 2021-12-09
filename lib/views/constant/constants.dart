@@ -20,3 +20,9 @@ const MEMBERSHIP_TIER = [
   'Expert',
   'Master'
 ];
+// UserModel Keys
+const USER_NAME = "name";
+const USER_ABOUT = "about";
+const USER_PROFILE_PIC_PATH = "profilePicPath";
+const USER_POINTS = "points";
+const USER_SCORES = "scores";
