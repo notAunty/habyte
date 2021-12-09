@@ -19,7 +19,7 @@ class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
   final List<GButton> _bottomNavItems = [
     const GButton(
-      text: 'Dashboard',
+      text: 'Home',
       icon: FeatherIcons.home,
     ),
     const GButton(
