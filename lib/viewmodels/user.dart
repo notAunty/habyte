@@ -18,8 +18,8 @@ class User {
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.main;
   final String _key = BOX_USER;
-
   UserModel? _currentUser;
+
   Map<String, dynamic> tempUserJson = {};
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
