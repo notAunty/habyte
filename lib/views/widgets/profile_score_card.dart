@@ -5,8 +5,8 @@ import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/widgets/profile_picture.dart';
 
-class DashboardCard extends StatelessWidget {
-  const DashboardCard({Key? key}) : super(key: key);
+class ProfileScoreCard extends StatelessWidget {
+  const ProfileScoreCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
