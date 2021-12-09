@@ -19,10 +19,7 @@ class ProfilePictureUpdate extends StatelessWidget {
       mini: true,
       heroTag: 'edit-profile-picture',
       backgroundColor: Colors.white,
-      child: const Icon(
-        FeatherIcons.camera,
-        size: 20,
-      ),
+      child: const Icon(FeatherIcons.camera, size: 20),
       onPressed: () => pickImage(),
     );
   }
