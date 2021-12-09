@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:habyte/models/entry.dart';
+import 'package:habyte/models/notification.dart';
+import 'package:habyte/models/reward.dart';
+import 'package:habyte/models/task.dart';
 import 'package:habyte/utils/theme_mode.dart';
 import 'package:habyte/views/pages/onboarding/onboarding_flow.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -11,7 +15,18 @@ import 'package:habyte/views/pages/main_layout.dart';
 
 void main() async {
   await Hive.initFlutter();
+
+  Hive.registerAdapter(TaskModelAdapter());
+  Hive.registerAdapter(RewardModelAdapter());
+  Hive.registerAdapter(NotificationModelAdapter());
+  Hive.registerAdapter(EntryModelAdapter());
+
   await Hive.openBox(BOX_NAME);
+  await Hive.openBox<TaskModel>(BOX_TASK);
+  await Hive.openBox<RewardModel>(BOX_REWARD);
+  await Hive.openBox<NotificationModel>(BOX_NOTIFICATION);
+  await Hive.openBox<EntryModel>(BOX_ENTRY);
+  
   runApp(const MyApp());
 }
 
