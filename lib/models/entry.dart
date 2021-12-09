@@ -1,3 +1,4 @@
+import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
 
 part 'hiveAdapter/entry.g.dart';
@@ -17,9 +18,12 @@ class EntryModel {
   EntryModel();
 
   EntryModel.fromJson(Map<String, dynamic> json)
-      : taskId = json['taskId'],
-        completedDate = json['completedDate'];
+      : taskId = json[ENTRY_TASK_ID],
+        completedDate = json[ENTRY_COMPLETED_DATE];
 
-  Map<String, dynamic> toMap() =>
-      {"id": id, "taskId": taskId, "completedDate": completedDate};
+  Map<String, dynamic> toMap() => {
+        ENTRY_ID: id,
+        ENTRY_TASK_ID: taskId,
+        ENTRY_COMPLETED_DATE: completedDate,
+      };
 }

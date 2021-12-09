@@ -1,3 +1,4 @@
+import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
 
 part 'hiveAdapter/reward.g.dart';
@@ -17,8 +18,12 @@ class RewardModel {
   RewardModel();
 
   RewardModel.fromJson(Map<String, String> json)
-      : name = json['name']!,
-        points = json['points']!;
+      : name = json[REWARD_NAME]!,
+        points = json[REWARD_POINTS]!;
 
-  Map<String, String> toMap() => {"id": id, "name": name, "points": points};
+  Map<String, String> toMap() => {
+        REWARD_ID: id,
+        REWARD_NAME: name,
+        REWARD_POINTS: points,
+      };
 }

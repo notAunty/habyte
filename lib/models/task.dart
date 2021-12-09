@@ -1,3 +1,4 @@
+import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
 
 part 'hiveAdapter/task.g.dart';
@@ -23,16 +24,16 @@ class TaskModel {
   TaskModel();
 
   TaskModel.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        points = json['points'],
-        startDate = json['startDate'],
-        endDate = json['endDate'];
+      : name = json[TASK_NAME],
+        points = json[TASK_POINTS],
+        startDate = json[TASK_START_DATE],
+        endDate = json[TASK_END_DATE];
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "name": name,
-        "points": points,
-        "startDate": startDate,
-        "endDate": endDate
+        TASK_ID: id,
+        TASK_NAME: name,
+        TASK_POINTS: points,
+        TASK_START_DATE: startDate,
+        TASK_END_DATE: endDate
       };
 }

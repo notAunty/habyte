@@ -20,3 +20,31 @@ const MEMBERSHIP_TIER = [
   'Expert',
   'Master'
 ];
+// UserModel Keys
+const USER_NAME = "name";
+const USER_ABOUT = "about";
+const USER_PROFILE_PIC_PATH = "profilePicPath";
+const USER_POINTS = "points";
+const USER_SCORES = "scores";
+
+// TaskModel Keys
+const TASK_ID = "id";
+const TASK_NAME = "name";
+const TASK_POINTS = "points";
+const TASK_START_DATE = "startDate";
+const TASK_END_DATE = "endDate";
+
+// RewardModel Keys
+const REWARD_ID = "id";
+const REWARD_NAME = "name";
+const REWARD_POINTS = "points";
+
+// NotificationModel Keys
+const NOTIFICATION_ID = "id";
+const NOTIFICATION_TASK_ID = "taskId";
+const NOTIFICATION_TIME = "notificationTime";
+
+// EntryModel Keys
+const ENTRY_ID = "id";
+const ENTRY_TASK_ID = "taskId";
+const ENTRY_COMPLETED_DATE = "completedDate";
