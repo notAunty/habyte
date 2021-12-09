@@ -6,14 +6,13 @@ import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/widgets/profile_picture.dart';
 
 class DashboardCard extends StatelessWidget {
-  const DashboardCard({Key? key, required this.score}) : super(key: key);
-
-  final int score;
+  const DashboardCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: SIDE_PADDING, vertical: 8),
+      padding:
+          const EdgeInsets.symmetric(horizontal: SIDE_PADDING, vertical: 8),
       child: Container(
         height: 160,
         decoration: BoxDecoration(
@@ -21,93 +20,121 @@ class DashboardCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(BORDER_RADIUS),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              flex: 2,
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(SIDE_PADDING * 0.75, 0, 16, 0),
+                  child: ProfilePictureHolder(radius: 28, initials: 'JD'),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      // TODO
+                      'John Dear',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4!
+                          .copyWith(color: Colors.white),
+                    ),
+                    Opacity(
+                      opacity: 0.7,
+                      child: Text(
+                        // TODO
+                        'Novice',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const Spacer(),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: SIDE_PADDING * 0.75),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        SIDE_PADDING * 0.75, 0, 16, 0),
-                    child: ProfilePictureHolder(radius: 28, initials: 'JD'),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
                       Text(
-                        'John Dear',
+                        '55',
                         style: Theme.of(context)
                             .textTheme
                             .headline4!
                             .copyWith(color: Colors.white),
                       ),
-                      Opacity(
-                        opacity: 0.7,
-                        child: Text(
-                          'Novice',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(color: Colors.white),
-                        ),
+                      const SizedBox(width: 4),
+                      Text(
+                        'pts',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '159',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4!
+                            .copyWith(color: Colors.white),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        'entries',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Colors.white),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: SIDE_PADDING * 0.75),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+            const SizedBox(height: 4,),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: SIDE_PADDING * 0.75),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    height: 12,
+                    child: Row(
                       children: [
+                        Image.asset('assets/logo/white.png'),
+                        const SizedBox(width: 2),
                         Text(
-                          score.toString(),
+                          'Habyte',
                           style: Theme.of(context)
                               .textTheme
-                              .headline4!
-                              .copyWith(color: Colors.white),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          'pts',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
+                              .subtitle2!
                               .copyWith(color: Colors.white),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 28,
-                      child: Row(
-                        children: [
-                          Image.asset('assets/logo/white.png'),
-                          const SizedBox(width: 2),
-                          Text(
-                            'Habyte',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
+            const SizedBox(height: SIDE_PADDING * 0.75,),
           ],
         ),
       ),
