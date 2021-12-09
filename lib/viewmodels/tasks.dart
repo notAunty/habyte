@@ -24,9 +24,8 @@ class Tasks {
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
-  void setCurrentTasks(List<TaskModel> taskModelList) {
-    _currentTasks = taskModelList;
-  }
+  void setCurrentTasks(List<TaskModel> taskModelList) =>
+      _currentTasks = taskModelList;
 
   /// **Create Task** (`C` in CRUD)
   ///
@@ -98,7 +97,7 @@ class Tasks {
     _general.deleteBoxItem(_boxType, removedId);
   }
 
-  /// Private function to convert `List of TaskModel` to `List of Map` 
+  /// Private function to convert `List of TaskModel` to `List of Map`
   List<Map<String, dynamic>> _toListOfMap() {
     List<Map<String, dynamic>> tasksInListOfMap = [];
     for (TaskModel taskModel in _currentTasks) {
