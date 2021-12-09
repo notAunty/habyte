@@ -57,8 +57,7 @@ class MyApp extends StatelessWidget {
                   context.read<Box>().get(BOX_SETTINGS_THEME, defaultValue: ""),
                 ),
                 scaffoldMessengerKey: context.read<GlobalScaffold>().key,
-                home: OnboardingnFlow(),
-                // home: const MainLayout(),
+                home: const MainLayout(),
               );
             });
       }),

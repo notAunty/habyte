@@ -15,3 +15,10 @@ const Color GREY_02 = Color(0xFF909090);
 const Color BLACK_01 = Color(0xFF000000);
 const Color BLACK_02 = Color(0xFF191a30);
 const Color BLACK_03 = Color(0xFF2A2D50);
+
+const List<Color> MEMBERSHIP_COLOR = [
+  GREY_02,
+  BLUE_03,
+  Color(0xFFB25050),
+  BLUE_01,
+];

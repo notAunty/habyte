@@ -76,7 +76,7 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
                 BoxShadow(
                   blurRadius: 2,
                   spreadRadius: 2,
-                  color: GREY_02.withOpacity(0.3),
+                  color: Colors.black.withOpacity(0.2),
                 ),
               ]),
         ),
@@ -96,9 +96,8 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
               borderRadius: BorderRadius.circular(radius),
               boxShadow: [
                 BoxShadow(
-                  blurRadius: 2,
-                  spreadRadius: 2,
-                  color: GREY_02.withOpacity(0.1),
+                  blurRadius: 4,
+                  color: Colors.black.withOpacity(0.2),
                 ),
               ]),
         ),

@@ -35,11 +35,11 @@ class _MainLayoutState extends State<MainLayout> {
       icon: FeatherIcons.user,
     ),
   ];
-  final List<Widget> _pages = [
-    const DashboardPage(),
-    const TasksPage(),
-    const RewardsPage(),
-    const ProfilePage(),
+  final List<Widget> _pages = const [
+    DashboardPage(),
+    TasksPage(),
+    RewardsPage(),
+    ProfilePage(),
   ];
 
   @override
