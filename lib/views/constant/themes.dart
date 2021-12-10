@@ -178,7 +178,7 @@ final darkTheme = ThemeData(
     border: OutlineInputBorder(),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: Colors.white,
+        color: WHITE_01,
         width: 1.5,
       ),
     ),

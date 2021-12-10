@@ -42,7 +42,7 @@ class ProfileScoreCard extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .headline4!
-                          .copyWith(color: Colors.white),
+                          .copyWith(color: WHITE_01),
                     ),
                     Opacity(
                       opacity: 0.7,
@@ -52,7 +52,7 @@ class ProfileScoreCard extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(color: Colors.white),
+                            .copyWith(color: WHITE_01),
                       ),
                     ),
                   ],
@@ -75,7 +75,7 @@ class ProfileScoreCard extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .headline4!
-                            .copyWith(color: Colors.white),
+                            .copyWith(color: WHITE_01),
                       ),
                       const SizedBox(width: 4),
                       Text(
@@ -83,7 +83,7 @@ class ProfileScoreCard extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(color: Colors.white),
+                            .copyWith(color: WHITE_01),
                       ),
                     ],
                   ),
@@ -95,7 +95,7 @@ class ProfileScoreCard extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .headline4!
-                            .copyWith(color: Colors.white),
+                            .copyWith(color: WHITE_01),
                       ),
                       const SizedBox(width: 4),
                       Text(
@@ -103,7 +103,7 @@ class ProfileScoreCard extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(color: Colors.white),
+                            .copyWith(color: WHITE_01),
                       ),
                     ],
                   ),
@@ -128,7 +128,7 @@ class ProfileScoreCard extends StatelessWidget {
                           style: Theme.of(context)
                               .textTheme
                               .subtitle2!
-                              .copyWith(color: Colors.white),
+                              .copyWith(color: WHITE_01),
                         ),
                       ],
                     ),

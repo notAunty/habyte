@@ -20,7 +20,7 @@ class ProfilePictureUpdate extends StatelessWidget {
     return FloatingActionButton(
       mini: true,
       heroTag: 'edit-profile-picture',
-      backgroundColor: Colors.white,
+      backgroundColor: WHITE_01,
       child: const Icon(FeatherIcons.camera, size: 20),
       onPressed: () => pickImage(),
     );
@@ -72,7 +72,7 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
           height: radius * 2,
           width: radius * 2,
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: WHITE_01,
               borderRadius: BorderRadius.circular(radius),
               boxShadow: [
                 BoxShadow(
@@ -122,7 +122,7 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
             Text(
               _userModel.name[0].toUpperCase(),
               style: TextStyle(
-                  color: Colors.white,
+                  color: WHITE_01,
                   fontWeight: FontWeight.w600,
                   fontSize: radius * 0.9),
             )
@@ -130,7 +130,7 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
           Text(
             initials,
             style: TextStyle(
-                color: Colors.white,
+                color: WHITE_01,
                 fontWeight: FontWeight.w600,
                 fontSize: radius * 0.9),
           ),
