@@ -13,7 +13,6 @@ class ProfilePage extends StatelessWidget {
         SizedBox(height: TOP_PADDING, width: double.infinity),
         ProfilePictureHolder(
           radius: 64,
-          initials: 'JD',
           editable: true,
         ),
       ],
