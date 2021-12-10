@@ -38,11 +38,9 @@ class RegistationPage2 extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: ProfilePictureHolder(
-              initials: _userName.length >= 2
-                  ? _userName.substring(0, 2).toUpperCase()
-                  : _userName[0].toUpperCase(),
               editable: true,
               radius: MediaQuery.of(context).size.width * 0.3,
+              isRegistering: true,
             ),
           ),
         ],
