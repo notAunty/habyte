@@ -18,7 +18,7 @@ class RegistationFlow extends StatefulWidget {
 }
 
 class _RegistationFlowState extends State<RegistationFlow> {
-  final User _userVM = User.getInstance();
+  final UserVM _userVM = UserVM.getInstance();
   late PageController _pageController;
   double _currentPage = 0.0;
   bool _isLastPage = false;

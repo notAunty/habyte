@@ -7,7 +7,7 @@ class RegistationPage1 extends StatelessWidget {
   RegistationPage1({Key? key, required this.formKey}) : super(key: key);
 
   final GlobalKey formKey;
-  final User _userVM = User.getInstance();
+  final UserVM _userVM = UserVM.getInstance();
 
   void addTempName(String name) => _userVM.addTempUserData({USER_NAME: name});
 

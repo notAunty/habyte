@@ -6,7 +6,7 @@ import 'package:habyte/views/widgets/profile_picture.dart';
 class RegistationPage2 extends StatelessWidget {
   RegistationPage2({Key? key}) : super(key: key);
 
-  final User _userVM = User.getInstance();
+  final UserVM _userVM = UserVM.getInstance();
 
   @override
   Widget build(BuildContext context) {

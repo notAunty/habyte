@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:habyte/models/user.dart';
 import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/constant/constants.dart';
@@ -44,17 +43,20 @@ class ProfilePictureHolder extends StatefulWidget {
 }
 
 class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
-  final User _user = User.getInstance();
+  final UserVM _userVM = UserVM.getInstance();
 
   void _imgFromGallery() async {
     XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
 
-    final Directory appDir = await getApplicationDocumentsDirectory();
-    final String filePath = '${appDir.path}/${image?.name}';
-    await image!.saveTo(filePath);
-    image = null;
+    if (image != null) {
+      final Directory appDir = await getApplicationDocumentsDirectory();
+      final String filePath = '${appDir.path}/${image.name}';
+      await image.saveTo(filePath);
+      image = null;
 
-    setState(() => _user.updateUser({USER_PROFILE_PIC_PATH: filePath}));
+      setState(
+          () => _userVM.addTempUserData({USER_PROFILE_PIC_PATH: filePath}));
+    }
   }
 
   @override
@@ -63,7 +65,8 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
     double radius = widget.radius;
     String initials = widget.initials;
 
-    UserModel? _userModel = _user.retrieveUser();
+    final String? _profilePicPath =
+        _userVM.retrieveTempUserJson()[USER_PROFILE_PIC_PATH];
 
     return Stack(
       alignment: Alignment.center,
@@ -103,36 +106,29 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
                 ),
               ]),
         ),
-        if (_userModel != null)
-          if (_userModel.profilePicPath != null ||
-              _userModel.profilePicPath == "")
-            Container(
-              child: Image.file(
-                File(_userModel.profilePicPath ?? ""),
-                fit: BoxFit.cover,
-              ),
-              height: (radius - (radius * 0.05)) * 2,
-              width: (radius - (radius * 0.05)) * 2,
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(radius),
-              ),
-            )
-          else
-            Text(
-              _userModel.name[0].toUpperCase(),
+        if (_profilePicPath != null || _profilePicPath == "")
+          Container(
+            child: Image.file(
+              File(_profilePicPath ?? ""),
+              fit: BoxFit.cover,
+            ),
+            height: (radius - (radius * 0.05)) * 2,
+            width: (radius - (radius * 0.05)) * 2,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(radius),
+            ),
+          )
+        else
+          Padding(
+            padding: EdgeInsets.only(top: radius * 0.15),
+            child: Text(
+              initials,
               style: TextStyle(
                   color: WHITE_01,
                   fontWeight: FontWeight.w600,
                   fontSize: radius * 0.9),
-            )
-        else
-          Text(
-            initials,
-            style: TextStyle(
-                color: WHITE_01,
-                fontWeight: FontWeight.w600,
-                fontSize: radius * 0.9),
+            ),
           ),
 
         if (editable)

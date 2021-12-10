@@ -44,7 +44,7 @@ class General {
     Map<String, dynamic>? userJson =
         Map<String, dynamic>.from(_mainBox.get(BOX_USER) ?? {});
     if (userJson.isEmpty) return false;
-    User.getInstance().setCurrentUser(userJson);
+    UserVM.getInstance().setCurrentUser(userJson);
 
     List<TaskModel> taskModelList = _taskBox.values.toList();
     if (taskModelList.isNotEmpty) {
@@ -93,7 +93,7 @@ class General {
 
   void updateBoxItem(BoxType boxType, String key, Object value) =>
       addBoxItem(boxType, key, value);
-  
+
   void deleteBoxItem(BoxType boxType, String key) {
     Box box = _getBoxByBoxType(boxType);
     box.delete(key);

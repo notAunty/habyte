@@ -108,7 +108,7 @@ class Tasks {
 
   /// This function is used to check all the skipped tasks.
   void checkSkippedTasks() {
-    User _user = User.getInstance();
+    UserVM _userVM = UserVM.getInstance();
     Entries _entries = Entries.getInstance();
 
     int totalMarksToBeDeducted = 0;
@@ -121,7 +121,7 @@ class Tasks {
       }
     }
 
-    _user.minusScore(totalMarksToBeDeducted);
+    _userVM.minusScore(totalMarksToBeDeducted);
   }
 
   /// Private function to find days difference.
