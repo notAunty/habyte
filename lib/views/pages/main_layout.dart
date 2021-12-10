@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:habyte/views/constant/colors.dart';
 
 import 'package:habyte/views/pages/dashboard/_dashboard.dart';
 import 'package:habyte/views/pages/profile/_profile.dart';
 import 'package:habyte/views/pages/rewards/_rewards.dart';
+import 'package:habyte/views/pages/rewards/add_rewards.dart';
 import 'package:habyte/views/pages/tasks/_tasks.dart';
 import 'package:habyte/views/widgets/animated_indexed_stack.dart';
 
@@ -41,18 +43,24 @@ class _MainLayoutState extends State<MainLayout> {
     RewardsPage(),
     ProfilePage(),
   ];
+  late List<void Function(BuildContext)?> _onFabClicked;
 
   @override
   Widget build(BuildContext context) {
+    _onFabClicked = [
+      null,
+      null, // TODO: add task onClicked goes here
+      onAddRewardsPressed,
+      null,
+    ];
+
     return Scaffold(
       bottomNavigationBar: Container(
         color: Theme.of(context).colorScheme.surface,
         padding: const EdgeInsets.all(8),
         child: GNav(
           gap: 4,
-          haptic: true,
           tabBorderRadius: 99,
-          duration: const Duration(milliseconds: 200),
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           activeColor: Theme.of(context).colorScheme.secondary,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
@@ -67,6 +75,12 @@ class _MainLayoutState extends State<MainLayout> {
           }),
         ),
       ),
+      floatingActionButton: (_onFabClicked[_selectedIndex] != null)
+          ? FloatingActionButton(
+              child: const Icon(FeatherIcons.plus, color: WHITE_01),
+              onPressed: () => _onFabClicked[_selectedIndex]!(context),
+            )
+          : null,
       body: AnimatedIndexedStack(index: _selectedIndex, children: _pages),
     );
   }

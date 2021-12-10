@@ -15,7 +15,7 @@ class DashboardHeader extends StatelessWidget {
           Opacity(
             opacity: 0.7,
             child: IconButton(
-              icon: const Icon(FeatherIcons.user),
+              icon: const Icon(FeatherIcons.share),
               onPressed: () {},
             ),
           ),
