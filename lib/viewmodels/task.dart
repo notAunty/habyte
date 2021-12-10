@@ -1,6 +1,6 @@
 import 'package:habyte/models/entry.dart';
 import 'package:habyte/models/task.dart';
-import 'package:habyte/viewmodels/entries.dart';
+import 'package:habyte/viewmodels/entry.dart';
 import 'package:habyte/viewmodels/general.dart';
 import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/constants.dart';
