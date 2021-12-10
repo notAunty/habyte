@@ -18,13 +18,13 @@ void main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(TaskAdapter());
-  Hive.registerAdapter(RewardModelAdapter());
+  Hive.registerAdapter(RewardAdapter());
   Hive.registerAdapter(NotificationModelAdapter());
   Hive.registerAdapter(EntryModelAdapter());
 
   await Hive.openBox(BOX_NAME);
   await Hive.openBox<Task>(BOX_TASK);
-  await Hive.openBox<RewardModel>(BOX_REWARD);
+  await Hive.openBox<Reward>(BOX_REWARD);
   await Hive.openBox<NotificationModel>(BOX_NOTIFICATION);
   await Hive.openBox<EntryModel>(BOX_ENTRY);
 

@@ -6,24 +6,24 @@ part of '../reward.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class RewardModelAdapter extends TypeAdapter<RewardModel> {
+class RewardAdapter extends TypeAdapter<Reward> {
   @override
   final int typeId = 1;
 
   @override
-  RewardModel read(BinaryReader reader) {
+  Reward read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return RewardModel()
+    return Reward()
       ..id = fields[0] as String
       ..name = fields[1] as String
       ..points = fields[2] as String;
   }
 
   @override
-  void write(BinaryWriter writer, RewardModel obj) {
+  void write(BinaryWriter writer, Reward obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -40,7 +40,7 @@ class RewardModelAdapter extends TypeAdapter<RewardModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is RewardModelAdapter &&
+      other is RewardAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

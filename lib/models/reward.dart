@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 part 'hiveAdapter/reward.g.dart';
 
 @HiveType(typeId: 1)
-class RewardModel {
+class Reward {
   // Example: R00001
   @HiveField(0)
   late final String id;
@@ -15,9 +15,9 @@ class RewardModel {
   @HiveField(2)
   late final String points;
 
-  RewardModel();
+  Reward();
 
-  RewardModel.fromJson(Map<String, String> json)
+  Reward.fromJson(Map<String, String> json)
       : name = json[REWARD_NAME]!,
         points = json[REWARD_POINTS]!;
 

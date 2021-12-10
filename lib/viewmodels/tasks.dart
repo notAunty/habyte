@@ -24,8 +24,7 @@ class TaskVM {
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
-  void setCurrentTasks(List<Task> taskModelList) =>
-      _currentTasks = taskModelList;
+  void setCurrentTasks(List<Task> taskList) => _currentTasks = taskList;
 
   /// **Create Task** (`C` in CRUD)
   ///
@@ -63,7 +62,7 @@ class TaskVM {
   ///
   /// Parameter required: `id` from `Task`.
   Task retrieveTaskById(String id) =>
-      _currentTasks.singleWhere((taskModel) => taskModel.id == id);
+      _currentTasks.singleWhere((task) => task.id == id);
 
   /// **Update Task** (`U` in CRUD)
   ///
@@ -79,7 +78,7 @@ class TaskVM {
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
   void updateTask(String id, Map<String, dynamic> jsonToUpdate) {
-    int _index = _currentTasks.indexWhere((taskModel) => taskModel.id == id);
+    int _index = _currentTasks.indexWhere((task) => task.id == id);
     Task _updatedTask = Task.fromJson({
       ..._currentTasks[_index].toMap(),
       ...jsonToUpdate,
@@ -92,7 +91,7 @@ class TaskVM {
   ///
   /// Call this function when need to delete task
   void deleteTask(String id) {
-    int index = _currentTasks.indexWhere((taskModel) => taskModel.id == id);
+    int index = _currentTasks.indexWhere((task) => task.id == id);
     String removedId = _currentTasks.removeAt(index).id;
     _general.deleteBoxItem(_boxType, removedId);
   }
@@ -100,8 +99,8 @@ class TaskVM {
   /// Private function to convert `List of Task` to `List of Map`
   List<Map<String, dynamic>> _toListOfMap() {
     List<Map<String, dynamic>> tasksInListOfMap = [];
-    for (Task taskModel in _currentTasks) {
-      tasksInListOfMap.add(taskModel.toMap());
+    for (Task task in _currentTasks) {
+      tasksInListOfMap.add(task.toMap());
     }
     return tasksInListOfMap;
   }
@@ -112,8 +111,8 @@ class TaskVM {
     Entries _entries = Entries.getInstance();
 
     int totalMarksToBeDeducted = 0;
-    for (Task taskModel in _currentTasks) {
-      EntryModel latestEntry = _entries.getLatestEntryByTaskId(taskModel.id);
+    for (Task task in _currentTasks) {
+      EntryModel latestEntry = _entries.getLatestEntryByTaskId(task.id);
       int currentTaskSkippedDays =
           _daysBetween(latestEntry.completedDate, DateTime.now());
       if (currentTaskSkippedDays > 0) {

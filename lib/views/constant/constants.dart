@@ -29,7 +29,7 @@ const TASK_POINTS = "points";
 const TASK_START_DATE = "startDate";
 const TASK_END_DATE = "endDate";
 
-// RewardModel Keys
+// Reward Keys
 const REWARD_ID = "id";
 const REWARD_NAME = "name";
 const REWARD_POINTS = "points";

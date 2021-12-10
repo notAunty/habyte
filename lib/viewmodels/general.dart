@@ -19,14 +19,14 @@ class General {
   General._internal() {
     _mainBox = Hive.box(BOX_NAME);
     _taskBox = Hive.box<Task>(BOX_TASK);
-    _rewardBox = Hive.box<RewardModel>(BOX_REWARD);
+    _rewardBox = Hive.box<Reward>(BOX_REWARD);
     _notificationBox = Hive.box<NotificationModel>(BOX_NOTIFICATION);
     _entryBox = Hive.box<EntryModel>(BOX_ENTRY);
   }
 
   late Box _mainBox;
   late Box<Task> _taskBox;
-  late Box<RewardModel> _rewardBox;
+  late Box<Reward> _rewardBox;
   late Box<NotificationModel> _notificationBox;
   late Box<EntryModel> _entryBox;
 
@@ -46,14 +46,14 @@ class General {
     if (userJson.isEmpty) return false;
     UserVM.getInstance().setCurrentUser(userJson);
 
-    List<Task> taskModelList = _taskBox.values.toList();
-    if (taskModelList.isNotEmpty) {
-      TaskVM.getInstance().setCurrentTasks(taskModelList);
+    List<Task> taskList = _taskBox.values.toList();
+    if (taskList.isNotEmpty) {
+      TaskVM.getInstance().setCurrentTasks(taskList);
     }
 
-    List<RewardModel> rewardModelList = _rewardBox.values.toList();
-    if (rewardModelList.isNotEmpty) {
-      Rewards.getInstance().setCurrentRewards(rewardModelList);
+    List<Reward> rewardList = _rewardBox.values.toList();
+    if (rewardList.isNotEmpty) {
+      RewardVM.getInstance().setCurrentRewards(rewardList);
     }
 
     List<NotificationModel>? notificationModelList =
