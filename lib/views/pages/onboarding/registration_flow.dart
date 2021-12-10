@@ -37,6 +37,7 @@ class _RegistationFlowState extends State<RegistationFlow> {
   void onPageChanged() {
     int toPage = _currentPage.round() + 1;
     if (toPage >= registrationPages.length) {
+      _userVM.createUser();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const MainLayout()),
