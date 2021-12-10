@@ -14,13 +14,8 @@ const BOX_NOTIFICATION = 'notification';
 const MODEL_ID_LENGTH = 4;
 const SKIPPED_MARKS_DEDUCTED = 0;
 
-const MEMBERSHIP_TIER = [
-  'Novice',
-  'Apprentice',
-  'Expert',
-  'Master'
-];
-// UserModel Keys
+const MEMBERSHIP_TIER = ['Novice', 'Apprentice', 'Expert', 'Master'];
+// User Keys
 const USER_NAME = "name";
 const USER_ABOUT = "about";
 const USER_PROFILE_PIC_PATH = "profilePicPath";

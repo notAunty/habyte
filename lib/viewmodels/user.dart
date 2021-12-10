@@ -18,13 +18,13 @@ class UserVM {
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.main;
   final String _key = BOX_USER;
-  UserModel? _currentUser;
+  User? _currentUser;
   Map<String, dynamic> _tempUserJson = {};
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
   void setCurrentUser(Map<String, dynamic> userJson) =>
-      _currentUser = UserModel.fromJson(userJson);
+      _currentUser = User.fromJson(userJson);
 
   /// Add temp user data, since multiple pages for user registration
   ///
@@ -59,7 +59,7 @@ class UserVM {
   /// **Retrieve User** (`R` in CRUD)
   ///
   /// Call this function when you need the info, such as `USER_NAME`.
-  UserModel? retrieveUser() => _currentUser;
+  User? retrieveUser() => _currentUser;
 
   /// **Update User** (`U` in CRUD)
   ///

@@ -38,7 +38,7 @@ class General {
     //   "points": 0,
     //   "scores": 0
     // };
-    // UserModel us = UserModel.fromJson(u);
+    // User us = User.fromJson(u);
     // _mainBox.put(BOX_USER, us.toMap());
 
     Map<String, dynamic>? userJson =

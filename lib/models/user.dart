@@ -1,13 +1,13 @@
 import 'package:habyte/views/constant/constants.dart';
 
-class UserModel {
+class User {
   late String name;
   late String? about;
   late String? profilePicPath;
   late int points;
   late int scores;
 
-  UserModel.fromJson(Map<String, dynamic> json)
+  User.fromJson(Map<String, dynamic> json)
       : name = json[USER_NAME],
         about = json[USER_ABOUT],
         profilePicPath = json[USER_PROFILE_PIC_PATH],
