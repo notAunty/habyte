@@ -20,13 +20,13 @@ void main() async {
   Hive.registerAdapter(TaskAdapter());
   Hive.registerAdapter(RewardAdapter());
   Hive.registerAdapter(NotificationDetailAdapter());
-  Hive.registerAdapter(EntryModelAdapter());
+  Hive.registerAdapter(EntryAdapter());
 
   await Hive.openBox(BOX_NAME);
   await Hive.openBox<Task>(BOX_TASK);
   await Hive.openBox<Reward>(BOX_REWARD);
   await Hive.openBox<NotificationDetail>(BOX_NOTIFICATION_DETAIL);
-  await Hive.openBox<EntryModel>(BOX_ENTRY);
+  await Hive.openBox<Entry>(BOX_ENTRY);
 
   runApp(const MyApp());
 }

@@ -108,11 +108,11 @@ class TaskVM {
   /// This function is used to check all the skipped tasks.
   void checkSkippedTasks() {
     UserVM _userVM = UserVM.getInstance();
-    Entries _entries = Entries.getInstance();
+    EntryVM _entryVM = EntryVM.getInstance();
 
     int totalMarksToBeDeducted = 0;
     for (Task task in _currentTasks) {
-      EntryModel latestEntry = _entries.getLatestEntryByTaskId(task.id);
+      Entry latestEntry = _entryVM.getLatestEntryByTaskId(task.id);
       int currentTaskSkippedDays =
           _daysBetween(latestEntry.completedDate, DateTime.now());
       if (currentTaskSkippedDays > 0) {

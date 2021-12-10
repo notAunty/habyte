@@ -20,15 +20,16 @@ class General {
     _mainBox = Hive.box(BOX_NAME);
     _taskBox = Hive.box<Task>(BOX_TASK);
     _rewardBox = Hive.box<Reward>(BOX_REWARD);
-    _notificationDetailBox = Hive.box<NotificationDetail>(BOX_NOTIFICATION_DETAIL);
-    _entryBox = Hive.box<EntryModel>(BOX_ENTRY);
+    _notificationDetailBox =
+        Hive.box<NotificationDetail>(BOX_NOTIFICATION_DETAIL);
+    _entryBox = Hive.box<Entry>(BOX_ENTRY);
   }
 
   late Box _mainBox;
   late Box<Task> _taskBox;
   late Box<Reward> _rewardBox;
   late Box<NotificationDetail> _notificationDetailBox;
-  late Box<EntryModel> _entryBox;
+  late Box<Entry> _entryBox;
 
   bool retrievePreviousLogin() {
     // Map<String, dynamic> u = {
@@ -63,9 +64,9 @@ class General {
           .setCurrentNotificationDetails(notificationDetailList);
     }
 
-    List<EntryModel> entryModelList = _entryBox.values.toList();
-    if (entryModelList.isNotEmpty) {
-      Entries.getInstance().setCurrentEntries(entryModelList);
+    List<Entry> entryList = _entryBox.values.toList();
+    if (entryList.isNotEmpty) {
+      EntryVM.getInstance().setCurrentEntries(entryList);
     }
 
     return true;

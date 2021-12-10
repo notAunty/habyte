@@ -39,7 +39,7 @@ const NOTIFICATION_DETAIL_ID = "id";
 const NOTIFICATION_DETAIL_TASK_ID = "taskId";
 const NOTIFICATION_DETAIL_TIME = "notificationTime";
 
-// EntryModel Keys
+// Entry Keys
 const ENTRY_ID = "id";
 const ENTRY_TASK_ID = "taskId";
 const ENTRY_COMPLETED_DATE = "completedDate";

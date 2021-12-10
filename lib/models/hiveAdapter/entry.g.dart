@@ -6,24 +6,24 @@ part of '../entry.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class EntryModelAdapter extends TypeAdapter<EntryModel> {
+class EntryAdapter extends TypeAdapter<Entry> {
   @override
   final int typeId = 3;
 
   @override
-  EntryModel read(BinaryReader reader) {
+  Entry read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return EntryModel()
+    return Entry()
       ..id = fields[0] as String
       ..taskId = fields[1] as String
       ..completedDate = fields[2] as DateTime;
   }
 
   @override
-  void write(BinaryWriter writer, EntryModel obj) {
+  void write(BinaryWriter writer, Entry obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -40,7 +40,7 @@ class EntryModelAdapter extends TypeAdapter<EntryModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is EntryModelAdapter &&
+      other is EntryAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
