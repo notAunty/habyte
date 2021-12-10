@@ -105,7 +105,7 @@ class Entries {
   EntryModel getLatestEntryByTaskId(String taskId) =>
       _currentEntries.lastWhere((entryModel) => entryModel.taskId == taskId);
 
-  /// Private function to convert `List of NotificationModel` to `List of Map`
+  /// Private function to convert `List of NotificationDetail` to `List of Map`
   List<Map<String, dynamic>> _toListOfMap() {
     List<Map<String, dynamic>> entriesInListOfMap = [];
     for (EntryModel entryModel in _currentEntries) {

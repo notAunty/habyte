@@ -11,7 +11,7 @@ import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
 
-enum BoxType { main, task, reward, notification, entry }
+enum BoxType { main, task, reward, notificationDetail, entry }
 
 class General {
   static final General _general = General._internal();
@@ -20,14 +20,14 @@ class General {
     _mainBox = Hive.box(BOX_NAME);
     _taskBox = Hive.box<Task>(BOX_TASK);
     _rewardBox = Hive.box<Reward>(BOX_REWARD);
-    _notificationBox = Hive.box<NotificationModel>(BOX_NOTIFICATION);
+    _notificationDetailBox = Hive.box<NotificationDetail>(BOX_NOTIFICATION_DETAIL);
     _entryBox = Hive.box<EntryModel>(BOX_ENTRY);
   }
 
   late Box _mainBox;
   late Box<Task> _taskBox;
   late Box<Reward> _rewardBox;
-  late Box<NotificationModel> _notificationBox;
+  late Box<NotificationDetail> _notificationDetailBox;
   late Box<EntryModel> _entryBox;
 
   bool retrievePreviousLogin() {
@@ -56,11 +56,11 @@ class General {
       RewardVM.getInstance().setCurrentRewards(rewardList);
     }
 
-    List<NotificationModel>? notificationModelList =
-        _notificationBox.values.toList();
-    if (notificationModelList.isNotEmpty) {
-      Notifications.getInstance()
-          .setCurrentNotifications(notificationModelList);
+    List<NotificationDetail> notificationDetailList =
+        _notificationDetailBox.values.toList();
+    if (notificationDetailList.isNotEmpty) {
+      NotificationDetailVM.getInstance()
+          .setCurrentNotificationDetails(notificationDetailList);
     }
 
     List<EntryModel> entryModelList = _entryBox.values.toList();
@@ -79,8 +79,8 @@ class General {
         return _taskBox;
       case BoxType.reward:
         return _rewardBox;
-      case BoxType.notification:
-        return _notificationBox;
+      case BoxType.notificationDetail:
+        return _notificationDetailBox;
       case BoxType.entry:
         return _entryBox;
     }
@@ -108,7 +108,7 @@ class General {
     Map<BoxType, String> boxTypeMap = {
       BoxType.task: "T",
       BoxType.reward: "R",
-      BoxType.notification: "N",
+      BoxType.notificationDetail: "N",
       BoxType.entry: "E"
     };
 

@@ -8,7 +8,7 @@ const BOX_USER = 'user';
 const BOX_TASK = 'task';
 const BOX_REWARD = 'reward';
 const BOX_ENTRY = 'entry';
-const BOX_NOTIFICATION = 'notification';
+const BOX_NOTIFICATION_DETAIL = 'notificationDetail';
 
 // Constant Value
 const MODEL_ID_LENGTH = 4;
@@ -34,10 +34,10 @@ const REWARD_ID = "id";
 const REWARD_NAME = "name";
 const REWARD_POINTS = "points";
 
-// NotificationModel Keys
-const NOTIFICATION_ID = "id";
-const NOTIFICATION_TASK_ID = "taskId";
-const NOTIFICATION_TIME = "notificationTime";
+// NotificationDetail Keys
+const NOTIFICATION_DETAIL_ID = "id";
+const NOTIFICATION_DETAIL_TASK_ID = "taskId";
+const NOTIFICATION_DETAIL_TIME = "notificationTime";
 
 // EntryModel Keys
 const ENTRY_ID = "id";
