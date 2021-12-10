@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:habyte/views/constant/sizes.dart';
+import 'package:habyte/views/pages/rewards/reward_list.dart';
 import 'package:habyte/views/widgets/profile_score_card.dart';
 
 class RewardsPage extends StatelessWidget {
@@ -13,6 +14,8 @@ class RewardsPage extends StatelessWidget {
       children: [
         const SizedBox(height: TOP_PADDING, width: double.infinity),
         ProfileScoreCard(),
+        // TODO: J - Rewards subheader?
+        const RewardList(),
       ],
     );
   }
