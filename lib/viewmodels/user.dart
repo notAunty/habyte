@@ -3,29 +3,28 @@ import 'package:habyte/viewmodels/general.dart';
 import 'package:habyte/views/constant/constants.dart';
 
 /// **User ViewModel Class**
-/// 
+///
 /// Involves:
 /// - User Model
 /// - CRUD
 /// - Other operations
-class User {
-  static final User _user = User._internal();
-  User._internal();
+class UserVM {
+  static final UserVM _userVM = UserVM._internal();
+  UserVM._internal();
 
   /// Get the `User` instance for user `CRUD` and other operations
-  factory User.getInstance() => _user;
+  factory UserVM.getInstance() => _userVM;
 
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.main;
   final String _key = BOX_USER;
-  UserModel? _currentUser;
-
-  Map<String, dynamic> tempUserJson = {};
+  User? _currentUser;
+  Map<String, dynamic> _tempUserJson = {};
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
   void setCurrentUser(Map<String, dynamic> userJson) =>
-      _currentUser = UserModel.fromJson(userJson);
+      _currentUser = User.fromJson(userJson);
 
   /// Add temp user data, since multiple pages for user registration
   ///
@@ -36,25 +35,31 @@ class User {
   ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  void addTempUserData(Map<String, dynamic> tempUserJson) =>
-      this.tempUserJson = {...this.tempUserJson, ...tempUserJson};
+  void addTempUserData(Map<String, dynamic> tempUserJson) {
+    _tempUserJson = {..._tempUserJson, ...tempUserJson};
+    //TODO: Remove print
+    print(_tempUserJson);
+  }
+
+  /// Only call this function during registration.
+  Map<String, dynamic> retrieveTempUserJson() => _tempUserJson;
 
   /// **Create User** (`C` in CRUD)
   ///
   /// Call this function at the last stage after adding all temp user data
   void createUser() {
-    tempUserJson = {
-      ...tempUserJson,
+    _tempUserJson = {
+      ..._tempUserJson,
       ...{USER_POINTS: 0, USER_SCORES: 0}
     };
-    setCurrentUser(tempUserJson);
-    _general.addBoxItem(_boxType, _key, tempUserJson);
+    setCurrentUser(_tempUserJson);
+    _general.addBoxItem(_boxType, _key, _tempUserJson);
   }
 
   /// **Retrieve User** (`R` in CRUD)
   ///
   /// Call this function when you need the info, such as `USER_NAME`.
-  UserModel? retrieveUser() => _currentUser;
+  User? retrieveUser() => _currentUser;
 
   /// **Update User** (`U` in CRUD)
   ///
@@ -76,7 +81,7 @@ class User {
   /// **Delete User** (`D` in CRUD)
   ///
   /// Call this function when user click logout.
-  /// 
+  ///
   /// **Remark:** In our case, `logout` == `clear db` as we don't have cloud
   /// database for multiple user structure
   void deleteUser() {

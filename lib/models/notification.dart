@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 part 'hiveAdapter/notification.g.dart';
 
 @HiveType(typeId: 2)
-class NotificationModel {
+class NotificationDetail {
   // Example: N00001
   @HiveField(0)
   late final String id;
@@ -16,15 +16,15 @@ class NotificationModel {
   @HiveField(2)
   late final DateTime notificationTime;
 
-  NotificationModel();
+  NotificationDetail();
 
-  NotificationModel.fromJson(Map<String, dynamic> json)
-      : taskId = json[NOTIFICATION_TASK_ID],
-        notificationTime = json[NOTIFICATION_TIME];
+  NotificationDetail.fromJson(Map<String, dynamic> json)
+      : taskId = json[NOTIFICATION_DETAIL_TASK_ID],
+        notificationTime = json[NOTIFICATION_DETAIL_TIME];
 
   Map<String, dynamic> toMap() => {
-        NOTIFICATION_ID: id,
-        NOTIFICATION_TASK_ID: taskId,
-        NOTIFICATION_TIME: notificationTime,
+        NOTIFICATION_DETAIL_ID: id,
+        NOTIFICATION_DETAIL_TASK_ID: taskId,
+        NOTIFICATION_DETAIL_TIME: notificationTime,
       };
 }

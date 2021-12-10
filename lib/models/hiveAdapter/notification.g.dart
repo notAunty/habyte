@@ -6,24 +6,24 @@ part of '../notification.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class NotificationModelAdapter extends TypeAdapter<NotificationModel> {
+class NotificationDetailAdapter extends TypeAdapter<NotificationDetail> {
   @override
   final int typeId = 2;
 
   @override
-  NotificationModel read(BinaryReader reader) {
+  NotificationDetail read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return NotificationModel()
+    return NotificationDetail()
       ..id = fields[0] as String
       ..taskId = fields[1] as String
       ..notificationTime = fields[2] as DateTime;
   }
 
   @override
-  void write(BinaryWriter writer, NotificationModel obj) {
+  void write(BinaryWriter writer, NotificationDetail obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -40,7 +40,7 @@ class NotificationModelAdapter extends TypeAdapter<NotificationModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NotificationModelAdapter &&
+      other is NotificationDetailAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

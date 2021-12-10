@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 part 'hiveAdapter/entry.g.dart';
 
 @HiveType(typeId: 3)
-class EntryModel {
+class Entry {
   // Example: E00001
   @HiveField(0)
   late final String id;
@@ -15,9 +15,9 @@ class EntryModel {
   @HiveField(2)
   late final DateTime completedDate;
 
-  EntryModel();
+  Entry();
 
-  EntryModel.fromJson(Map<String, dynamic> json)
+  Entry.fromJson(Map<String, dynamic> json)
       : taskId = json[ENTRY_TASK_ID],
         completedDate = json[ENTRY_COMPLETED_DATE];
 

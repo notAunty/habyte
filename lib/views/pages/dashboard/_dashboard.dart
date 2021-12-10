@@ -13,12 +13,12 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        SizedBox(height: TOP_PADDING, width: double.infinity),
-        DashboardHeader(),
+      children: [
+        const SizedBox(height: TOP_PADDING, width: double.infinity),
+        const DashboardHeader(),
         ProfileScoreCard(),
-        DashboardTaskHeader(),
-        DashboardTaskList(),
+        const DashboardTaskHeader(),
+        const DashboardTaskList(),
       ],
     );
   }

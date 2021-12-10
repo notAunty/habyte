@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 part 'hiveAdapter/task.g.dart';
 
 @HiveType(typeId: 0)
-class TaskModel {
+class Task {
   // Example: T00001
   @HiveField(0)
   late final String id;
@@ -21,9 +21,9 @@ class TaskModel {
   @HiveField(4)
   late final DateTime? endDate;
 
-  TaskModel();
+  Task();
 
-  TaskModel.fromJson(Map<String, dynamic> json)
+  Task.fromJson(Map<String, dynamic> json)
       : name = json[TASK_NAME],
         points = json[TASK_POINTS],
         startDate = json[TASK_START_DATE],

@@ -10,8 +10,8 @@ class RewardsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        SizedBox(height: TOP_PADDING, width: double.infinity),
+      children: [
+        const SizedBox(height: TOP_PADDING, width: double.infinity),
         ProfileScoreCard(),
       ],
     );

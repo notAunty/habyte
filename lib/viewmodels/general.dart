@@ -3,32 +3,33 @@ import 'package:habyte/models/notification.dart';
 import 'package:habyte/models/reward.dart';
 import 'package:habyte/models/task.dart';
 // import 'package:habyte/models/user.dart';
-import 'package:habyte/viewmodels/entries.dart';
-import 'package:habyte/viewmodels/notifications.dart';
-import 'package:habyte/viewmodels/rewards.dart';
-import 'package:habyte/viewmodels/tasks.dart';
+import 'package:habyte/viewmodels/entry.dart';
+import 'package:habyte/viewmodels/notification.dart';
+import 'package:habyte/viewmodels/reward.dart';
+import 'package:habyte/viewmodels/task.dart';
 import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
 
-enum BoxType { main, task, reward, notification, entry }
+enum BoxType { main, task, reward, notificationDetail, entry }
 
 class General {
   static final General _general = General._internal();
   factory General.getInstance() => _general;
   General._internal() {
     _mainBox = Hive.box(BOX_NAME);
-    _taskBox = Hive.box<TaskModel>(BOX_TASK);
-    _rewardBox = Hive.box<RewardModel>(BOX_REWARD);
-    _notificationBox = Hive.box<NotificationModel>(BOX_NOTIFICATION);
-    _entryBox = Hive.box<EntryModel>(BOX_ENTRY);
+    _taskBox = Hive.box<Task>(BOX_TASK);
+    _rewardBox = Hive.box<Reward>(BOX_REWARD);
+    _notificationDetailBox =
+        Hive.box<NotificationDetail>(BOX_NOTIFICATION_DETAIL);
+    _entryBox = Hive.box<Entry>(BOX_ENTRY);
   }
 
   late Box _mainBox;
-  late Box<TaskModel> _taskBox;
-  late Box<RewardModel> _rewardBox;
-  late Box<NotificationModel> _notificationBox;
-  late Box<EntryModel> _entryBox;
+  late Box<Task> _taskBox;
+  late Box<Reward> _rewardBox;
+  late Box<NotificationDetail> _notificationDetailBox;
+  late Box<Entry> _entryBox;
 
   bool retrievePreviousLogin() {
     // Map<String, dynamic> u = {
@@ -38,34 +39,34 @@ class General {
     //   "points": 0,
     //   "scores": 0
     // };
-    // UserModel us = UserModel.fromJson(u);
+    // User us = User.fromJson(u);
     // _mainBox.put(BOX_USER, us.toMap());
 
     Map<String, dynamic>? userJson =
         Map<String, dynamic>.from(_mainBox.get(BOX_USER) ?? {});
     if (userJson.isEmpty) return false;
-    User.getInstance().setCurrentUser(userJson);
+    UserVM.getInstance().setCurrentUser(userJson);
 
-    List<TaskModel> taskModelList = _taskBox.values.toList();
-    if (taskModelList.isNotEmpty) {
-      Tasks.getInstance().setCurrentTasks(taskModelList);
+    List<Task> taskList = _taskBox.values.toList();
+    if (taskList.isNotEmpty) {
+      TaskVM.getInstance().setCurrentTasks(taskList);
     }
 
-    List<RewardModel> rewardModelList = _rewardBox.values.toList();
-    if (rewardModelList.isNotEmpty) {
-      Rewards.getInstance().setCurrentRewards(rewardModelList);
+    List<Reward> rewardList = _rewardBox.values.toList();
+    if (rewardList.isNotEmpty) {
+      RewardVM.getInstance().setCurrentRewards(rewardList);
     }
 
-    List<NotificationModel>? notificationModelList =
-        _notificationBox.values.toList();
-    if (notificationModelList.isNotEmpty) {
-      Notifications.getInstance()
-          .setCurrentNotifications(notificationModelList);
+    List<NotificationDetail> notificationDetailList =
+        _notificationDetailBox.values.toList();
+    if (notificationDetailList.isNotEmpty) {
+      NotificationDetailVM.getInstance()
+          .setCurrentNotificationDetails(notificationDetailList);
     }
 
-    List<EntryModel> entryModelList = _entryBox.values.toList();
-    if (entryModelList.isNotEmpty) {
-      Entries.getInstance().setCurrentEntries(entryModelList);
+    List<Entry> entryList = _entryBox.values.toList();
+    if (entryList.isNotEmpty) {
+      EntryVM.getInstance().setCurrentEntries(entryList);
     }
 
     return true;
@@ -79,8 +80,8 @@ class General {
         return _taskBox;
       case BoxType.reward:
         return _rewardBox;
-      case BoxType.notification:
-        return _notificationBox;
+      case BoxType.notificationDetail:
+        return _notificationDetailBox;
       case BoxType.entry:
         return _entryBox;
     }
@@ -93,7 +94,7 @@ class General {
 
   void updateBoxItem(BoxType boxType, String key, Object value) =>
       addBoxItem(boxType, key, value);
-  
+
   void deleteBoxItem(BoxType boxType, String key) {
     Box box = _getBoxByBoxType(boxType);
     box.delete(key);
@@ -108,7 +109,7 @@ class General {
     Map<BoxType, String> boxTypeMap = {
       BoxType.task: "T",
       BoxType.reward: "R",
-      BoxType.notification: "N",
+      BoxType.notificationDetail: "N",
       BoxType.entry: "E"
     };
 
