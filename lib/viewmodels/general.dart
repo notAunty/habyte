@@ -18,14 +18,14 @@ class General {
   factory General.getInstance() => _general;
   General._internal() {
     _mainBox = Hive.box(BOX_NAME);
-    _taskBox = Hive.box<TaskModel>(BOX_TASK);
+    _taskBox = Hive.box<Task>(BOX_TASK);
     _rewardBox = Hive.box<RewardModel>(BOX_REWARD);
     _notificationBox = Hive.box<NotificationModel>(BOX_NOTIFICATION);
     _entryBox = Hive.box<EntryModel>(BOX_ENTRY);
   }
 
   late Box _mainBox;
-  late Box<TaskModel> _taskBox;
+  late Box<Task> _taskBox;
   late Box<RewardModel> _rewardBox;
   late Box<NotificationModel> _notificationBox;
   late Box<EntryModel> _entryBox;
@@ -46,9 +46,9 @@ class General {
     if (userJson.isEmpty) return false;
     UserVM.getInstance().setCurrentUser(userJson);
 
-    List<TaskModel> taskModelList = _taskBox.values.toList();
+    List<Task> taskModelList = _taskBox.values.toList();
     if (taskModelList.isNotEmpty) {
-      Tasks.getInstance().setCurrentTasks(taskModelList);
+      TaskVM.getInstance().setCurrentTasks(taskModelList);
     }
 
     List<RewardModel> rewardModelList = _rewardBox.values.toList();

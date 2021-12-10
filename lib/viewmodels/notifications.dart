@@ -65,7 +65,7 @@ class Notifications {
   ///
   /// Call this function when you need the info from one of the `NotificationModel`.
   ///
-  /// Parameter required: `taskId` from `TaskModel`.
+  /// Parameter required: `taskId` from `Task`.
   NotificationModel retrieveNotificationByTaskId(String taskId) =>
       _currentNotifications.singleWhere(
           (notificationModel) => notificationModel.taskId == taskId);

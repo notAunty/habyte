@@ -17,13 +17,13 @@ import 'package:habyte/views/pages/onboarding/onboarding_flow.dart';
 void main() async {
   await Hive.initFlutter();
 
-  Hive.registerAdapter(TaskModelAdapter());
+  Hive.registerAdapter(TaskAdapter());
   Hive.registerAdapter(RewardModelAdapter());
   Hive.registerAdapter(NotificationModelAdapter());
   Hive.registerAdapter(EntryModelAdapter());
 
   await Hive.openBox(BOX_NAME);
-  await Hive.openBox<TaskModel>(BOX_TASK);
+  await Hive.openBox<Task>(BOX_TASK);
   await Hive.openBox<RewardModel>(BOX_REWARD);
   await Hive.openBox<NotificationModel>(BOX_NOTIFICATION);
   await Hive.openBox<EntryModel>(BOX_ENTRY);

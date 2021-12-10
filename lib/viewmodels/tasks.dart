@@ -11,20 +11,20 @@ import 'package:habyte/views/constant/constants.dart';
 /// - Task Model
 /// - CRUD
 /// - Other operations
-class Tasks {
-  static final Tasks _tasks = Tasks._internal();
-  Tasks._internal();
+class TaskVM {
+  static final TaskVM _taskVM = TaskVM._internal();
+  TaskVM._internal();
 
   /// Get the `Task` instance for user `CRUD` and other operations
-  factory Tasks.getInstance() => _tasks;
+  factory TaskVM.getInstance() => _taskVM;
 
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.task;
-  List<TaskModel> _currentTasks = [];
+  List<Task> _currentTasks = [];
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
-  void setCurrentTasks(List<TaskModel> taskModelList) =>
+  void setCurrentTasks(List<Task> taskModelList) =>
       _currentTasks = taskModelList;
 
   /// **Create Task** (`C` in CRUD)
@@ -40,34 +40,34 @@ class Tasks {
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
   void createTask(Map<String, dynamic> taskJson) {
-    TaskModel _taskModel = TaskModel.fromJson(taskJson);
-    _taskModel.id = _general.getBoxItemNewId(_boxType);
-    _currentTasks.add(_taskModel);
-    _general.addBoxItem(_boxType, _taskModel.id, _taskModel);
+    Task _task = Task.fromJson(taskJson);
+    _task.id = _general.getBoxItemNewId(_boxType);
+    _currentTasks.add(_task);
+    _general.addBoxItem(_boxType, _task.id, _task);
   }
 
   /// **Retrieve Task** (`R` in CRUD)
   ///
-  /// Call this function when you need the info in `List of TaskModel`.
-  List<TaskModel> retrieveAllTasks() => _currentTasks;
+  /// Call this function when you need the info in `List of Task`.
+  List<Task> retrieveAllTasks() => _currentTasks;
 
   /// **Retrieve Task** (`R` in CRUD)
   ///
   /// Call this function when you need the info in `List of Map`
-  /// (converted from `TaskModel`).
+  /// (converted from `Task`).
   List<Map<String, dynamic>> retrieveAllTasksInListOfMap() => _toListOfMap();
 
   /// **Retrieve Task** (`R` in CRUD)
   ///
-  /// Call this function when you need the info from one of the `TaskModel`.
+  /// Call this function when you need the info from one of the `Task`.
   ///
-  /// Parameter required: `id` from `TaskModel`.
-  TaskModel retrieveTaskById(String id) =>
+  /// Parameter required: `id` from `Task`.
+  Task retrieveTaskById(String id) =>
       _currentTasks.singleWhere((taskModel) => taskModel.id == id);
 
   /// **Update Task** (`U` in CRUD)
   ///
-  /// Update task will just need to pass the `id` of the `TaskModel` &
+  /// Update task will just need to pass the `id` of the `Task` &
   /// a map with the key and value that need to update
   ///
   /// Below are the fields that can be updated:
@@ -80,12 +80,12 @@ class Tasks {
   /// from there
   void updateTask(String id, Map<String, dynamic> jsonToUpdate) {
     int _index = _currentTasks.indexWhere((taskModel) => taskModel.id == id);
-    TaskModel _updatedTaskModel = TaskModel.fromJson({
+    Task _updatedTask = Task.fromJson({
       ..._currentTasks[_index].toMap(),
       ...jsonToUpdate,
     });
-    _currentTasks[_index] = _updatedTaskModel;
-    _general.updateBoxItem(_boxType, _updatedTaskModel.id, _updatedTaskModel);
+    _currentTasks[_index] = _updatedTask;
+    _general.updateBoxItem(_boxType, _updatedTask.id, _updatedTask);
   }
 
   /// **Delete Task** (`D` in CRUD)
@@ -97,10 +97,10 @@ class Tasks {
     _general.deleteBoxItem(_boxType, removedId);
   }
 
-  /// Private function to convert `List of TaskModel` to `List of Map`
+  /// Private function to convert `List of Task` to `List of Map`
   List<Map<String, dynamic>> _toListOfMap() {
     List<Map<String, dynamic>> tasksInListOfMap = [];
-    for (TaskModel taskModel in _currentTasks) {
+    for (Task taskModel in _currentTasks) {
       tasksInListOfMap.add(taskModel.toMap());
     }
     return tasksInListOfMap;
@@ -112,7 +112,7 @@ class Tasks {
     Entries _entries = Entries.getInstance();
 
     int totalMarksToBeDeducted = 0;
-    for (TaskModel taskModel in _currentTasks) {
+    for (Task taskModel in _currentTasks) {
       EntryModel latestEntry = _entries.getLatestEntryByTaskId(taskModel.id);
       int currentTaskSkippedDays =
           _daysBetween(latestEntry.completedDate, DateTime.now());

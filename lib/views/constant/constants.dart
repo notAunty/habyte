@@ -22,7 +22,7 @@ const USER_PROFILE_PIC_PATH = "profilePicPath";
 const USER_POINTS = "points";
 const USER_SCORES = "scores";
 
-// TaskModel Keys
+// Task Keys
 const TASK_ID = "id";
 const TASK_NAME = "name";
 const TASK_POINTS = "points";

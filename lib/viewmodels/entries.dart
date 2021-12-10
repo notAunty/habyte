@@ -64,7 +64,7 @@ class Entries {
   ///
   /// Call this function when you need the info in `List of EntryModel` from `taskId`.
   ///
-  /// Parameter required: `taskId` from `TaskModel`.
+  /// Parameter required: `taskId` from `Task`.
   List<EntryModel> retrieveEntriesByTaskId(String taskId) => _currentEntries
       .where((entryModel) => entryModel.taskId == taskId)
       .toList();
@@ -100,7 +100,7 @@ class Entries {
     _general.deleteBoxItem(_boxType, removedId);
   }
 
-  /// Get the latest entry by Task ID to get the completedDate in order to 
+  /// Get the latest entry by Task ID to get the completedDate in order to
   /// check skipped tasks.
   EntryModel getLatestEntryByTaskId(String taskId) =>
       _currentEntries.lastWhere((entryModel) => entryModel.taskId == taskId);
