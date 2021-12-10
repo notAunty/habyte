@@ -30,13 +30,15 @@ class ProfilePictureHolder extends StatefulWidget {
   const ProfilePictureHolder({
     Key? key,
     this.editable = false,
-    required this.initials,
+    this.initials,
     this.radius = 32,
+    this.isRegistering = false,
   }) : super(key: key);
 
   final bool editable;
   final double radius;
-  final String initials;
+  final String? initials;
+  final bool isRegistering;
 
   @override
   _ProfilePictureHolderState createState() => _ProfilePictureHolderState();
@@ -45,7 +47,7 @@ class ProfilePictureHolder extends StatefulWidget {
 class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
   final UserVM _userVM = UserVM.getInstance();
 
-  void _imgFromGallery() async {
+  void _imgFromGallery(bool isRegistering) async {
     XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (image != null) {
@@ -54,8 +56,11 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
       await image.saveTo(filePath);
       image = null;
 
-      setState(
-          () => _userVM.addTempUserData({USER_PROFILE_PIC_PATH: filePath}));
+      Map<String, dynamic> jsonToUpdate = {USER_PROFILE_PIC_PATH: filePath};
+
+      setState(() => isRegistering
+          ? _userVM.addTempUserData(jsonToUpdate)
+          : _userVM.updateUser(jsonToUpdate));
     }
   }
 
@@ -63,10 +68,15 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
   Widget build(BuildContext context) {
     bool editable = widget.editable;
     double radius = widget.radius;
-    String initials = widget.initials;
+    String? initials = widget.initials;
+    bool isRegistering = widget.isRegistering;
 
-    final String? _profilePicPath =
-        _userVM.retrieveTempUserJson()[USER_PROFILE_PIC_PATH];
+    final String? _userName = isRegistering
+        ? _userVM.retrieveTempUserJson()[USER_NAME]
+        : _userVM.retrieveUser()!.toMap()[USER_NAME];
+    final String? _profilePicPath = isRegistering
+        ? _userVM.retrieveTempUserJson()[USER_PROFILE_PIC_PATH]
+        : _userVM.retrieveUser()!.toMap()[USER_PROFILE_PIC_PATH];
 
     return Stack(
       alignment: Alignment.center,
@@ -106,10 +116,10 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
                 ),
               ]),
         ),
-        if (_profilePicPath != null || _profilePicPath == "")
+        if (_profilePicPath != null && _profilePicPath != "")
           Container(
             child: Image.file(
-              File(_profilePicPath ?? ""),
+              File(_profilePicPath),
               fit: BoxFit.cover,
             ),
             height: (radius - (radius * 0.05)) * 2,
@@ -123,7 +133,10 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
           Padding(
             padding: EdgeInsets.only(top: radius * 0.15),
             child: Text(
-              initials,
+              initials ??
+                  (_userName!.length >= 2
+                      ? _userName.substring(0, 2).toUpperCase()
+                      : _userName[0].toUpperCase()),
               style: TextStyle(
                   color: WHITE_01,
                   fontWeight: FontWeight.w600,
@@ -136,7 +149,7 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
             right: 0,
             bottom: 0,
             child: ProfilePictureUpdate(
-              pickImage: () => _imgFromGallery(),
+              pickImage: () => _imgFromGallery(isRegistering),
             ),
           ),
       ],
