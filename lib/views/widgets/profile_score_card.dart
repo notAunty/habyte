@@ -1,15 +1,25 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:habyte/viewmodels/entry.dart';
+import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/colors.dart';
+import 'package:habyte/views/constant/constants.dart';
 import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/widgets/profile_picture.dart';
 
 class ProfileScoreCard extends StatelessWidget {
-  const ProfileScoreCard({Key? key}) : super(key: key);
+  ProfileScoreCard({Key? key}) : super(key: key);
+
+  final UserVM _userVM = UserVM.getInstance();
+  final EntryVM _entryVM = EntryVM.getInstance();
 
   @override
   Widget build(BuildContext context) {
+    final String? _userName = _userVM.retrieveUser()!.toMap()[USER_NAME];
+    final int? _userScore = _userVM.retrieveUser()!.toMap()[USER_SCORES];
+    final int _numOfEntries = _entryVM.retrieveAllEntries().length;
+
     return Padding(
       padding:
           const EdgeInsets.symmetric(horizontal: SIDE_PADDING, vertical: 8),
@@ -37,8 +47,7 @@ class ProfileScoreCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      // TODO
-                      'John Dear',
+                      _userName!,
                       style: Theme.of(context)
                           .textTheme
                           .headline4!
@@ -70,8 +79,7 @@ class ProfileScoreCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        // TODO
-                        '55',
+                        _userScore.toString(),
                         style: Theme.of(context)
                             .textTheme
                             .headline4!
@@ -90,8 +98,7 @@ class ProfileScoreCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        // TODO
-                        '159',
+                        _numOfEntries.toString(),
                         style: Theme.of(context)
                             .textTheme
                             .headline4!
@@ -110,7 +117,9 @@ class ProfileScoreCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 4,),
+            const SizedBox(
+              height: 4,
+            ),
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: SIDE_PADDING * 0.75),
@@ -136,7 +145,9 @@ class ProfileScoreCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: SIDE_PADDING * 0.75,),
+            const SizedBox(
+              height: SIDE_PADDING * 0.75,
+            ),
           ],
         ),
       ),
