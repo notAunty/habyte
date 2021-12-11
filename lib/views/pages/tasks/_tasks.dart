@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:habyte/models/notification.dart';
 import 'package:habyte/views/constant/colors.dart';
-import 'package:habyte/models/task.dart';
 import 'package:habyte/views/widgets/text_fields.dart';
 import 'package:intl/intl.dart';
 import '../../widgets/taskItem.dart';
 import '../../../viewmodels/task.dart';
+import '../../../viewmodels/notification.dart';
 import 'package:habyte/views/constant/constants.dart';
 
 class TasksPage extends StatefulWidget {
@@ -17,22 +18,40 @@ class TasksPage extends StatefulWidget {
 class _TasksPageState extends State<TasksPage> {
   final formKey = GlobalKey<FormState>();
   final TaskVM _taskVM = TaskVM.getInstance();
+  final NotificationDetailVM _notificationVM =
+      NotificationDetailVM.getInstance();
   List<Map<String, dynamic>> taskList = [];
   bool edit = false;
   Map<String, dynamic> editItem = {};
+  NotificationDetail? editNotification = null;
   DateTime? startDate = null;
   DateTime? endDate = null;
+  TimeOfDay? reminder = null;
+  bool isReminderOn = false;
 
   TextEditingController startDateInput = TextEditingController();
   TextEditingController endDateInput = TextEditingController();
+  TextEditingController reminderInput = TextEditingController();
   TextEditingController nameInput = TextEditingController();
   TextEditingController pointInput = TextEditingController();
 
   @override
   void initState() {
-    startDateInput.text = "";
-    endDateInput.text = "";
     super.initState();
+  }
+
+  void initiailInput() {
+    setState(() {
+      nameInput.text = '';
+      pointInput.text = '';
+      startDateInput.text = "";
+      endDateInput.text = "";
+      reminderInput.text = "";
+      reminder = null;
+      isReminderOn = false;
+      startDate = null;
+      endDate = null;
+    });
   }
 
   void addTask() {
@@ -43,13 +62,10 @@ class _TasksPageState extends State<TasksPage> {
       TASK_END_DATE: endDate,
     });
 
+    //TO DO: add notification
+    //addNotification()
+    initiailInput();
     setState(() {
-      nameInput.text = '';
-      pointInput.text = '';
-      startDateInput.text = "";
-      endDateInput.text = "";
-      startDate = null;
-      endDate = null;
       taskList = _taskVM.retrieveAllTasksInListOfMap();
     });
 
@@ -60,13 +76,12 @@ class _TasksPageState extends State<TasksPage> {
     _taskVM.deleteTask(task['id']);
 
     setState(() {
-       taskList = _taskVM.retrieveAllTasksInListOfMap();
+      taskList = _taskVM.retrieveAllTasksInListOfMap();
     });
   }
 
   Future editTask() async {
-
-    //TODO
+    //TODO: edit task
     /* _taskVM.updateTask(editItem['id'], {
       TASK_NAME: nameInput.text,
       TASK_POINTS: int.parse(pointInput.text),
@@ -74,20 +89,33 @@ class _TasksPageState extends State<TasksPage> {
       TASK_END_DATE: endDate,
     });*/
 
+    /*if(editNotification==null && isReminderOn==true){
+        //addNotification()
+    }else if(editNotification!=null && isReminderOn==false){
+      //deleteNotification()
+    }else if(editNotification!=null && editNotification.notificationTime!=reminder){
+      //updateNotification()
+    }*/
+    initiailInput();
     setState(() {
-      nameInput.text = '';
-      pointInput.text = '';
-      startDateInput.text = "";
-      endDateInput.text = "";
-      startDate = null;
-      endDate = null;
       taskList = _taskVM.retrieveAllTasksInListOfMap();
     });
     Navigator.of(context).pop();
   }
 
+  void addNotification() {}
+  void deleteNotification() {}
+  void updateNotification() {}
+
   void onClickEdit(Map<String, dynamic> task) {
+    /* NotificationDetail editNotification =
+        _notificationVM.retrieveNotificationDetailByTaskId(task['id']);*/
+
     setState(() {
+      //isReminderOn=editNotification == null ? false : true;
+      //reminder= editNotification.notificationTime;
+      //reminderInput= formatTimeOfDay(editNotification.notificationTime);
+      //editNotification = editNotification;
       editItem = task;
       edit = true;
       nameInput.text = task['name'];
@@ -120,6 +148,29 @@ class _TasksPageState extends State<TasksPage> {
     }
   }
 
+  String formatTimeOfDay(TimeOfDay tod) {
+    final now = new DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+    final format = DateFormat.jm();
+    return format.format(dt);
+  }
+
+  Future showTimeInput(BuildContext context) async {
+    await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: 8, minute: 0),
+      initialEntryMode: TimePickerEntryMode.dial,
+    ).then((time) {
+      if (time != null) {
+        setState(() {
+          this.reminder = time;
+          reminderInput.text = formatTimeOfDay(time);
+        });
+        print(reminder!.hour);
+      }
+    });
+  }
+
   Future showCalendar(bool isStartDate) async {
     DateTime dateRange = DateTime.now();
 
@@ -148,60 +199,106 @@ class _TasksPageState extends State<TasksPage> {
   Future toogleDialog() async {
     await showDialog(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
-          insetPadding: EdgeInsets.all(10),
-          title: Text(edit == true ? 'Edit Task' : 'New Task'),
-          content: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomTextFieldLabel(
-                  label: 'Task Name',
-                  child: CustomTextField(
-                    maxWords: -1,
-                    isRequired: true,
-                    controller: nameInput,
+      builder: (BuildContext context) => StatefulBuilder(
+        builder: (context, setState) {
+          return SingleChildScrollView(
+            child: AlertDialog(
+                insetPadding: EdgeInsets.all(10),
+                title: Text(edit == true ? 'Edit Task' : 'New Task'),
+                content: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CustomTextFieldLabel(
+                        label: 'Task Name',
+                        child: CustomTextField(
+                          maxWords: -1,
+                          isRequired: true,
+                          controller: nameInput,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextFieldLabel(
+                        label: 'Points (1-5)',
+                        child: CustomTextField(
+                          maxWords: -1,
+                          isRequired: true,
+                          controller: pointInput,
+                          isInt: true,
+                          maxInt: 5,
+                          minInt: 1,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextFieldLabel(
+                        label: 'Start Date',
+                        child: CustomTextField(
+                            maxWords: -1,
+                            isRequired: true,
+                            controller: startDateInput,
+                            readOnly: true,
+                            onTap: () => showCalendar(true)),
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextFieldLabel(
+                        label: 'End Date (Optional)',
+                        child: CustomTextField(
+                            maxWords: -1,
+                            controller: endDateInput,
+                            readOnly: true,
+                            onTap: () => showCalendar(false)),
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Text(
+                            'Reminder',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                          Switch(
+                            onChanged: (value) {
+                              if (value == true) {
+                                setState(() {
+                                  isReminderOn = value;
+                                });
+                              } else {
+                                setState(() {
+                                  isReminderOn = value;
+                                  reminder = null;
+                                  reminderInput.text = '';
+                                });
+                              }
+                            },
+                            value: isReminderOn,
+                          ),
+                        ],
+                      ),
+                      Container(
+                        child: isReminderOn == true
+                            ? CustomTextField(
+                                maxWords: -1,
+                                controller: reminderInput,
+                                readOnly: true,
+                                onTap: () => showTimeInput(context))
+                            : SizedBox(height: 1),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 20),
-                CustomTextFieldLabel(
-                  label: 'Points (1-5)',
-                  child: CustomTextField(
-                    maxWords: -1,
-                    isRequired: true,
-                    controller: pointInput,
-                    isInt: true,
-                    maxInt: 5,
-                    minInt: 1,
-                  ),
-                ),
-                SizedBox(height: 20),
-                CustomTextFieldLabel(
-                  label: 'Start Date',
-                  child: CustomTextField(
-                      maxWords: -1,
-                      isRequired: true,
-                      controller: startDateInput,
-                      readOnly: true,
-                      onTap: () => showCalendar(true)),
-                ),
-                SizedBox(height: 20),
-                CustomTextFieldLabel(
-                  label: 'End Date',
-                  child: CustomTextField(
-                      maxWords: -1,
-                      controller: endDateInput,
-                      readOnly: true,
-                      onTap: () => showCalendar(false)),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(onPressed: onClickDone, child: Text('Done'))
-          ]),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        initiailInput();
+                      },
+                      child: Text('Cancel')),
+                  TextButton(onPressed: onClickDone, child: Text('Done'))
+                ]),
+          );
+        },
+      ),
     );
   }
 
