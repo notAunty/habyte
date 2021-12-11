@@ -16,6 +16,7 @@ final lightTheme = ThemeData(
   splashColor: Colors.transparent,
   iconTheme: const IconThemeData(color: GREY_01),
   buttonTheme: const ButtonThemeData(
+    height: 16,
     buttonColor: BLUE_02,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
