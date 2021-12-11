@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habyte/models/notification.dart';
 import 'package:habyte/views/constant/colors.dart';
+import 'package:habyte/views/pages/tasks/_viewTask.dart';
 import 'package:habyte/views/widgets/text_fields.dart';
 import 'package:intl/intl.dart';
 import '../../widgets/taskItem.dart';
@@ -322,8 +323,11 @@ class _TasksPageState extends State<TasksPage> {
                       ),
                       IconButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/viewTask',
-                                arguments: taskList);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ViewTask(taskList: taskList)));
                           },
                           icon: Icon(Icons.calendar_today))
                     ])),

@@ -6,7 +6,11 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../widgets/taskItem.dart';
 
 class ViewTask extends StatefulWidget {
-  const ViewTask({Key? key}) : super(key: key);
+  const ViewTask({
+    required this.taskList,
+    Key? key}) : super(key: key);
+
+   final List<Map<String, dynamic>> taskList;
 
   @override
   _ViewTaskState createState() => _ViewTaskState();
@@ -18,14 +22,11 @@ class _ViewTaskState extends State<ViewTask> {
   DateTime firstDay = DateTime.now().subtract(Duration(days: 3650));
   DateTime lastDay = DateTime.now().add(Duration(days: 3650));
   DateTime? _selectedDay;
-  List<Map<String, dynamic>> taskList = [];
   List<Map<String, dynamic>> todayTaskList = [];
 
   @override
   Widget build(BuildContext context) {
-    taskList = ModalRoute.of(context)!.settings.arguments
-        as List<Map<String, dynamic>>;
-    todayTaskList = taskList
+    todayTaskList = widget.taskList
         .where((task) =>
             task['startDate'].compareTo(_focusedDay) == -1 &&
             (task['endDate'] == null

@@ -38,18 +38,24 @@ class TaskItem extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          SizedBox(
+                            width: MediaQuery. of(context). size. width/2,
+                              child: Text(
                             task['name'],
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 18.0,
                               color: Colors.grey[600],
                             ),
-                          ),
+                          )),
                           SizedBox(height: 6.0),
                           Text(
-                            DateFormat('yyyy-MM-dd').format(task['startDate']) +(task['endDate']==null? '' : ('-' +
-                                DateFormat('yyyy-MM-dd').format(task['endDate']!)))
-                               ,
+                            DateFormat('yyyy-MM-dd').format(task['startDate']) +
+                                (task['endDate'] == null
+                                    ? ''
+                                    : ('-' +
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(task['endDate']!))),
                             style: TextStyle(
                               fontSize: 14.0,
                               color: Colors.grey[800],
@@ -67,7 +73,7 @@ class TaskItem extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    child: this.edit == null && this.delete==null 
+                    child: this.edit == null && this.delete == null
                         ? Container()
                         : Column(
                             children: [
