@@ -4,6 +4,8 @@ import 'package:habyte/models/task.dart';
 import 'package:habyte/views/widgets/text_fields.dart';
 import 'package:intl/intl.dart';
 import '../../widgets/taskItem.dart';
+import '../../../viewmodels/task.dart';
+import 'package:habyte/views/constant/constants.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({Key? key}) : super(key: key);
@@ -14,9 +16,10 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPageState extends State<TasksPage> {
   final formKey = GlobalKey<FormState>();
-  List<Task> taskList = [];
+  final TaskVM _taskVM = TaskVM.getInstance();
+  List<Map<String, dynamic>> taskList = [];
   bool edit = false;
-  Task editItem = Task();
+  Map<String, dynamic> editItem = {};
   DateTime? startDate = null;
   DateTime? endDate = null;
 
@@ -32,12 +35,13 @@ class _TasksPageState extends State<TasksPage> {
     super.initState();
   }
 
-  Future addTask() async {
-    final task = Task()
-      ..name = nameInput.text
-      ..points = int.parse(pointInput.text)
-      ..startDate = startDate!
-      ..endDate = endDate;
+  void addTask() {
+    _taskVM.createTask({
+      TASK_NAME: nameInput.text,
+      TASK_POINTS: int.parse(pointInput.text),
+      TASK_START_DATE: startDate,
+      TASK_END_DATE: endDate,
+    });
 
     setState(() {
       nameInput.text = '';
@@ -46,25 +50,30 @@ class _TasksPageState extends State<TasksPage> {
       endDateInput.text = "";
       startDate = null;
       endDate = null;
-      taskList.add(task);
+      taskList = _taskVM.retrieveAllTasksInListOfMap();
     });
+
     Navigator.of(context).pop();
   }
 
   Future deleteTask(task) async {
+    _taskVM.deleteTask(task['id']);
+
     setState(() {
-      taskList.remove(task);
+       taskList = _taskVM.retrieveAllTasksInListOfMap();
     });
   }
 
   Future editTask() async {
-    final newTask = Task()
-      ..name = nameInput.text
-      ..points = int.parse(pointInput.text)
-      ..startDate = startDate!
-      ..endDate = endDate;
 
-    int index = taskList.indexOf(editItem);
+    //TODO
+    /* _taskVM.updateTask(editItem['id'], {
+      TASK_NAME: nameInput.text,
+      TASK_POINTS: int.parse(pointInput.text),
+      TASK_START_DATE: startDate,
+      TASK_END_DATE: endDate,
+    });*/
+
     setState(() {
       nameInput.text = '';
       pointInput.text = '';
@@ -72,22 +81,22 @@ class _TasksPageState extends State<TasksPage> {
       endDateInput.text = "";
       startDate = null;
       endDate = null;
-      taskList[index] = newTask;
+      taskList = _taskVM.retrieveAllTasksInListOfMap();
     });
     Navigator.of(context).pop();
   }
 
-  void onClickEdit(Task task) {
+  void onClickEdit(Map<String, dynamic> task) {
     setState(() {
       editItem = task;
       edit = true;
-      nameInput.text = task.name;
-      pointInput.text = task.points.toString();
-      startDate = task.startDate;
-      endDate = task.endDate;
-      startDateInput.text = DateFormat("yyyy-MM-dd").format(task.startDate);
-      endDateInput.text = task.endDate != null
-          ? DateFormat('yyyy-MM-dd').format(task.endDate!)
+      nameInput.text = task['name'];
+      pointInput.text = task['points'].toString();
+      startDate = task['startDate'];
+      endDate = task['endDate'];
+      startDateInput.text = DateFormat("yyyy-MM-dd").format(task['startDate']);
+      endDateInput.text = task['endDate'] != null
+          ? DateFormat('yyyy-MM-dd').format(task['endDate']!)
           : '';
     });
     toogleDialog();
@@ -103,7 +112,7 @@ class _TasksPageState extends State<TasksPage> {
   void onClickDone() {
     final isValid = formKey.currentState!.validate();
     if (isValid) {
-      if (edit) {
+      if (edit == true) {
         editTask();
       } else {
         addTask();
@@ -141,7 +150,7 @@ class _TasksPageState extends State<TasksPage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
           insetPadding: EdgeInsets.all(10),
-          title: const Text('New Task'),
+          title: Text(edit == true ? 'Edit Task' : 'New Task'),
           content: Form(
             key: formKey,
             child: Column(

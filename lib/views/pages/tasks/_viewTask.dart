@@ -15,17 +15,24 @@ class ViewTask extends StatefulWidget {
 class _ViewTaskState extends State<ViewTask> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
+  DateTime firstDay = DateTime.now().subtract(Duration(days: 3650));
+  DateTime lastDay = DateTime.now().add(Duration(days: 3650));
   DateTime? _selectedDay;
-  List<Task> taskList = [];
-  List<Task> todayTaskList = [];
+  List<Map<String, dynamic>> taskList = [];
+  List<Map<String, dynamic>> todayTaskList = [];
 
   @override
   Widget build(BuildContext context) {
-    taskList = ModalRoute.of(context)!.settings.arguments as List<Task>;
+    taskList = ModalRoute.of(context)!.settings.arguments
+        as List<Map<String, dynamic>>;
     todayTaskList = taskList
         .where((task) =>
-            task.startDate.compareTo(_focusedDay) == -1 && 
-            (task.endDate==null ? true : task.endDate!.compareTo(_focusedDay.subtract(Duration(days: 1))) >=0))
+            task['startDate'].compareTo(_focusedDay) == -1 &&
+            (task['endDate'] == null
+                ? true
+                : task['endDate']!
+                        .compareTo(_focusedDay.subtract(Duration(days: 1))) >=
+                    0))
         .toList();
     return Scaffold(
         appBar: AppBar(
@@ -35,8 +42,8 @@ class _ViewTaskState extends State<ViewTask> {
         body: Column(
           children: [
             TableCalendar(
-              firstDay: DateTime.utc(2010, 10, 16),
-              lastDay: DateTime.utc(2030, 3, 14),
+              firstDay: firstDay,
+              lastDay: lastDay,
               focusedDay: _focusedDay,
               calendarFormat: _calendarFormat,
               selectedDayPredicate: (day) {

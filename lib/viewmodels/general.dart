@@ -118,7 +118,7 @@ class General {
       BoxType.taskEntry: "E"
     };
 
-    String? newId = boxTypeMap[box];
+    String? newId = boxTypeMap[boxType];
     for (var i = 0; i < MODEL_ID_LENGTH - newNumId.toString().length; i++) {
       newId = newId! + "0";
     }

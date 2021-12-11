@@ -5,9 +5,9 @@ import 'package:intl/intl.dart';
 import '../pages/tasks/_tasks.dart';
 
 class TaskItem extends StatelessWidget {
-  final Task task;
-  final Function(Task)? delete;
-  final Function(Task)? edit;
+  final Map<String, dynamic> task;
+  final Function(Map<String, dynamic>)? delete;
+  final Function(Map<String, dynamic>)? edit;
 
   const TaskItem({required this.task, this.delete, this.edit});
 
@@ -39,7 +39,7 @@ class TaskItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            task.name,
+                            task['name'],
                             style: TextStyle(
                               fontSize: 18.0,
                               color: Colors.grey[600],
@@ -47,8 +47,8 @@ class TaskItem extends StatelessWidget {
                           ),
                           SizedBox(height: 6.0),
                           Text(
-                            DateFormat('yyyy-MM-dd').format(task.startDate) +(task.endDate==null? '' : ('-' +
-                                DateFormat('yyyy-MM-dd').format(task.endDate!)))
+                            DateFormat('yyyy-MM-dd').format(task['startDate']) +(task['endDate']==null? '' : ('-' +
+                                DateFormat('yyyy-MM-dd').format(task['endDate']!)))
                                ,
                             style: TextStyle(
                               fontSize: 14.0,
@@ -58,7 +58,7 @@ class TaskItem extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        task.points.toString(),
+                        task['points'].toString(),
                         style: TextStyle(
                           fontSize: 40.0,
                           color: Theme.of(context).colorScheme.primary,
