@@ -1,23 +1,28 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:habyte/views/classes/global_scaffold.dart';
 import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/widgets/profile_score_card.dart';
 
-void initiateShareCard(BuildContext context) {
+void initiateShareCard(BuildContext context, {required Widget shareWidget}) {
   Navigator.push(
     context,
     PageRouteBuilder(
       opaque: false,
       transitionDuration: const Duration(milliseconds: 700),
-      pageBuilder: (context, animation, secondaryAnimation) => SharePage(),
+      pageBuilder: (context, animation, secondaryAnimation) => SharePage(
+        child: shareWidget,
+      ),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         bool reverse = animation.status == AnimationStatus.reverse;
         return SlideTransition(
@@ -37,8 +42,10 @@ void initiateShareCard(BuildContext context) {
 }
 
 class SharePage extends StatelessWidget {
-  late Uint8List imageInMemory;
+  SharePage({Key? key, required this.child}) : super(key: key);
 
+  final Widget child;
+  late Uint8List imageInMemory;
   final GlobalKey _globalKey = GlobalKey();
 
   Future<Uint8List?> _capturePng(BuildContext context) async {
@@ -54,7 +61,6 @@ class SharePage extends StatelessWidget {
         print(imageInMemory);
       }
       return pngBytes;
-
     } catch (e) {
       context
           .read<GlobalScaffold>()
@@ -62,12 +68,22 @@ class SharePage extends StatelessWidget {
     }
   }
 
+  void _share(BuildContext context) async {
+    Uint8List? capturedPngUint8List = await _capturePng(context);
+    if (capturedPngUint8List == null) return;
+
+    final temp = await getTemporaryDirectory();
+    final path = '${temp.path}/share.png';
+    File(path).writeAsBytesSync(capturedPngUint8List);
+    await Share.shareFiles([path], text: 'Shared image');
+  }
+
   @override
   Widget build(BuildContext context) {
     Future.delayed(
       const Duration(milliseconds: 800),
     ).then((_) {
-      _capturePng(context);
+      _share(context);
     });
 
     return Scaffold(
