@@ -81,7 +81,9 @@ class _MainLayoutState extends State<MainLayout> {
               onPressed: () => _onFabClicked[_selectedIndex]!(context),
             )
           : null,
-      body: AnimatedIndexedStack(index: _selectedIndex, children: _pages),
+      body: SafeArea(
+        child: AnimatedIndexedStack(index: _selectedIndex, children: _pages),
+      ),
     );
   }
 }

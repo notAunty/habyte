@@ -1,3 +1,3 @@
-const TOP_PADDING = 32.0;
+const TOP_PADDING = 16.0;
 const SIDE_PADDING = 24.0;
 const BORDER_RADIUS = 12.0;

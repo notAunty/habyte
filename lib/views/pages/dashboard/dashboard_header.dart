@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/pages/share/initiate_share_card.dart';
+import 'package:habyte/views/widgets/custom_icon_button.dart';
 import 'package:habyte/views/widgets/profile_score_card.dart';
 
 class DashboardHeader extends StatelessWidget {
@@ -16,7 +17,7 @@ class DashboardHeader extends StatelessWidget {
         children: [
           Opacity(
             opacity: 0.7,
-            child: IconButton(
+            child: CustomIconButton(
               icon: const Icon(FeatherIcons.share),
               onPressed: () => initiateShareCard(
                 context,

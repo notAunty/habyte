@@ -64,15 +64,17 @@ class SharePage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: BLACK_01.withOpacity(0.5),
-      body: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 5.0),
-          child: Column(
-            children: [
-              const SizedBox(height: TOP_PADDING, width: double.infinity),
-              const SharePageHeader(),
-              RepaintBoundary(key: _globalKey, child: child),
-            ],
+      body: SafeArea(
+        child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 5.0),
+            child: Column(
+              children: [
+                const SizedBox(height: TOP_PADDING, width: double.infinity),
+                const SharePageHeader(),
+                RepaintBoundary(key: _globalKey, child: child),
+              ],
+            ),
           ),
         ),
       ),
