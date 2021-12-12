@@ -161,6 +161,16 @@ class _TasksPageState extends State<TasksPage> {
       context: context,
       initialTime: TimeOfDay(hour: 8, minute: 0),
       initialEntryMode: TimePickerEntryMode.dial,
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light().copyWith(
+              primary: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          child: child!,
+        );
+      },
     ).then((time) {
       if (time != null) {
         setState(() {
@@ -173,24 +183,58 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   Future showCalendar(bool isStartDate) async {
-    DateTime dateRange = DateTime.now();
+    DateTime dateRange = isStartDate
+        ? DateTime.now()
+        : startDate == null
+            ? DateTime.now()
+            : startDate!;
 
     await showDatePicker(
-            context: context,
-            initialDate: startDate ?? DateTime.now(),
-            firstDate: dateRange,
-            lastDate: dateRange.add(Duration(days: 3650)))
-        .then((date) {
+      context: context,
+      initialDate: startDate ?? DateTime.now(),
+      firstDate: dateRange,
+      cancelText: 'Clear',
+      lastDate: dateRange.add(Duration(days: 3650)),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light().copyWith(
+              primary: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    ).then((date) {
       if (date != null) {
         if (isStartDate) {
           setState(() {
             this.startDate = date;
             startDateInput.text = DateFormat('yyyy-MM-dd').format(startDate!);
           });
+          if (endDate != null && endDate!.compareTo(startDate!) < 0) {
+            print('exe');
+            setState(() {
+              this.endDate = null;
+              endDateInput.text = '';
+            });
+          }
         } else {
           setState(() {
             this.endDate = date;
             endDateInput.text = DateFormat('yyyy-MM-dd').format(endDate!);
+          });
+        }
+      } else {
+        if (isStartDate) {
+          setState(() {
+            this.startDate = null;
+            startDateInput.text = '';
+          });
+        } else {
+          setState(() {
+            this.endDate = null;
+            endDateInput.text = '';
           });
         }
       }

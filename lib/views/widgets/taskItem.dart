@@ -28,7 +28,7 @@ class TaskItem extends StatelessWidget {
         child: Card(
             color: WHITE_01, //Theme.of(context).colorScheme.onSurface,
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
