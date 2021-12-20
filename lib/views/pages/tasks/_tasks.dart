@@ -1,12 +1,13 @@
+import 'package:habyte/utils/date_time.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:habyte/models/notification.dart';
+import 'package:habyte/viewmodels/notification.dart';
+import 'package:habyte/viewmodels/task.dart';
 import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/pages/tasks/_viewTask.dart';
+import 'package:habyte/views/widgets/task_card.dart';
 import 'package:habyte/views/widgets/text_fields.dart';
-import 'package:intl/intl.dart';
-import '../../widgets/taskItem.dart';
-import '../../../viewmodels/task.dart';
-import '../../../viewmodels/notification.dart';
 import 'package:habyte/views/constant/constants.dart';
 
 class TasksPage extends StatefulWidget {
@@ -21,13 +22,12 @@ class _TasksPageState extends State<TasksPage> {
   final TaskVM _taskVM = TaskVM.getInstance();
   final NotificationDetailVM _notificationVM =
       NotificationDetailVM.getInstance();
+
   List<Map<String, dynamic>> taskList = [];
-  bool edit = false;
-  Map<String, dynamic> editItem = {};
-  NotificationDetail? editNotification = null;
-  DateTime? startDate = null;
-  DateTime? endDate = null;
-  TimeOfDay? reminder = null;
+  NotificationDetail? editNotification;
+  DateTime? startDate;
+  DateTime? endDate;
+  TimeOfDay? reminder;
   bool isReminderOn = false;
 
   TextEditingController startDateInput = TextEditingController();
@@ -39,49 +39,34 @@ class _TasksPageState extends State<TasksPage> {
   @override
   void initState() {
     super.initState();
-  }
-
-  void initiailInput() {
-    setState(() {
-      nameInput.text = '';
-      pointInput.text = '';
-      startDateInput.text = "";
-      endDateInput.text = "";
-      reminderInput.text = "";
-      reminder = null;
-      isReminderOn = false;
-      startDate = null;
-      endDate = null;
-    });
+    taskList = _taskVM.retrieveAllTasksInListOfMap();
   }
 
   void addTask() {
-    _taskVM.createTask({
-      TASK_NAME: nameInput.text,
-      TASK_POINTS: int.parse(pointInput.text),
-      TASK_START_DATE: startDate,
-      TASK_END_DATE: endDate,
-    });
-
     //TO DO: add notification
     //addNotification()
-    initiailInput();
     setState(() {
-      taskList = _taskVM.retrieveAllTasksInListOfMap();
+      taskList.add(_taskVM.createTask({
+        TASK_NAME: nameInput.text,
+        TASK_POINTS: int.parse(pointInput.text),
+        TASK_START_DATE: startDate,
+        TASK_END_DATE: endDate,
+      }));
+      print(taskList);
     });
 
     Navigator.of(context).pop();
   }
 
-  Future deleteTask(task) async {
-    _taskVM.deleteTask(task['id']);
+  Future deleteTask(Map<String, dynamic> taskToBeDeleted) async {
+    _taskVM.deleteTask(taskToBeDeleted[TASK_ID]);
 
     setState(() {
       taskList = _taskVM.retrieveAllTasksInListOfMap();
     });
   }
 
-  Future editTask() async {
+  Future editTask(String taskId) async {
     //TODO: edit task
     /* _taskVM.updateTask(editItem['id'], {
       TASK_NAME: nameInput.text,
@@ -97,9 +82,15 @@ class _TasksPageState extends State<TasksPage> {
     }else if(editNotification!=null && editNotification.notificationTime!=reminder){
       //updateNotification()
     }*/
-    initiailInput();
     setState(() {
-      taskList = _taskVM.retrieveAllTasksInListOfMap();
+      int updatedTaskIndex =
+          taskList.firstWhere((task) => task[TASK_ID] == taskId)[TASK_ID];
+      taskList[updatedTaskIndex] = _taskVM.updateTask(taskId, {
+        TASK_NAME: nameInput.text,
+        TASK_POINTS: int.parse(pointInput.text),
+        TASK_START_DATE: startDate,
+        TASK_END_DATE: endDate,
+      });
     });
     Navigator.of(context).pop();
   }
@@ -117,54 +108,34 @@ class _TasksPageState extends State<TasksPage> {
       //reminder= editNotification.notificationTime;
       //reminderInput= formatTimeOfDay(editNotification.notificationTime);
       //editNotification = editNotification;
-      editItem = task;
-      edit = true;
-      nameInput.text = task['name'];
-      pointInput.text = task['points'].toString();
-      startDate = task['startDate'];
-      endDate = task['endDate'];
-      startDateInput.text = DateFormat("yyyy-MM-dd").format(task['startDate']);
-      endDateInput.text = task['endDate'] != null
-          ? DateFormat('yyyy-MM-dd').format(task['endDate']!)
-          : '';
     });
-    toogleDialog();
+    toggleDialog(taskToBeEdited: task);
   }
 
   void onClickAdd() {
-    setState(() {
-      edit = false;
-    });
-    toogleDialog();
+    toggleDialog();
   }
 
-  void onClickDone() {
+  void onClickDone({String? taskId}) {
     final isValid = formKey.currentState!.validate();
     if (isValid) {
-      if (edit == true) {
-        editTask();
+      if (taskId != null) {
+        editTask(taskId);
       } else {
         addTask();
       }
     }
   }
 
-  String formatTimeOfDay(TimeOfDay tod) {
-    final now = new DateTime.now();
-    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
-    final format = DateFormat.jm();
-    return format.format(dt);
-  }
-
   Future showTimeInput(BuildContext context) async {
     await showTimePicker(
       context: context,
-      initialTime: TimeOfDay(hour: 8, minute: 0),
+      initialTime: const TimeOfDay(hour: 8, minute: 0),
       initialEntryMode: TimePickerEntryMode.dial,
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light().copyWith(
+            colorScheme: const ColorScheme.light().copyWith(
               primary: Theme.of(context).colorScheme.primary,
             ),
           ),
@@ -175,7 +146,7 @@ class _TasksPageState extends State<TasksPage> {
       if (time != null) {
         setState(() {
           this.reminder = time;
-          reminderInput.text = formatTimeOfDay(time);
+          reminderInput.text = timeOfDayFormatter(time);
         });
         print(reminder!.hour);
       }
@@ -194,11 +165,11 @@ class _TasksPageState extends State<TasksPage> {
       initialDate: startDate ?? DateTime.now(),
       firstDate: dateRange,
       cancelText: 'Clear',
-      lastDate: dateRange.add(Duration(days: 3650)),
+      lastDate: dateRange.add(const Duration(days: 3650)),
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light().copyWith(
+            colorScheme: const ColorScheme.light().copyWith(
               primary: Theme.of(context).colorScheme.primary,
             ),
           ),
@@ -241,106 +212,136 @@ class _TasksPageState extends State<TasksPage> {
     });
   }
 
-  Future toogleDialog() async {
+  Future toggleDialog({Map<String, dynamic>? taskToBeEdited}) async {
+    String title = taskToBeEdited != null ? 'Edit Task' : 'New Task';
+    if (taskToBeEdited != null) {
+      nameInput.text = taskToBeEdited[TASK_NAME];
+      pointInput.text = taskToBeEdited[TASK_POINTS].toString();
+      startDate = taskToBeEdited[TASK_START_DATE];
+      endDate = taskToBeEdited[TASK_END_DATE];
+      startDateInput.text =
+          DateFormat("yyyy-MM-dd").format(taskToBeEdited[TASK_START_DATE]);
+      endDateInput.text = taskToBeEdited[TASK_END_DATE] != null
+          ? DateFormat('yyyy-MM-dd').format(taskToBeEdited[TASK_END_DATE]!)
+          : '';
+    } else {
+      nameInput.text = '';
+      pointInput.text = '';
+      startDateInput.text = "";
+      endDateInput.text = "";
+      reminderInput.text = "";
+      reminder = null;
+      isReminderOn = false;
+      startDate = null;
+      endDate = null;
+    }
+
     await showDialog(
       context: context,
       builder: (BuildContext context) => StatefulBuilder(
         builder: (context, setState) {
           return SingleChildScrollView(
             child: AlertDialog(
-                insetPadding: EdgeInsets.all(10),
-                title: Text(edit == true ? 'Edit Task' : 'New Task'),
-                content: Form(
-                  key: formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CustomTextFieldLabel(
-                        label: 'Task Name',
-                        child: CustomTextField(
-                          maxWords: -1,
-                          isRequired: true,
-                          controller: nameInput,
+              insetPadding: const EdgeInsets.all(10),
+              title: Text(title),
+              content: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomTextFieldLabel(
+                      label: 'Task Name',
+                      child: CustomTextField(
+                        maxWords: -1,
+                        isRequired: true,
+                        controller: nameInput,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    CustomTextFieldLabel(
+                      label: 'Points (1-5)',
+                      child: CustomTextField(
+                        maxWords: -1,
+                        isRequired: true,
+                        controller: pointInput,
+                        isInt: true,
+                        maxInt: 5,
+                        minInt: 1,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    CustomTextFieldLabel(
+                      label: 'Start Date',
+                      child: CustomTextField(
+                        maxWords: -1,
+                        isRequired: true,
+                        controller: startDateInput,
+                        readOnly: true,
+                        onTap: () => showCalendar(true),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    CustomTextFieldLabel(
+                      label: 'End Date (Optional)',
+                      child: CustomTextField(
+                        maxWords: -1,
+                        controller: endDateInput,
+                        readOnly: true,
+                        onTap: () => showCalendar(false),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Text(
+                          'Reminder',
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      CustomTextFieldLabel(
-                        label: 'Points (1-5)',
-                        child: CustomTextField(
-                          maxWords: -1,
-                          isRequired: true,
-                          controller: pointInput,
-                          isInt: true,
-                          maxInt: 5,
-                          minInt: 1,
+                        Switch(
+                          onChanged: (value) {
+                            if (value == true) {
+                              setState(() {
+                                isReminderOn = value;
+                              });
+                            } else {
+                              setState(() {
+                                isReminderOn = value;
+                                reminder = null;
+                                reminderInput.text = '';
+                              });
+                            }
+                          },
+                          value: isReminderOn,
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      CustomTextFieldLabel(
-                        label: 'Start Date',
-                        child: CustomTextField(
-                            maxWords: -1,
-                            isRequired: true,
-                            controller: startDateInput,
-                            readOnly: true,
-                            onTap: () => showCalendar(true)),
-                      ),
-                      SizedBox(height: 10),
-                      CustomTextFieldLabel(
-                        label: 'End Date (Optional)',
-                        child: CustomTextField(
-                            maxWords: -1,
-                            controller: endDateInput,
-                            readOnly: true,
-                            onTap: () => showCalendar(false)),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Text(
-                            'Reminder',
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                          Switch(
-                            onChanged: (value) {
-                              if (value == true) {
-                                setState(() {
-                                  isReminderOn = value;
-                                });
-                              } else {
-                                setState(() {
-                                  isReminderOn = value;
-                                  reminder = null;
-                                  reminderInput.text = '';
-                                });
-                              }
-                            },
-                            value: isReminderOn,
-                          ),
-                        ],
-                      ),
-                      Container(
-                        child: isReminderOn == true
-                            ? CustomTextField(
-                                maxWords: -1,
-                                controller: reminderInput,
-                                readOnly: true,
-                                onTap: () => showTimeInput(context))
-                            : SizedBox(height: 1),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                    Container(
+                      child: isReminderOn == true
+                          ? CustomTextField(
+                              maxWords: -1,
+                              controller: reminderInput,
+                              readOnly: true,
+                              onTap: () => showTimeInput(context),
+                            )
+                          : const SizedBox(height: 1),
+                    ),
+                  ],
                 ),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        initiailInput();
-                      },
-                      child: Text('Cancel')),
-                  TextButton(onPressed: onClickDone, child: Text('Done'))
-                ]),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => taskToBeEdited != null
+                      ? onClickDone(taskId: taskToBeEdited[TASK_ID])
+                      : onClickDone(),
+                  child: const Text('Done'),
+                )
+              ],
+            ),
           );
         },
       ),
@@ -350,78 +351,86 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
-                padding: EdgeInsets.all(25),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Tasks List',
-                        style: Theme.of(context).textTheme.headline5,
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ViewTask(taskList: taskList)));
-                          },
-                          icon: Icon(Icons.calendar_today))
-                    ])),
-            Expanded(
-                child: Container(
-              decoration: BoxDecoration(
-                color: WHITE_01, //Theme.of(context).colorScheme.onSurface,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(60),
-                    topRight: Radius.circular(60)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3),
+              padding: const EdgeInsets.all(25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Tasks List',
+                    style: Theme.of(context).textTheme.headline5,
                   ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewTask(taskList: taskList),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.calendar_today),
+                  )
                 ],
               ),
-              child: Padding(
-                  padding: EdgeInsets.all(20.0),
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: WHITE_01, //Theme.of(context).colorScheme.onSurface,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(60),
+                      topRight: Radius.circular(60)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: taskList
-                                .map((task) => TaskItem(
-                                      task: task,
-                                      delete: deleteTask,
-                                      edit: onClickEdit,
-                                    ))
-                                .toList()),
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: taskList
+                              .map((task) => TaskCard(
+                                    task: task,
+                                    delete: deleteTask,
+                                    edit: onClickEdit,
+                                  ))
+                              .toList(),
+                        ),
                       ],
                     ),
-                  )),
-            )),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: onClickAdd,
-          child: Icon(
-            Icons.add,
-            color: WHITE_01,
-          )),
+        onPressed: onClickAdd,
+        child: const Icon(
+          Icons.add,
+          color: WHITE_01,
+        ),
+      ),
     );
   }
 }
