@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:habyte/utils/name_initials.dart';
 import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/constant/constants.dart';
@@ -9,18 +10,22 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ProfilePictureUpdate extends StatelessWidget {
-  const ProfilePictureUpdate({Key? key, required this.pickImage})
-      : super(key: key);
+  const ProfilePictureUpdate({
+    Key? key,
+    this.mini = true,
+    required this.pickImage,
+  }) : super(key: key);
 
+  final bool mini;
   final Function pickImage;
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      mini: true,
+      mini: mini,
       heroTag: 'edit-profile-picture',
       backgroundColor: WHITE_01,
-      child: const Icon(FeatherIcons.camera, size: 20),
+      child: const Icon(FeatherIcons.camera, size: 20, color: BLACK_02),
       onPressed: () => pickImage(),
     );
   }
@@ -30,14 +35,12 @@ class ProfilePictureHolder extends StatefulWidget {
   const ProfilePictureHolder({
     Key? key,
     this.editable = false,
-    this.initials,
     this.radius = 32,
     this.isRegistering = false,
   }) : super(key: key);
 
   final bool editable;
   final double radius;
-  final String? initials;
   final bool isRegistering;
 
   @override
@@ -68,7 +71,6 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
   Widget build(BuildContext context) {
     bool editable = widget.editable;
     double radius = widget.radius;
-    String? initials = widget.initials;
     bool isRegistering = widget.isRegistering;
 
     final String? _userName = isRegistering
@@ -133,10 +135,7 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
           Padding(
             padding: EdgeInsets.only(top: radius * 0.15),
             child: Text(
-              initials ??
-                  (_userName!.length >= 2
-                      ? _userName.substring(0, 2).toUpperCase()
-                      : _userName[0].toUpperCase()),
+              getNameInitials(_userName).toUpperCase(),
               style: TextStyle(
                   color: WHITE_01,
                   fontWeight: FontWeight.w600,
@@ -149,6 +148,7 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
             right: 0,
             bottom: 0,
             child: ProfilePictureUpdate(
+              mini: radius < 96,
               pickImage: () => _imgFromGallery(isRegistering),
             ),
           ),

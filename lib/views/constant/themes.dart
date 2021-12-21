@@ -175,16 +175,16 @@ final darkTheme = ThemeData(
       ),
     ),
   ),
-  inputDecorationTheme: const InputDecorationTheme(
-    border: OutlineInputBorder(),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: WHITE_01,
-        width: 1.5,
-      ),
-    ),
-    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-  ),
+  // inputDecorationTheme: const InputDecorationTheme(
+  //   border: OutlineInputBorder(),
+  //   focusedBorder: OutlineInputBorder(
+  //     borderSide: BorderSide(
+  //       color: WHITE_01,
+  //       width: 1.5,
+  //     ),
+  //   ),
+  //   contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+  // ),
   snackBarTheme: SnackBarThemeData(
     backgroundColor: WHITE_01,
     contentTextStyle: const TextStyle().copyWith(
@@ -243,7 +243,7 @@ final darkTheme = ThemeData(
     subtitle1: TextStyle(
       fontFamily: "Poppins",
       fontSize: 14,
-      color: BLACK_02,
+      color: WHITE_02,
       fontWeight: FontWeight.w400,
       height: 1.15,
       // letterSpacing: 0
@@ -251,7 +251,7 @@ final darkTheme = ThemeData(
     subtitle2: TextStyle(
       fontFamily: "Poppins",
       fontSize: 12,
-      color: BLACK_02,
+      color: WHITE_02,
       height: 1.15,
       // fontWeight: FontWeight.w600,
       // letterSpacing: 0.1
