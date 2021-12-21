@@ -1,9 +1,5 @@
-import 'package:habyte/models/taskEntry.dart';
 import 'package:habyte/models/task.dart';
-import 'package:habyte/viewmodels/taskEntry.dart';
 import 'package:habyte/viewmodels/general.dart';
-import 'package:habyte/viewmodels/user.dart';
-import 'package:habyte/views/constant/constants.dart';
 
 /// **Task ViewModel Class**
 ///
@@ -64,8 +60,10 @@ class TaskVM {
   /// Call this function when you need the info from one of the `Task`.
   ///
   /// Parameter required: `id` from `Task`.
-  Task retrieveTaskById(String id) =>
-      _currentTasks.singleWhere((task) => task.id == id);
+  Task retrieveTaskById(String id) => _currentTasks.singleWhere(
+        (task) => task.id == id,
+        orElse: () => Task().nullClass(),
+      );
 
   /// **Update Task** (`U` in CRUD)
   ///
@@ -84,6 +82,7 @@ class TaskVM {
   /// from there
   Task updateTask(String id, Map<String, dynamic> jsonToUpdate) {
     int _index = _currentTasks.indexWhere((task) => task.id == id);
+    // if (_index == -1) // do some alert
     Task _updatedTask = Task.fromJson({
       ..._currentTasks[_index].toMap(),
       ...jsonToUpdate,
@@ -98,6 +97,7 @@ class TaskVM {
   /// Call this function when need to delete task
   void deleteTask(String id) {
     int index = _currentTasks.indexWhere((task) => task.id == id);
+    // if (_index == -1) // do some alert
     String removedId = _currentTasks.removeAt(index).id;
     _general.deleteBoxItem(_boxType, removedId);
   }
@@ -109,31 +109,5 @@ class TaskVM {
       tasksInListOfMap.add(task.toMap());
     }
     return tasksInListOfMap;
-  }
-
-  /// This function is used to check all the skipped tasks.
-  void checkSkippedTasks() {
-    UserVM _userVM = UserVM.getInstance();
-    TaskEntryVM _taskEntryVM = TaskEntryVM.getInstance();
-
-    int totalMarksToBeDeducted = 0;
-    for (Task task in _currentTasks) {
-      TaskEntry latestTaskEntry =
-          _taskEntryVM.getLatestTaskEntryByTaskId(task.id);
-      int currentTaskSkippedDays =
-          _daysBetween(latestTaskEntry.completedDate, DateTime.now());
-      if (currentTaskSkippedDays > 0) {
-        totalMarksToBeDeducted += SKIPPED_MARKS_DEDUCTED; // amount to be fixed
-      }
-    }
-
-    _userVM.minusScore(totalMarksToBeDeducted);
-  }
-
-  /// Private function to find days difference.
-  int _daysBetween(DateTime from, DateTime to) {
-    from = DateTime(from.year, from.month, from.day);
-    to = DateTime(to.year, to.month, to.day);
-    return (to.difference(from).inHours / 24).round();
   }
 }
