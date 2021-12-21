@@ -9,18 +9,22 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ProfilePictureUpdate extends StatelessWidget {
-  const ProfilePictureUpdate({Key? key, required this.pickImage})
-      : super(key: key);
+  const ProfilePictureUpdate({
+    Key? key,
+    this.mini = true,
+    required this.pickImage,
+  }) : super(key: key);
 
+  final bool mini;
   final Function pickImage;
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      mini: true,
+      mini: mini,
       heroTag: 'edit-profile-picture',
       backgroundColor: WHITE_01,
-      child: const Icon(FeatherIcons.camera, size: 20),
+      child: const Icon(FeatherIcons.camera, size: 20, color: BLACK_02),
       onPressed: () => pickImage(),
     );
   }
@@ -149,6 +153,7 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
             right: 0,
             bottom: 0,
             child: ProfilePictureUpdate(
+              mini: radius < 96,
               pickImage: () => _imgFromGallery(isRegistering),
             ),
           ),
