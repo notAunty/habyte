@@ -60,8 +60,10 @@ class TaskEntryVM {
   /// Call this function when you need the info from one of the `TaskEntry`.
   ///
   /// Parameter required: `id` from `TaskEntry`.
-  TaskEntry retrieveTaskEntryById(String id) =>
-      _currentTaskEntries.singleWhere((taskEntry) => taskEntry.id == id);
+  TaskEntry retrieveTaskEntryById(String id) => _currentTaskEntries.singleWhere(
+        (taskEntry) => taskEntry.id == id,
+        orElse: () => TaskEntry().nullClass(),
+      );
 
   /// **Retrieve TaskEntry** (`R` in CRUD)
   ///
@@ -89,6 +91,7 @@ class TaskEntryVM {
   TaskEntry updateTaskEntry(String id, Map<String, dynamic> jsonToUpdate) {
     int _index =
         _currentTaskEntries.indexWhere((taskEntry) => taskEntry.id == id);
+    // if (_index == -1) // do some alert
     TaskEntry _updatedTaskEntry = TaskEntry.fromJson({
       ..._currentTaskEntries[_index].toMap(),
       ...jsonToUpdate,
@@ -102,7 +105,9 @@ class TaskEntryVM {
   ///
   /// Call this function when need to delete taskEntry
   void deleteTaskEntry(String id) {
-    int index = _currentTaskEntries.indexWhere((taskEntry) => taskEntry.id == id);
+    int index =
+        _currentTaskEntries.indexWhere((taskEntry) => taskEntry.id == id);
+    // if (_index == -1) // do some alert
     String removedId = _currentTaskEntries.removeAt(index).id;
     _general.deleteBoxItem(_boxType, removedId);
   }
@@ -110,7 +115,10 @@ class TaskEntryVM {
   /// Get the latest taskEntry by Task ID to get the completedDate in order to
   /// check skipped tasks.
   TaskEntry getLatestTaskEntryByTaskId(String taskId) =>
-      _currentTaskEntries.lastWhere((taskEntry) => taskEntry.taskId == taskId);
+      _currentTaskEntries.lastWhere(
+        (taskEntry) => taskEntry.taskId == taskId,
+        orElse: () => TaskEntry().nullClass(),
+      );
 
   /// Private function to convert `List of TaskEntry` to `List of Map`
   List<Map<String, dynamic>> _toListOfMap() {

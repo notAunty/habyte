@@ -35,7 +35,7 @@ class RewardVM {
   ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  Reward createReward(Map<String, String> rewardJson) {
+  Reward createReward(Map<String, dynamic> rewardJson) {
     Reward _reward = Reward.fromJson(rewardJson);
     _reward.id = _general.getBoxItemNewId(_boxType);
     _currentRewards.add(_reward);
@@ -52,15 +52,17 @@ class RewardVM {
   ///
   /// Call this function when you need the info in `List of Map`
   /// (converted from `Reward`).
-  List<Map<String, String>> retrieveAllRewardsInListOfMap() => _toListOfMap();
+  List<Map<String, dynamic>> retrieveAllRewardsInListOfMap() => _toListOfMap();
 
   /// **Retrieve Reward** (`R` in CRUD)
   ///
   /// Call this function when you need the info from one of the `Reward`.
   ///
   /// Parameter required: `id` from `Reward`.
-  Reward retrieveRewardById(String id) =>
-      _currentRewards.singleWhere((reward) => reward.id == id);
+  Reward retrieveRewardById(String id) => _currentRewards.singleWhere(
+        (reward) => reward.id == id,
+        orElse: () => Reward().nullClass(),
+      );
 
   /// **Update Reward** (`U` in CRUD)
   ///
@@ -75,8 +77,9 @@ class RewardVM {
   ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  Reward updateReward(String id, Map<String, String> jsonToUpdate) {
+  Reward updateReward(String id, Map<String, dynamic> jsonToUpdate) {
     int _index = _currentRewards.indexWhere((reward) => reward.id == id);
+    // if (_index == -1) // do some alert
     Reward _updatedReward = Reward.fromJson({
       ..._currentRewards[_index].toMap(),
       ...jsonToUpdate,
@@ -91,13 +94,14 @@ class RewardVM {
   /// Call this function when need to delete reward
   void deleteReward(String id) {
     int index = _currentRewards.indexWhere((reward) => reward.id == id);
+    // if (_index == -1) // do some alert
     String removedId = _currentRewards.removeAt(index).id;
     _general.deleteBoxItem(_boxType, removedId);
   }
 
   /// Private function to convert `List of Reward` to `List of Map`
-  List<Map<String, String>> _toListOfMap() {
-    List<Map<String, String>> rewardsInListOfMap = [];
+  List<Map<String, dynamic>> _toListOfMap() {
+    List<Map<String, dynamic>> rewardsInListOfMap = [];
     for (Reward reward in _currentRewards) {
       rewardsInListOfMap.add(reward.toMap());
     }

@@ -63,8 +63,11 @@ class ReminderEntryVM {
   /// Call this function when you need the info from one of the `ReminderEntry`.
   ///
   /// Parameter required: `id` from `ReminderEntry`.
-  ReminderEntry retrieveReminderEntryById(String id) => _currentReminderEntries
-      .singleWhere((reminderEntry) => reminderEntry.id == id);
+  ReminderEntry retrieveReminderEntryById(String id) =>
+      _currentReminderEntries.singleWhere(
+        (reminderEntry) => reminderEntry.id == id,
+        orElse: () => ReminderEntry().nullClass(),
+      );
 
   /// **Retrieve ReminderEntry** (`R` in CRUD)
   ///
@@ -72,8 +75,10 @@ class ReminderEntryVM {
   ///
   /// Parameter required: `taskId` from `Task`.
   ReminderEntry retrieveReminderEntryByTaskId(String taskId) =>
-      _currentReminderEntries
-          .singleWhere((reminderEntry) => reminderEntry.taskId == taskId);
+      _currentReminderEntries.singleWhere(
+        (reminderEntry) => reminderEntry.taskId == taskId,
+        orElse: () => ReminderEntry().nullClass(),
+      );
 
   /// **Update ReminderEntry** (`U` in CRUD)
   ///
@@ -92,6 +97,7 @@ class ReminderEntryVM {
       String id, Map<String, dynamic> jsonToUpdate) {
     int _index = _currentReminderEntries
         .indexWhere((reminderEntry) => reminderEntry.id == id);
+    // if (_index == -1) // do some alert
     ReminderEntry _updatedReminderEntry = ReminderEntry.fromJson({
       ..._currentReminderEntries[_index].toMap(),
       ...jsonToUpdate,
@@ -111,6 +117,7 @@ class ReminderEntryVM {
   ReminderEntry updateStatus(String id) {
     int _index = _currentReminderEntries
         .indexWhere((reminderEntry) => reminderEntry.id == id);
+    // if (_index == -1) // do some alert
     bool _currentStatus =
         _currentReminderEntries[_index].toMap()[REMINDER_ENTRY_STATUS];
     ReminderEntry _updatedReminderEntry = ReminderEntry.fromJson({
@@ -129,6 +136,7 @@ class ReminderEntryVM {
   void deleteReminderEntry(String id) {
     int index = _currentReminderEntries
         .indexWhere((reminderEntry) => reminderEntry.id == id);
+    // if (_index == -1) // do some alert
     String removedId = _currentReminderEntries.removeAt(index).id;
     _general.deleteBoxItem(_boxType, removedId);
   }
