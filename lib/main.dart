@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habyte/services/notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -27,6 +28,9 @@ void main() async {
   await Hive.openBox<Reward>(BOX_REWARD);
   await Hive.openBox<ReminderEntry>(BOX_REMINDER_ENTRY);
   await Hive.openBox<TaskEntry>(BOX_TASK_ENTRY);
+
+  await NotificationHandler.getInstance().init();
+  print(TaskEntry().nullClass().toMap());
 
   runApp(const MyApp());
 }
