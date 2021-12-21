@@ -21,7 +21,7 @@ class RegistationPage2 extends StatelessWidget {
         children: [
           SizedBox(height: MediaQuery.of(context).size.height * 0.07),
           Text(
-            'Hi there! $_userName',
+            'Hi there, $_userName!',
             style: Theme.of(context).textTheme.headline6!.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -39,8 +39,8 @@ class RegistationPage2 extends StatelessWidget {
             alignment: Alignment.center,
             child: ProfilePictureHolder(
               editable: true,
-              radius: MediaQuery.of(context).size.width * 0.3,
               isRegistering: true,
+              radius: MediaQuery.of(context).size.width * 0.3,
             ),
           ),
         ],

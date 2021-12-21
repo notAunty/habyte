@@ -42,7 +42,7 @@ class ProfileScoreCard extends StatelessWidget {
                 children: [
                   const Padding(
                     padding: EdgeInsets.fromLTRB(SIDE_PADDING * 0.75, 0, 16, 0),
-                    child: ProfilePictureHolder(radius: 28, initials: 'JD'),
+                    child: ProfilePictureHolder(radius: 28),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
