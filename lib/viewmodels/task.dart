@@ -36,13 +36,16 @@ class TaskVM {
   /// - `TASK_START_DATE`
   /// - `TASK_END_DATE` (optional)
   ///
+  /// Return the created task
+  ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  void createTask(Map<String, dynamic> taskJson) {
+  Task createTask(Map<String, dynamic> taskJson) {
     Task _task = Task.fromJson(taskJson);
     _task.id = _general.getBoxItemNewId(_boxType);
     _currentTasks.add(_task);
     _general.addBoxItem(_boxType, _task.id, _task);
+    return _task;
   }
 
   /// **Retrieve Task** (`R` in CRUD)
@@ -75,9 +78,11 @@ class TaskVM {
   /// - `TASK_START_DATE`
   /// - `TASK_END_DATE`
   ///
+  /// Return the created task
+  ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  void updateTask(String id, Map<String, dynamic> jsonToUpdate) {
+  Task updateTask(String id, Map<String, dynamic> jsonToUpdate) {
     int _index = _currentTasks.indexWhere((task) => task.id == id);
     Task _updatedTask = Task.fromJson({
       ..._currentTasks[_index].toMap(),
@@ -85,6 +90,7 @@ class TaskVM {
     });
     _currentTasks[_index] = _updatedTask;
     _general.updateBoxItem(_boxType, _updatedTask.id, _updatedTask);
+    return _updatedTask;
   }
 
   /// **Delete Task** (`D` in CRUD)

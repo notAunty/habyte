@@ -31,13 +31,16 @@ class RewardVM {
   /// - `REWARD_NAME`
   /// - `REWARD_POINTS`
   ///
+  /// Return the created reward
+  ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  void createReward(Map<String, String> rewardJson) {
+  Reward createReward(Map<String, String> rewardJson) {
     Reward _reward = Reward.fromJson(rewardJson);
     _reward.id = _general.getBoxItemNewId(_boxType);
     _currentRewards.add(_reward);
     _general.addBoxItem(_boxType, _reward.id, _reward);
+    return _reward;
   }
 
   /// **Retrieve Reward** (`R` in CRUD)
@@ -68,9 +71,11 @@ class RewardVM {
   /// - `REWARD_NAME`
   /// - `REWARD_POINTS`
   ///
+  /// Return the created reward
+  ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  void updateReward(String id, Map<String, String> jsonToUpdate) {
+  Reward updateReward(String id, Map<String, String> jsonToUpdate) {
     int _index = _currentRewards.indexWhere((reward) => reward.id == id);
     Reward _updatedReward = Reward.fromJson({
       ..._currentRewards[_index].toMap(),
@@ -78,6 +83,7 @@ class RewardVM {
     });
     _currentRewards[_index] = _updatedReward;
     _general.updateBoxItem(_boxType, _updatedReward.id, _updatedReward);
+    return _updatedReward;
   }
 
   /// **Delete Reward** (`D` in CRUD)
