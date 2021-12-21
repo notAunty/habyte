@@ -13,6 +13,9 @@ const BOX_REMINDER_ENTRY = 'reminderEntry';
 // Constant Value
 const MODEL_ID_LENGTH = 4;
 const SKIPPED_MARKS_DEDUCTED = 0;
+const NULL_STRING_PLACEHOLDER = 'null';
+const NULL_INT_PLACEHOLDER = -1;
+const NULL_BOOL_PLACEHOLDER = false;
 
 const MEMBERSHIP_TIER = ['Novice', 'Apprentice', 'Expert', 'Master'];
 // User Keys
