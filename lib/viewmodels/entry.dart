@@ -101,7 +101,7 @@ class EntryVM {
   Entry getLatestEntryByTaskId(String taskId) =>
       _currentEntries.lastWhere((entry) => entry.taskId == taskId);
 
-  /// Private function to convert `List of NotificationDetail` to `List of Map`
+  /// Private function to convert `List of Entry` to `List of Map`
   List<Map<String, dynamic>> _toListOfMap() {
     List<Map<String, dynamic>> entriesInListOfMap = [];
     for (Entry entry in _currentEntries) {

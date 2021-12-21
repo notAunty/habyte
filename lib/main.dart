@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:habyte/models/entry.dart';
-import 'package:habyte/models/notification.dart';
+import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/reward.dart';
 import 'package:habyte/models/task.dart';
 import 'package:habyte/utils/theme_mode.dart';
@@ -19,13 +19,13 @@ void main() async {
 
   Hive.registerAdapter(TaskAdapter());
   Hive.registerAdapter(RewardAdapter());
-  Hive.registerAdapter(NotificationDetailAdapter());
+  Hive.registerAdapter(ReminderEntryAdapter());
   Hive.registerAdapter(EntryAdapter());
 
   await Hive.openBox(BOX_NAME);
   await Hive.openBox<Task>(BOX_TASK);
   await Hive.openBox<Reward>(BOX_REWARD);
-  await Hive.openBox<NotificationDetail>(BOX_NOTIFICATION_DETAIL);
+  await Hive.openBox<ReminderEntry>(BOX_REMINDER_ENTRY);
   await Hive.openBox<Entry>(BOX_ENTRY);
 
   runApp(const MyApp());

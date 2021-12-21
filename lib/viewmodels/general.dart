@@ -1,17 +1,17 @@
 import 'package:habyte/models/entry.dart';
-import 'package:habyte/models/notification.dart';
+import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/reward.dart';
 import 'package:habyte/models/task.dart';
 // import 'package:habyte/models/user.dart';
 import 'package:habyte/viewmodels/entry.dart';
-import 'package:habyte/viewmodels/notification.dart';
+import 'package:habyte/viewmodels/reminderEntry.dart';
 import 'package:habyte/viewmodels/reward.dart';
 import 'package:habyte/viewmodels/task.dart';
 import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
 
-enum BoxType { main, task, reward, notificationDetail, entry }
+enum BoxType { main, task, reward, reminderEntry, entry }
 
 class General {
   static final General _general = General._internal();
@@ -20,15 +20,14 @@ class General {
     _mainBox = Hive.box(BOX_NAME);
     _taskBox = Hive.box<Task>(BOX_TASK);
     _rewardBox = Hive.box<Reward>(BOX_REWARD);
-    _notificationDetailBox =
-        Hive.box<NotificationDetail>(BOX_NOTIFICATION_DETAIL);
+    _reminderEntryBox = Hive.box<ReminderEntry>(BOX_REMINDER_ENTRY);
     _entryBox = Hive.box<Entry>(BOX_ENTRY);
   }
 
   late Box _mainBox;
   late Box<Task> _taskBox;
   late Box<Reward> _rewardBox;
-  late Box<NotificationDetail> _notificationDetailBox;
+  late Box<ReminderEntry> _reminderEntryBox;
   late Box<Entry> _entryBox;
 
   bool retrievePreviousLogin() {
@@ -57,11 +56,10 @@ class General {
       RewardVM.getInstance().setCurrentRewards(rewardList);
     }
 
-    List<NotificationDetail> notificationDetailList =
-        _notificationDetailBox.values.toList();
-    if (notificationDetailList.isNotEmpty) {
-      NotificationDetailVM.getInstance()
-          .setCurrentNotificationDetails(notificationDetailList);
+    List<ReminderEntry> reminderEntryList = _reminderEntryBox.values.toList();
+    if (reminderEntryList.isNotEmpty) {
+      ReminderEntryVM.getInstance()
+          .setCurrentReminderEntries(reminderEntryList);
     }
 
     List<Entry> entryList = _entryBox.values.toList();
@@ -80,8 +78,8 @@ class General {
         return _taskBox;
       case BoxType.reward:
         return _rewardBox;
-      case BoxType.notificationDetail:
-        return _notificationDetailBox;
+      case BoxType.reminderEntry:
+        return _reminderEntryBox;
       case BoxType.entry:
         return _entryBox;
     }
@@ -109,7 +107,7 @@ class General {
     Map<BoxType, String> boxTypeMap = {
       BoxType.task: "T",
       BoxType.reward: "R",
-      BoxType.notificationDetail: "N",
+      BoxType.reminderEntry: "N",
       BoxType.entry: "E"
     };
 
