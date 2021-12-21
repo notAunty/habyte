@@ -1,9 +1,9 @@
-import 'package:habyte/models/entry.dart';
+import 'package:habyte/models/taskEntry.dart';
 import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/reward.dart';
 import 'package:habyte/models/task.dart';
 // import 'package:habyte/models/user.dart';
-import 'package:habyte/viewmodels/entry.dart';
+import 'package:habyte/viewmodels/taskEntry.dart';
 import 'package:habyte/viewmodels/reminderEntry.dart';
 import 'package:habyte/viewmodels/reward.dart';
 import 'package:habyte/viewmodels/task.dart';
@@ -11,7 +11,7 @@ import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
 
-enum BoxType { main, task, reward, reminderEntry, entry }
+enum BoxType { main, task, reward, reminderEntry, taskEntry }
 
 class General {
   static final General _general = General._internal();
@@ -21,14 +21,14 @@ class General {
     _taskBox = Hive.box<Task>(BOX_TASK);
     _rewardBox = Hive.box<Reward>(BOX_REWARD);
     _reminderEntryBox = Hive.box<ReminderEntry>(BOX_REMINDER_ENTRY);
-    _entryBox = Hive.box<Entry>(BOX_ENTRY);
+    _taskEntryBox = Hive.box<TaskEntry>(BOX_TASK_ENTRY);
   }
 
   late Box _mainBox;
   late Box<Task> _taskBox;
   late Box<Reward> _rewardBox;
   late Box<ReminderEntry> _reminderEntryBox;
-  late Box<Entry> _entryBox;
+  late Box<TaskEntry> _taskEntryBox;
 
   bool retrievePreviousLogin() {
     // Map<String, dynamic> u = {
@@ -62,9 +62,9 @@ class General {
           .setCurrentReminderEntries(reminderEntryList);
     }
 
-    List<Entry> entryList = _entryBox.values.toList();
-    if (entryList.isNotEmpty) {
-      EntryVM.getInstance().setCurrentEntries(entryList);
+    List<TaskEntry> taskEntryList = _taskEntryBox.values.toList();
+    if (taskEntryList.isNotEmpty) {
+      TaskEntryVM.getInstance().setCurrentTaskEntries(taskEntryList);
     }
 
     return true;
@@ -80,8 +80,8 @@ class General {
         return _rewardBox;
       case BoxType.reminderEntry:
         return _reminderEntryBox;
-      case BoxType.entry:
-        return _entryBox;
+      case BoxType.taskEntry:
+        return _taskEntryBox;
     }
   }
 
@@ -108,7 +108,7 @@ class General {
       BoxType.task: "T",
       BoxType.reward: "R",
       BoxType.reminderEntry: "N",
-      BoxType.entry: "E"
+      BoxType.taskEntry: "E"
     };
 
     String? newId = boxTypeMap[box];

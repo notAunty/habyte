@@ -7,7 +7,7 @@ const BOX_SETTINGS_THEME = 'settings-theme';
 const BOX_USER = 'user';
 const BOX_TASK = 'task';
 const BOX_REWARD = 'reward';
-const BOX_ENTRY = 'entry';
+const BOX_TASK_ENTRY = 'taskEntry';
 const BOX_REMINDER_ENTRY = 'reminderEntry';
 
 // Constant Value
@@ -40,7 +40,7 @@ const REMINDER_ENTRY_TASK_ID = "taskId";
 const REMINDER_ENTRY_STATUS = "status";
 const REMINDER_ENTRY_TIME = "reminderTime";
 
-// Entry Keys
-const ENTRY_ID = "id";
-const ENTRY_TASK_ID = "taskId";
-const ENTRY_COMPLETED_DATE = "completedDate";
+// TaskEntry Keys
+const TASK_ENTRY_ID = "id";
+const TASK_ENTRY_TASK_ID = "taskId";
+const TASK_ENTRY_COMPLETED_DATE = "completedDate";

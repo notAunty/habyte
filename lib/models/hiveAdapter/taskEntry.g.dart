@@ -1,29 +1,29 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../entry.dart';
+part of '../taskEntry.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class EntryAdapter extends TypeAdapter<Entry> {
+class TaskEntryAdapter extends TypeAdapter<TaskEntry> {
   @override
   final int typeId = 3;
 
   @override
-  Entry read(BinaryReader reader) {
+  TaskEntry read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Entry()
+    return TaskEntry()
       ..id = fields[0] as String
       ..taskId = fields[1] as String
       ..completedDate = fields[2] as DateTime;
   }
 
   @override
-  void write(BinaryWriter writer, Entry obj) {
+  void write(BinaryWriter writer, TaskEntry obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -40,7 +40,7 @@ class EntryAdapter extends TypeAdapter<Entry> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is EntryAdapter &&
+      other is TaskEntryAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

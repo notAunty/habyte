@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:habyte/viewmodels/entry.dart';
+import 'package:habyte/viewmodels/taskEntry.dart';
 import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/constant/constants.dart';
@@ -12,13 +12,13 @@ class ProfileScoreCard extends StatelessWidget {
   ProfileScoreCard({Key? key}) : super(key: key);
 
   final UserVM _userVM = UserVM.getInstance();
-  final EntryVM _entryVM = EntryVM.getInstance();
+  final TaskEntryVM _taskEntryVM = TaskEntryVM.getInstance();
 
   @override
   Widget build(BuildContext context) {
     final String? _userName = _userVM.retrieveUser()!.toMap()[USER_NAME];
     final int? _userScore = _userVM.retrieveUser()!.toMap()[USER_SCORES];
-    final int _numOfEntries = _entryVM.retrieveAllEntries().length;
+    final int _numOfEntries = _taskEntryVM.retrieveAllTaskEntries().length;
 
     return Hero(
       tag: 'profile_score_card',

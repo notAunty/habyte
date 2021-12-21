@@ -1,6 +1,6 @@
-import 'package:habyte/models/entry.dart';
+import 'package:habyte/models/taskEntry.dart';
 import 'package:habyte/models/task.dart';
-import 'package:habyte/viewmodels/entry.dart';
+import 'package:habyte/viewmodels/taskEntry.dart';
 import 'package:habyte/viewmodels/general.dart';
 import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/constants.dart';
@@ -108,13 +108,14 @@ class TaskVM {
   /// This function is used to check all the skipped tasks.
   void checkSkippedTasks() {
     UserVM _userVM = UserVM.getInstance();
-    EntryVM _entryVM = EntryVM.getInstance();
+    TaskEntryVM _taskEntryVM = TaskEntryVM.getInstance();
 
     int totalMarksToBeDeducted = 0;
     for (Task task in _currentTasks) {
-      Entry latestEntry = _entryVM.getLatestEntryByTaskId(task.id);
+      TaskEntry latestTaskEntry =
+          _taskEntryVM.getLatestTaskEntryByTaskId(task.id);
       int currentTaskSkippedDays =
-          _daysBetween(latestEntry.completedDate, DateTime.now());
+          _daysBetween(latestTaskEntry.completedDate, DateTime.now());
       if (currentTaskSkippedDays > 0) {
         totalMarksToBeDeducted += SKIPPED_MARKS_DEDUCTED; // amount to be fixed
       }
