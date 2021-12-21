@@ -55,9 +55,11 @@ class MyApp extends StatelessWidget {
                 title: 'Habyte',
                 theme: lightTheme,
                 darkTheme: darkTheme,
-                themeMode: themeModeFromString(
-                  context.read<Box>().get(BOX_SETTINGS_THEME, defaultValue: ""),
-                ),
+                // TODO: undo following
+                themeMode: ThemeMode.dark,
+                // themeMode: themeModeFromString(
+                //   context.read<Box>().get(BOX_SETTINGS_THEME, defaultValue: ""),
+                // ),
                 scaffoldMessengerKey: context.read<GlobalScaffold>().key,
                 home: General.getInstance().retrievePreviousLogin()
                     ? const MainLayout()
