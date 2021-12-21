@@ -9,11 +9,13 @@ class RegistationPage1 extends StatelessWidget {
   final GlobalKey formKey;
   final UserVM _userVM = UserVM.getInstance();
 
-  void addTempName(String name) => _userVM.addTempUserData({USER_NAME: name});
+  void addTempName(String value) => _userVM.addTempUserData({USER_NAME: value});
+  void addTempAboutMe(String value) => _userVM.addTempUserData({USER_ABOUT: value});
 
   @override
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
+    TextEditingController aboutMeController = TextEditingController();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -35,12 +37,22 @@ class RegistationPage1 extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               CustomTextFieldLabel(
-                label: 'Name',
+                label: 'Name*',
                 child: CustomTextField(
                   maxWords: -1,
                   isRequired: true,
                   controller: nameController,
-                  onChanged: (name) => addTempName(name),
+                  onChanged: (value) => addTempName(value),
+                ),
+              ),
+              const SizedBox(height: 24),
+              CustomTextFieldLabel(
+                label: 'About me',
+                child: CustomTextField(
+                  maxWords: -1,
+                  isRequired: false,
+                  controller: aboutMeController,
+                  onChanged: (value) => addTempAboutMe(value),
                 ),
               ),
             ],
