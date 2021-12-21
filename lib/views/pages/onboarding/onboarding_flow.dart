@@ -19,9 +19,9 @@ class _OnboardingnFlowState extends State<OnboardingnFlow> {
   bool _isLastPage = false;
 
   final List<Widget> onboardingPages = [
-    const OnboardingnPage1(),
-    const OnboardingnPage2(),
-    const OnboardingnPage3(),
+    const OnboardingPage1(),
+    const OnboardingPage2(),
+    const OnboardingPage3(),
   ];
 
   void next() => animateScroll(_currentPage.round() + 1);
@@ -121,8 +121,8 @@ class _OnboardingnFlowState extends State<OnboardingnFlow> {
   }
 }
 
-class OnboardingnPage1 extends StatelessWidget {
-  const OnboardingnPage1({Key? key}) : super(key: key);
+class OnboardingPage1 extends StatelessWidget {
+  const OnboardingPage1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -144,8 +144,8 @@ class OnboardingnPage1 extends StatelessWidget {
   }
 }
 
-class OnboardingnPage2 extends StatelessWidget {
-  const OnboardingnPage2({Key? key}) : super(key: key);
+class OnboardingPage2 extends StatelessWidget {
+  const OnboardingPage2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -167,8 +167,8 @@ class OnboardingnPage2 extends StatelessWidget {
   }
 }
 
-class OnboardingnPage3 extends StatelessWidget {
-  const OnboardingnPage3({Key? key}) : super(key: key);
+class OnboardingPage3 extends StatelessWidget {
+  const OnboardingPage3({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
