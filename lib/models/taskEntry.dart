@@ -1,5 +1,5 @@
-import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
+import 'package:habyte/views/constant/constants.dart';
 
 part 'hiveAdapter/taskEntry.g.dart';
 
@@ -26,4 +26,9 @@ class TaskEntry {
         TASK_ENTRY_TASK_ID: taskId,
         TASK_ENTRY_COMPLETED_DATE: completedDate,
       };
+
+  TaskEntry nullClass() => TaskEntry()
+    ..id = NULL_STRING_PLACEHOLDER
+    ..taskId = NULL_STRING_PLACEHOLDER
+    ..completedDate = DateTime.now();
 }

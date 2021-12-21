@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
+import 'package:habyte/views/constant/constants.dart';
 
 part 'hiveAdapter/reminderEntry.g.dart';
 
@@ -34,4 +34,10 @@ class ReminderEntry {
         REMINDER_ENTRY_STATUS: status,
         REMINDER_ENTRY_TIME: reminderTime,
       };
+
+  ReminderEntry nullClass() => ReminderEntry()
+    ..id = NULL_STRING_PLACEHOLDER
+    ..taskId = NULL_STRING_PLACEHOLDER
+    ..status = NULL_BOOL_PLACEHOLDER
+    ..reminderTime = TimeOfDay.now();
 }

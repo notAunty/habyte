@@ -1,5 +1,5 @@
-import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
+import 'package:habyte/views/constant/constants.dart';
 
 part 'hiveAdapter/task.g.dart';
 
@@ -36,4 +36,10 @@ class Task {
         TASK_START_DATE: startDate,
         TASK_END_DATE: endDate
       };
+
+  Task nullClass() => Task()
+    ..id = NULL_STRING_PLACEHOLDER
+    ..name = NULL_STRING_PLACEHOLDER
+    ..points = NULL_INT_PLACEHOLDER
+    ..startDate = DateTime.now();
 }

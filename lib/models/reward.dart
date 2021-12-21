@@ -1,5 +1,5 @@
-import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
+import 'package:habyte/views/constant/constants.dart';
 
 part 'hiveAdapter/reward.g.dart';
 
@@ -13,17 +13,22 @@ class Reward {
   late final String name;
 
   @HiveField(2)
-  late final String points;
+  late final int points;
 
   Reward();
 
-  Reward.fromJson(Map<String, String> json)
+  Reward.fromJson(Map<String, dynamic> json)
       : name = json[REWARD_NAME]!,
         points = json[REWARD_POINTS]!;
 
-  Map<String, String> toMap() => {
+  Map<String, dynamic> toMap() => {
         REWARD_ID: id,
         REWARD_NAME: name,
         REWARD_POINTS: points,
       };
+
+  Reward nullClass() => Reward()
+    ..id = NULL_STRING_PLACEHOLDER
+    ..name = NULL_STRING_PLACEHOLDER
+    ..points = NULL_INT_PLACEHOLDER;
 }
