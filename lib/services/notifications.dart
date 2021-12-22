@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:habyte/main.dart';
+import 'package:habyte/models/reminderEntry.dart';
+import 'package:habyte/models/taskEntry.dart';
+import 'package:habyte/viewmodels/task.dart';
+import 'package:habyte/viewmodels/taskEntry.dart';
+import 'package:habyte/views/constant/constants.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -19,7 +24,7 @@ class NotificationHandler {
 
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-  Future init() async {
+  Future init(List<ReminderEntry> reminderEntries) async {
     _configureLocalTimeZone();
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -31,43 +36,60 @@ class NotificationHandler {
       onSelectNotification: (payload) => main(),
     );
     // Testing purpose
+    await flutterLocalNotificationsPlugin.cancelAll();
+    for (ReminderEntry reminderEntry in reminderEntries) {
+      if (reminderEntry.status) {
+        TaskEntry latestTaskEntry = TaskEntryVM.getInstance()
+            .getLatestTaskEntryByTaskId(reminderEntry.taskId);
+        if (latestTaskEntry.id != NULL_STRING_PLACEHOLDER) {
+          // If same year, same month, same day, then means already done for that day
+          if (latestTaskEntry.completedDate.year == DateTime.now().year &&
+              latestTaskEntry.completedDate.month == DateTime.now().month &&
+              latestTaskEntry.completedDate.day == DateTime.now().day) {
+            continue;
+          }
+          await createNotification(
+              reminderEntry.id,
+              TaskVM.getInstance().retrieveTaskById(reminderEntry.taskId).name,
+              reminderEntry.reminderTime);
+        }
+      }
+    }
     // await createNotification('T0003', 'Testing Title', 'Testing Body', const TimeOfDay(hour: 17, minute: 13));
   }
 
   Future<void> createNotification(
-      String reminderId, String title, String body, TimeOfDay scheduleTime) async {
-    int reminderIdInt = int.parse(reminderId.substring(1));
+      String reminderEntryId, String title, TimeOfDay scheduleTime) async {
+    int reminderIdInt = int.parse(reminderEntryId.substring(1));
 
-    await _setNotification(reminderIdInt, title, body, scheduleTime);
+    await _setNotification(reminderIdInt, title, scheduleTime);
     print(
         'ADD reminder for $title (${scheduleTime.hour}:${scheduleTime.minute})');
   }
 
   Future<void> updateNotification(
-      String reminderId, String title, String body, TimeOfDay scheduleTime) async {
-    int reminderIdInt = int.parse(reminderId.substring(1));
+      String reminderEntryId, String title, TimeOfDay scheduleTime) async {
+    int reminderIdInt = int.parse(reminderEntryId.substring(1));
 
     await flutterLocalNotificationsPlugin.cancel(reminderIdInt);
-    await _setNotification(reminderIdInt, title, body, scheduleTime);
+    await _setNotification(reminderIdInt, title, scheduleTime);
     print(
         'UPDATE reminder for $title (${scheduleTime.hour}:${scheduleTime.minute})');
   }
 
-  Future<void> cancelNotification(
-      String taskId, String title, String body, TimeOfDay scheduleTime) async {
-    int taskIdInt = int.parse(taskId.substring(1));
+  Future<void> cancelNotification(String reminderEntryId) async {
+    int reminderIdInt = int.parse(reminderEntryId.substring(1));
 
-    await flutterLocalNotificationsPlugin.cancel(taskIdInt);
-    print(
-        'CANCEL reminder for $title (${scheduleTime.hour}:${scheduleTime.minute})');
+    await flutterLocalNotificationsPlugin.cancel(reminderIdInt);
+    print('CANCEL reminder');
   }
 
   Future<void> _setNotification(
-      int taskIdInt, String title, String body, TimeOfDay scheduleTime) async {
+      int reminderEntryIdInt, String title, TimeOfDay scheduleTime) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        taskIdInt,
+        reminderEntryIdInt,
         title,
-        body,
+        REMINDER_BODY,
         _nextInstanceOfTimeOfDay(scheduleTime.hour, scheduleTime.minute),
         const NotificationDetails(
           android:
