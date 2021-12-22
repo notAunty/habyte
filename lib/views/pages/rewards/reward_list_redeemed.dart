@@ -29,8 +29,9 @@ class RewardListRedeemed extends StatelessWidget {
               horizontal: SIDE_PADDING,
             ),
             itemBuilder: (context, index) => RedeemedRewardItem(
-              points: rewardPoint[index],
               name: rewardName[index],
+              points: rewardPoint[index],
+              onTap: () {},
             ),
           ),
         ),

@@ -3,17 +3,24 @@ import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/constant/sizes.dart';
 
 class RewardItem extends StatelessWidget {
-  const RewardItem({Key? key, required this.points, required this.name})
-      : super(key: key);
+  const RewardItem({
+    Key? key,
+    required this.points,
+    required this.name,
+    required this.onTap,
+  }) : super(key: key);
 
   final int points;
   final String name;
+  final Function onTap;
+
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(BORDER_RADIUS)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(BORDER_RADIUS)),
       child: ListTile(
         horizontalTitleGap: 0,
         contentPadding: EdgeInsets.zero,
@@ -29,7 +36,10 @@ class RewardItem extends StatelessWidget {
               children: [
                 Text(
                   points.toString(),
-                  style: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.w500),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontWeight: FontWeight.w500),
                 ),
                 const Text('pts'),
               ],
@@ -38,7 +48,11 @@ class RewardItem extends StatelessWidget {
         ),
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(name, style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w500)),
+          child: Text(name,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1!
+                  .copyWith(fontWeight: FontWeight.w500)),
         ),
       ),
     );
@@ -46,17 +60,24 @@ class RewardItem extends StatelessWidget {
 }
 
 class RedeemedRewardItem extends StatelessWidget {
-  const RedeemedRewardItem({Key? key, required this.points, required this.name})
-      : super(key: key);
+  const RedeemedRewardItem({
+    Key? key,
+    required this.points,
+    required this.name,
+    required this.onTap,
+  }) : super(key: key);
 
   final int points;
   final String name;
+  final Function onTap;
+
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(BORDER_RADIUS)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(BORDER_RADIUS)),
       child: Opacity(
         opacity: 0.5,
         child: ListTile(
@@ -74,7 +95,10 @@ class RedeemedRewardItem extends StatelessWidget {
                 children: [
                   Text(
                     points.toString(),
-                    style: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.w500),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
+                        .copyWith(fontWeight: FontWeight.w500),
                   ),
                   Text('pts'),
                 ],
@@ -83,7 +107,11 @@ class RedeemedRewardItem extends StatelessWidget {
           ),
           title: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(name, style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w500)),
+            child: Text(name,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(fontWeight: FontWeight.w500)),
           ),
         ),
       ),
