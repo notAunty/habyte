@@ -80,12 +80,7 @@ class TaskVM {
   ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-<<<<<<< HEAD
   Task updateTask(String id, Map<String, dynamic> jsonToUpdate) {
-=======
-  Map<String, dynamic> updateTask(
-      String id, Map<String, dynamic> jsonToUpdate) {
->>>>>>> b2829ab ([Object Model] Change void to return the task at createTask & updateTask for easier frontend operation)
     int _index = _currentTasks.indexWhere((task) => task.id == id);
     // if (_index == -1) // do some alert
     Task _updatedTask = Task.fromJson({
@@ -94,11 +89,7 @@ class TaskVM {
     });
     _currentTasks[_index] = _updatedTask;
     _general.updateBoxItem(_boxType, _updatedTask.id, _updatedTask);
-<<<<<<< HEAD
     return _updatedTask;
-=======
-    return _updatedTask.toMap();
->>>>>>> b2829ab ([Object Model] Change void to return the task at createTask & updateTask for easier frontend operation)
   }
 
   /// **Delete Task** (`D` in CRUD)

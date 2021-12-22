@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:habyte/views/constant/colors.dart';
-import 'package:habyte/views/widgets/text_fields.dart';
-import 'package:intl/intl.dart';
-import '../../../viewmodels/notification.dart';
+import 'package:habyte/viewmodels/reminderEntry.dart';
 import 'package:habyte/views/constant/sizes.dart';
-import '../../../viewmodels/task.dart';
-import 'package:habyte/views/constant/constants.dart';
 
 class ReminderPage extends StatefulWidget {
   const ReminderPage({Key? key}) : super(key: key);
@@ -16,21 +11,19 @@ class ReminderPage extends StatefulWidget {
 
 class _ReminderPageState extends State<ReminderPage> {
   final formKey = GlobalKey<FormState>();
-  final NotificationDetailVM _notificationVM =
-      NotificationDetailVM.getInstance();
+  final ReminderEntryVM _reminderEntryVM = ReminderEntryVM.getInstance();
 
   @override
   Widget build(BuildContext context) {
-    final notificationList =
-        _notificationVM.retrieveAllNotificationDetailsInListOfMap();
+    final _reminderEntryList =
+        _reminderEntryVM.retrieveAllReminderEntriesInListOfMap();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reminder'),
+        title: const Text('Reminder'),
         centerTitle: true,
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const SizedBox(height: TOP_PADDING, width: double.infinity),
-        
       ]),
     );
   }

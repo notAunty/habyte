@@ -1,8 +1,8 @@
+import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/utils/date_time.dart';
+import 'package:habyte/viewmodels/reminderEntry.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:habyte/models/notification.dart';
-import 'package:habyte/viewmodels/notification.dart';
 import 'package:habyte/viewmodels/task.dart';
 import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/pages/tasks/_viewTask.dart';
@@ -20,11 +20,10 @@ class TasksPage extends StatefulWidget {
 class _TasksPageState extends State<TasksPage> {
   final formKey = GlobalKey<FormState>();
   final TaskVM _taskVM = TaskVM.getInstance();
-  final NotificationDetailVM _notificationVM =
-      NotificationDetailVM.getInstance();
+  final ReminderEntryVM _reminderEntryVM = ReminderEntryVM.getInstance();
 
   List<Map<String, dynamic>> taskList = [];
-  NotificationDetail? editNotification;
+  ReminderEntry? editReminder;
   DateTime? startDate;
   DateTime? endDate;
   TimeOfDay? reminder;
@@ -51,7 +50,7 @@ class _TasksPageState extends State<TasksPage> {
         TASK_POINTS: int.parse(pointInput.text),
         TASK_START_DATE: startDate,
         TASK_END_DATE: endDate,
-      }));
+      }).toMap());
       print(taskList);
     });
 
@@ -90,7 +89,7 @@ class _TasksPageState extends State<TasksPage> {
         TASK_POINTS: int.parse(pointInput.text),
         TASK_START_DATE: startDate,
         TASK_END_DATE: endDate,
-      });
+      }).toMap();
     });
     Navigator.of(context).pop();
   }
