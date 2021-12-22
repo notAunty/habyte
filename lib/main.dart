@@ -12,6 +12,7 @@ import 'package:habyte/views/constant/themes.dart';
 import 'package:habyte/views/pages/main_layout.dart';
 import 'package:habyte/views/constant/constants.dart';
 import 'package:habyte/views/classes/global_scaffold.dart';
+import 'package:habyte/views/pages/tasks/_viewTask.dart';
 
 void main() async {
   await Hive.initFlutter();

@@ -15,6 +15,9 @@ class CustomTextField extends StatelessWidget {
     this.maxWords = 300,
     this.hintText = '',
     this.onChanged,
+    this.onTap,
+    this.maxInt=100,
+    this.minInt=0,
     this.onEditingComplete,
     required this.controller,
     Key? key,
@@ -31,11 +34,14 @@ class CustomTextField extends StatelessWidget {
   final bool isMultiline;
 
   final int maxWords;
+  final int maxInt;
+  final int minInt;
   final String hintText;
   final TextEditingController controller;
 
   final void Function(String)? onChanged;
   final void Function()? onEditingComplete;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +64,24 @@ class CustomTextField extends StatelessWidget {
         try {
           if (isRequired && (str == null || str.isEmpty)) {
             return '* This field is required.';
-          } else if (isInt && ((int.tryParse(str!) == null) || str.contains('.'))) {
+          } else if (isInt &&
+              ((int.tryParse(str!) == null) || str.contains('.'))) {
             return 'Must be an integer.';
+          }else if (isInt &&
+              ((int.tryParse(str!)! > maxInt))) {
+            return 'Maximum value is ${maxInt}.';
+          }else if (isInt &&
+              ((int.tryParse(str!)! < minInt))) {
+            return 'Minimum value is ${minInt}.';
           } else if (isNumeric && double.tryParse(str!) == null) {
             return 'Must be a number.';
           } else if (isPositive && double.parse(str!) < 0) {
             return 'Must be a positive number.';
-          } else if (divisibleBy != -1 && (double.parse(str!) % divisibleBy != 0)) {
+          } else if (divisibleBy != -1 &&
+              (double.parse(str!) % divisibleBy != 0)) {
             return 'Must be divisible by $divisibleBy.';
-          } else if (maxWords > 0 && str!.split(RegExp(r'\s')).length > maxWords) {
+          } else if (maxWords > 0 &&
+              str!.split(RegExp(r'\s')).length > maxWords) {
             return 'Text length is greater than $maxWords words.';
           } else {
             return null;
@@ -96,6 +111,7 @@ class CustomTextField extends StatelessWidget {
         // contentPadding: EdgeInsets.all(8),
       ),
       onChanged: onChanged,
+      onTap: onTap,
       onEditingComplete: onEditingComplete,
       buildCounter: (context,
               {required currentLength, required isFocused, maxLength}) =>

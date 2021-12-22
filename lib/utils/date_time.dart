@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 String getDayOfMonthSuffix(int dayNum) {
@@ -23,3 +24,10 @@ String getDayOfMonthSuffix(int dayNum) {
 
 String dateFormatter(DateTime dt) =>
     DateFormat("d'${getDayOfMonthSuffix(dt.day)}' MMMM yyyy").format(dt);
+
+String timeOfDayFormatter(TimeOfDay tod) {
+  final now = DateTime.now();
+  final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+  final format = DateFormat.jm();
+  return format.format(dt);
+}

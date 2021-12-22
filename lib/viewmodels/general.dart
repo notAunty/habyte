@@ -101,9 +101,15 @@ class General {
 
   String getBoxItemNewId(BoxType boxType) {
     Box box = _getBoxByBoxType(boxType);
-    String id = box.getAt(box.length - 1).id;
-    int numId = int.parse(id.substring(1));
-    int newNumId = numId + 1;
+    int boxLength = box.length;
+    int newNumId;
+    if (boxLength > 0) {
+      String id = box.getAt(boxLength - 1).id;
+      int numId = int.parse(id.substring(1));
+      newNumId = numId + 1;
+    } else {
+      newNumId = 1;
+    }
 
     Map<BoxType, String> boxTypeMap = {
       BoxType.task: "T",
@@ -112,7 +118,7 @@ class General {
       BoxType.taskEntry: "E"
     };
 
-    String? newId = boxTypeMap[box];
+    String? newId = boxTypeMap[boxType];
     for (var i = 0; i < MODEL_ID_LENGTH - newNumId.toString().length; i++) {
       newId = newId! + "0";
     }
