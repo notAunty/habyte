@@ -10,8 +10,9 @@ class RewardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.zero,
       horizontalTitleGap: 0,
+      contentPadding: EdgeInsets.zero,
+      tileColor: Theme.of(context).colorScheme.surface,
       leading: Container(
         width: 64,
         color: YELLOW_01.withOpacity(0.5),
@@ -30,7 +31,6 @@ class RewardItem extends StatelessWidget {
           ),
         ),
       ),
-      tileColor: WHITE_01,
       title: Padding(
         padding: const EdgeInsets.only(left: 8.0),
         child: Text(name, style: Theme.of(context).textTheme.headline6),

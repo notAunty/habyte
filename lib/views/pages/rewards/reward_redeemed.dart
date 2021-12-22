@@ -12,8 +12,9 @@ class RewardRedeemed extends StatelessWidget {
     return Opacity(
       opacity: 0.5,
       child: ListTile(
-        contentPadding: EdgeInsets.zero,
         horizontalTitleGap: 0,
+        contentPadding: EdgeInsets.zero,
+        tileColor: Theme.of(context).colorScheme.surface,
         leading: Container(
           width: 64,
           color: GREY_02.withOpacity(0.5),
@@ -32,7 +33,6 @@ class RewardRedeemed extends StatelessWidget {
             ),
           ),
         ),
-        tileColor: WHITE_01,
         title: Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: Text(name, style: Theme.of(context).textTheme.headline6),

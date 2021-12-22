@@ -10,10 +10,9 @@ class RewardList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Mock
-    final List<int> rewardPoint = [5, 10, 8];
+    final List<int> rewardPoint = [5, 10];
 
     final List<String> rewardName = [
-      "Watch 'Spiderman' Movie 🍿",
       "Have a cheat meal at MCDonald's",
       "Visit an Art Exhibition"
     ];

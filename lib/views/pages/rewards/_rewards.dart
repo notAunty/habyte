@@ -9,14 +9,19 @@ class RewardsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: TOP_PADDING, width: double.infinity),
-        ProfileScoreCard(),
-        // TODO: J - Rewards subheader?
-        const RewardList(),
-      ],
+    // Following 'Material' prevent ListTile Ink bleeds to
+    // other pages of indexedStack. Remove to try it out
+    return Material(
+      color: Theme.of(context).colorScheme.background,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: TOP_PADDING, width: double.infinity),
+          ProfileScoreCard(),
+          // TODO: J - Rewards subheader?
+          const RewardList(),
+        ],
+      ),
     );
   }
 }
