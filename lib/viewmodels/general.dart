@@ -30,7 +30,7 @@ class General {
   late Box<TaskEntry> _taskEntryBox;
   late Box<ReminderEntry> _reminderEntryBox;
 
-  bool retrievePreviousLogin() {
+  Future<bool> retrievePreviousLogin() async {
     // Map<String, dynamic> u = {
     //   "name": "helloworld",
     //   "phoneNumber": "01234",
@@ -64,7 +64,7 @@ class General {
 
     List<ReminderEntry> reminderEntryList = _reminderEntryBox.values.toList();
     if (reminderEntryList.isNotEmpty) {
-      ReminderEntryVM.getInstance()
+      await ReminderEntryVM.getInstance()
           .setCurrentReminderEntries(reminderEntryList);
     }
 
@@ -128,7 +128,7 @@ class General {
     for (Task task in TaskVM.getInstance().retrieveAllTasks()) {
       TaskEntry latestTaskEntry =
           TaskEntryVM.getInstance().getLatestTaskEntryByTaskId(task.id);
-      if (latestTaskEntry.id != '0') {
+      if (latestTaskEntry.id != NULL_STRING_PLACEHOLDER) {
         int currentTaskSkippedDays =
             _daysBetween(latestTaskEntry.completedDate, DateTime.now());
         if (currentTaskSkippedDays > 0) {
