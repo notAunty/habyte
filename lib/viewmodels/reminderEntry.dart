@@ -1,5 +1,8 @@
 import 'package:habyte/models/reminderEntry.dart';
+import 'package:habyte/models/task.dart';
+import 'package:habyte/services/notifications.dart';
 import 'package:habyte/viewmodels/general.dart';
+import 'package:habyte/viewmodels/task.dart';
 import 'package:habyte/views/constant/constants.dart';
 
 /// **ReminderEntry ViewModel Class**
@@ -21,8 +24,11 @@ class ReminderEntryVM {
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
-  void setCurrentReminderEntries(List<ReminderEntry> reminderEntryList) =>
-      _currentReminderEntries = reminderEntryList;
+  Future<void> setCurrentReminderEntries(
+      List<ReminderEntry> reminderEntryList) async {
+    _currentReminderEntries = reminderEntryList;
+    await NotificationHandler.getInstance().init(reminderEntryList);
+  }
 
   /// **Create ReminderEntry** (`C` in CRUD)
   ///
@@ -38,11 +44,17 @@ class ReminderEntryVM {
   ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  ReminderEntry createReminderEntry(Map<String, dynamic> reminderEntryJson) {
+  Future<ReminderEntry> createReminderEntry(
+      Map<String, dynamic> reminderEntryJson) async {
     ReminderEntry _reminderEntry = ReminderEntry.fromJson(reminderEntryJson);
     _reminderEntry.id = _general.getBoxItemNewId(_boxType);
     _currentReminderEntries.add(_reminderEntry);
     _general.addBoxItem(_boxType, _reminderEntry.id, _reminderEntry);
+
+    // Create new reminder entry will add notification
+    Task _task = TaskVM.getInstance().retrieveTaskById(_reminderEntry.taskId);
+    await NotificationHandler.getInstance().createNotification(
+        _reminderEntry.id, _task.name, _reminderEntry.reminderTime);
     return _reminderEntry;
   }
 

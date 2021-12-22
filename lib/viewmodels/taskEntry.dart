@@ -1,5 +1,8 @@
+import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/taskEntry.dart';
+import 'package:habyte/services/notifications.dart';
 import 'package:habyte/viewmodels/general.dart';
+import 'package:habyte/viewmodels/reminderEntry.dart';
 
 /// **TaskEntry ViewModel Class**
 ///
@@ -35,11 +38,16 @@ class TaskEntryVM {
   ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  TaskEntry createTaskEntry(Map<String, dynamic> taskEntryJson) {
+  Future<TaskEntry> createTaskEntry(Map<String, dynamic> taskEntryJson) async {
     TaskEntry _taskEntry = TaskEntry.fromJson(taskEntryJson);
     _taskEntry.id = _general.getBoxItemNewId(_boxType);
     _currentTaskEntries.add(_taskEntry);
     _general.addBoxItem(_boxType, _taskEntry.id, _taskEntry);
+
+    // Once done create taskEntry, notification for today should be off
+    ReminderEntry _reminderEntry = ReminderEntryVM.getInstance()
+        .retrieveReminderEntryByTaskId(_taskEntry.taskId);
+    await NotificationHandler.getInstance().cancelNotification(_reminderEntry.id);
     return _taskEntry;
   }
 
