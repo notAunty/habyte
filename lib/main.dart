@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:habyte/models/entry.dart';
-import 'package:habyte/models/notification.dart';
+import 'package:habyte/models/taskEntry.dart';
+import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/reward.dart';
 import 'package:habyte/models/task.dart';
-import 'package:habyte/utils/theme_mode.dart';
 import 'package:habyte/viewmodels/general.dart';
 import 'package:habyte/views/pages/onboarding/onboarding_flow.dart';
 import 'package:habyte/views/constant/themes.dart';
@@ -19,14 +18,14 @@ void main() async {
 
   Hive.registerAdapter(TaskAdapter());
   Hive.registerAdapter(RewardAdapter());
-  Hive.registerAdapter(NotificationDetailAdapter());
-  Hive.registerAdapter(EntryAdapter());
+  Hive.registerAdapter(ReminderEntryAdapter());
+  Hive.registerAdapter(TaskEntryAdapter());
 
   await Hive.openBox(BOX_NAME);
   await Hive.openBox<Task>(BOX_TASK);
   await Hive.openBox<Reward>(BOX_REWARD);
-  await Hive.openBox<NotificationDetail>(BOX_NOTIFICATION_DETAIL);
-  await Hive.openBox<Entry>(BOX_ENTRY);
+  await Hive.openBox<ReminderEntry>(BOX_REMINDER_ENTRY);
+  await Hive.openBox<TaskEntry>(BOX_TASK_ENTRY);
 
   runApp(const MyApp());
 }
@@ -51,19 +50,31 @@ class MyApp extends StatelessWidget {
             valueListenable:
                 context.read<Box>().listenable(keys: [BOX_SETTINGS_THEME]),
             builder: (context, box, _widget) {
-              return MaterialApp(
-                title: 'Habyte',
-                theme: lightTheme,
-                darkTheme: darkTheme,
-                // TODO: undo following
-                themeMode: ThemeMode.dark,
-                // themeMode: themeModeFromString(
-                //   context.read<Box>().get(BOX_SETTINGS_THEME, defaultValue: ""),
-                // ),
-                scaffoldMessengerKey: context.read<GlobalScaffold>().key,
-                home: General.getInstance().retrievePreviousLogin()
-                    ? const MainLayout()
-                    : const OnboardingnFlow(),
+              return FutureBuilder(
+                future: General.getInstance().retrievePreviousLogin(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    // while data is loading:
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return MaterialApp(
+                      title: 'Habyte',
+                      theme: lightTheme,
+                      darkTheme: darkTheme,
+                      // TODO: undo following
+                      themeMode: ThemeMode.dark,
+                      // themeMode: themeModeFromString(
+                      //   context.read<Box>().get(BOX_SETTINGS_THEME, defaultValue: ""),
+                      // ),
+                      scaffoldMessengerKey: context.read<GlobalScaffold>().key,
+                      home: snapshot.data as bool
+                          ? const MainLayout()
+                          : const OnboardingnFlow(),
+                    );
+                  }
+                },
               );
             },
           );

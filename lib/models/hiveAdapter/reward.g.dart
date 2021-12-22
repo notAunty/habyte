@@ -19,7 +19,7 @@ class RewardAdapter extends TypeAdapter<Reward> {
     return Reward()
       ..id = fields[0] as String
       ..name = fields[1] as String
-      ..points = fields[2] as String;
+      ..points = fields[2] as int;
   }
 
   @override

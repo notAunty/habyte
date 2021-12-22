@@ -1,9 +1,5 @@
-import 'package:habyte/models/entry.dart';
 import 'package:habyte/models/task.dart';
-import 'package:habyte/viewmodels/entry.dart';
 import 'package:habyte/viewmodels/general.dart';
-import 'package:habyte/viewmodels/user.dart';
-import 'package:habyte/views/constant/constants.dart';
 
 /// **Task ViewModel Class**
 ///
@@ -36,13 +32,16 @@ class TaskVM {
   /// - `TASK_START_DATE`
   /// - `TASK_END_DATE` (optional)
   ///
+  /// Return the created task
+  ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  void createTask(Map<String, dynamic> taskJson) {
+  Task createTask(Map<String, dynamic> taskJson) {
     Task _task = Task.fromJson(taskJson);
     _task.id = _general.getBoxItemNewId(_boxType);
     _currentTasks.add(_task);
     _general.addBoxItem(_boxType, _task.id, _task);
+    return _task;
   }
 
   /// **Retrieve Task** (`R` in CRUD)
@@ -61,8 +60,10 @@ class TaskVM {
   /// Call this function when you need the info from one of the `Task`.
   ///
   /// Parameter required: `id` from `Task`.
-  Task retrieveTaskById(String id) =>
-      _currentTasks.singleWhere((task) => task.id == id);
+  Task retrieveTaskById(String id) => _currentTasks.singleWhere(
+        (task) => task.id == id,
+        orElse: () => Task().nullClass(),
+      );
 
   /// **Update Task** (`U` in CRUD)
   ///
@@ -75,16 +76,20 @@ class TaskVM {
   /// - `TASK_START_DATE`
   /// - `TASK_END_DATE`
   ///
+  /// Return the created task
+  ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  void updateTask(String id, Map<String, dynamic> jsonToUpdate) {
+  Task updateTask(String id, Map<String, dynamic> jsonToUpdate) {
     int _index = _currentTasks.indexWhere((task) => task.id == id);
+    // if (_index == -1) // do some alert
     Task _updatedTask = Task.fromJson({
       ..._currentTasks[_index].toMap(),
       ...jsonToUpdate,
     });
     _currentTasks[_index] = _updatedTask;
     _general.updateBoxItem(_boxType, _updatedTask.id, _updatedTask);
+    return _updatedTask;
   }
 
   /// **Delete Task** (`D` in CRUD)
@@ -92,6 +97,7 @@ class TaskVM {
   /// Call this function when need to delete task
   void deleteTask(String id) {
     int index = _currentTasks.indexWhere((task) => task.id == id);
+    // if (_index == -1) // do some alert
     String removedId = _currentTasks.removeAt(index).id;
     _general.deleteBoxItem(_boxType, removedId);
   }
@@ -103,30 +109,5 @@ class TaskVM {
       tasksInListOfMap.add(task.toMap());
     }
     return tasksInListOfMap;
-  }
-
-  /// This function is used to check all the skipped tasks.
-  void checkSkippedTasks() {
-    UserVM _userVM = UserVM.getInstance();
-    EntryVM _entryVM = EntryVM.getInstance();
-
-    int totalMarksToBeDeducted = 0;
-    for (Task task in _currentTasks) {
-      Entry latestEntry = _entryVM.getLatestEntryByTaskId(task.id);
-      int currentTaskSkippedDays =
-          _daysBetween(latestEntry.completedDate, DateTime.now());
-      if (currentTaskSkippedDays > 0) {
-        totalMarksToBeDeducted += SKIPPED_MARKS_DEDUCTED; // amount to be fixed
-      }
-    }
-
-    _userVM.minusScore(totalMarksToBeDeducted);
-  }
-
-  /// Private function to find days difference.
-  int _daysBetween(DateTime from, DateTime to) {
-    from = DateTime(from.year, from.month, from.day);
-    to = DateTime(to.year, to.month, to.day);
-    return (to.difference(from).inHours / 24).round();
   }
 }

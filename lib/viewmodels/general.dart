@@ -1,17 +1,17 @@
-import 'package:habyte/models/entry.dart';
-import 'package:habyte/models/notification.dart';
+import 'package:habyte/models/taskEntry.dart';
+import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/reward.dart';
 import 'package:habyte/models/task.dart';
 // import 'package:habyte/models/user.dart';
-import 'package:habyte/viewmodels/entry.dart';
-import 'package:habyte/viewmodels/notification.dart';
+import 'package:habyte/viewmodels/taskEntry.dart';
+import 'package:habyte/viewmodels/reminderEntry.dart';
 import 'package:habyte/viewmodels/reward.dart';
 import 'package:habyte/viewmodels/task.dart';
 import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/constants.dart';
 import 'package:hive/hive.dart';
 
-enum BoxType { main, task, reward, notificationDetail, entry }
+enum BoxType { main, task, reward, reminderEntry, taskEntry }
 
 class General {
   static final General _general = General._internal();
@@ -20,18 +20,17 @@ class General {
     _mainBox = Hive.box(BOX_NAME);
     _taskBox = Hive.box<Task>(BOX_TASK);
     _rewardBox = Hive.box<Reward>(BOX_REWARD);
-    _notificationDetailBox =
-        Hive.box<NotificationDetail>(BOX_NOTIFICATION_DETAIL);
-    _entryBox = Hive.box<Entry>(BOX_ENTRY);
+    _taskEntryBox = Hive.box<TaskEntry>(BOX_TASK_ENTRY);
+    _reminderEntryBox = Hive.box<ReminderEntry>(BOX_REMINDER_ENTRY);
   }
 
   late Box _mainBox;
   late Box<Task> _taskBox;
   late Box<Reward> _rewardBox;
-  late Box<NotificationDetail> _notificationDetailBox;
-  late Box<Entry> _entryBox;
+  late Box<TaskEntry> _taskEntryBox;
+  late Box<ReminderEntry> _reminderEntryBox;
 
-  bool retrievePreviousLogin() {
+  Future<bool> retrievePreviousLogin() async {
     // Map<String, dynamic> u = {
     //   "name": "helloworld",
     //   "phoneNumber": "01234",
@@ -47,9 +46,15 @@ class General {
     if (userJson.isEmpty) return false;
     UserVM.getInstance().setCurrentUser(userJson);
 
+    List<TaskEntry> taskEntryList = _taskEntryBox.values.toList();
+    if (taskEntryList.isNotEmpty) {
+      TaskEntryVM.getInstance().setCurrentTaskEntries(taskEntryList);
+    }
+
     List<Task> taskList = _taskBox.values.toList();
     if (taskList.isNotEmpty) {
       TaskVM.getInstance().setCurrentTasks(taskList);
+      checkSkippedTasks();
     }
 
     List<Reward> rewardList = _rewardBox.values.toList();
@@ -57,16 +62,10 @@ class General {
       RewardVM.getInstance().setCurrentRewards(rewardList);
     }
 
-    List<NotificationDetail> notificationDetailList =
-        _notificationDetailBox.values.toList();
-    if (notificationDetailList.isNotEmpty) {
-      NotificationDetailVM.getInstance()
-          .setCurrentNotificationDetails(notificationDetailList);
-    }
-
-    List<Entry> entryList = _entryBox.values.toList();
-    if (entryList.isNotEmpty) {
-      EntryVM.getInstance().setCurrentEntries(entryList);
+    List<ReminderEntry> reminderEntryList = _reminderEntryBox.values.toList();
+    if (reminderEntryList.isNotEmpty) {
+      await ReminderEntryVM.getInstance()
+          .setCurrentReminderEntries(reminderEntryList);
     }
 
     return true;
@@ -80,10 +79,10 @@ class General {
         return _taskBox;
       case BoxType.reward:
         return _rewardBox;
-      case BoxType.notificationDetail:
-        return _notificationDetailBox;
-      case BoxType.entry:
-        return _entryBox;
+      case BoxType.reminderEntry:
+        return _reminderEntryBox;
+      case BoxType.taskEntry:
+        return _taskEntryBox;
     }
   }
 
@@ -109,8 +108,8 @@ class General {
     Map<BoxType, String> boxTypeMap = {
       BoxType.task: "T",
       BoxType.reward: "R",
-      BoxType.notificationDetail: "N",
-      BoxType.entry: "E"
+      BoxType.reminderEntry: "N",
+      BoxType.taskEntry: "E"
     };
 
     String? newId = boxTypeMap[box];
@@ -120,5 +119,32 @@ class General {
     newId = newId! + newNumId.toString();
 
     return newId;
+  }
+
+  /// This function is used to check all the skipped tasks.
+  void checkSkippedTasks() {
+    int totalMarksToBeDeducted = 0;
+
+    for (Task task in TaskVM.getInstance().retrieveAllTasks()) {
+      TaskEntry latestTaskEntry =
+          TaskEntryVM.getInstance().getLatestTaskEntryByTaskId(task.id);
+      if (latestTaskEntry.id != NULL_STRING_PLACEHOLDER) {
+        int currentTaskSkippedDays =
+            _daysBetween(latestTaskEntry.completedDate, DateTime.now());
+        if (currentTaskSkippedDays > 0) {
+          // amount to be fixed
+          totalMarksToBeDeducted += SKIPPED_MARKS_DEDUCTED;
+        }
+      }
+    }
+
+    UserVM.getInstance().minusScore(totalMarksToBeDeducted);
+  }
+
+  /// Private function to find days difference.
+  int _daysBetween(DateTime from, DateTime to) {
+    from = DateTime(from.year, from.month, from.day);
+    to = DateTime(to.year, to.month, to.day);
+    return (to.difference(from).inHours / 24).round();
   }
 }

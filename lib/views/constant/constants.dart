@@ -7,13 +7,17 @@ const BOX_SETTINGS_THEME = 'settings-theme';
 const BOX_USER = 'user';
 const BOX_TASK = 'task';
 const BOX_REWARD = 'reward';
-const BOX_ENTRY = 'entry';
-const BOX_NOTIFICATION_DETAIL = 'notificationDetail';
+const BOX_TASK_ENTRY = 'taskEntry';
+const BOX_REMINDER_ENTRY = 'reminderEntry';
 
 // Constant Value
 const MODEL_ID_LENGTH = 4;
 const SKIPPED_MARKS_DEDUCTED = 0;
+const NULL_STRING_PLACEHOLDER = 'null';
+const NULL_INT_PLACEHOLDER = -1;
+const NULL_BOOL_PLACEHOLDER = false;
 
+const REMINDER_BODY = 'Habyte task reminder';
 const MEMBERSHIP_TIER = ['Novice', 'Apprentice', 'Expert', 'Master'];
 // User Keys
 const USER_NAME = "name";
@@ -34,12 +38,13 @@ const REWARD_ID = "id";
 const REWARD_NAME = "name";
 const REWARD_POINTS = "points";
 
-// NotificationDetail Keys
-const NOTIFICATION_DETAIL_ID = "id";
-const NOTIFICATION_DETAIL_TASK_ID = "taskId";
-const NOTIFICATION_DETAIL_TIME = "notificationTime";
+// ReminderEntry Keys
+const REMINDER_ENTRY_ID = "id";
+const REMINDER_ENTRY_TASK_ID = "taskId";
+const REMINDER_ENTRY_STATUS = "status";
+const REMINDER_ENTRY_TIME = "reminderTime";
 
-// Entry Keys
-const ENTRY_ID = "id";
-const ENTRY_TASK_ID = "taskId";
-const ENTRY_COMPLETED_DATE = "completedDate";
+// TaskEntry Keys
+const TASK_ENTRY_ID = "id";
+const TASK_ENTRY_TASK_ID = "taskId";
+const TASK_ENTRY_COMPLETED_DATE = "completedDate";

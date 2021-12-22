@@ -1,37 +1,40 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../entry.dart';
+part of '../reminderEntry.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class EntryAdapter extends TypeAdapter<Entry> {
+class ReminderEntryAdapter extends TypeAdapter<ReminderEntry> {
   @override
-  final int typeId = 3;
+  final int typeId = 2;
 
   @override
-  Entry read(BinaryReader reader) {
+  ReminderEntry read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Entry()
+    return ReminderEntry()
       ..id = fields[0] as String
       ..taskId = fields[1] as String
-      ..completedDate = fields[2] as DateTime;
+      ..status = fields[2] as bool
+      ..reminderTime = fields[3] as TimeOfDay;
   }
 
   @override
-  void write(BinaryWriter writer, Entry obj) {
+  void write(BinaryWriter writer, ReminderEntry obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.taskId)
       ..writeByte(2)
-      ..write(obj.completedDate);
+      ..write(obj.status)
+      ..writeByte(3)
+      ..write(obj.reminderTime);
   }
 
   @override
@@ -40,7 +43,7 @@ class EntryAdapter extends TypeAdapter<Entry> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is EntryAdapter &&
+      other is ReminderEntryAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
