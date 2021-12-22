@@ -31,7 +31,7 @@ class RewardList extends StatelessWidget {
             primary: false,
             shrinkWrap: true,
             itemCount: rewardPoint.length,
-            separatorBuilder: (context, index) => SizedBox(height: 16),
+            separatorBuilder: (context, index) => const SizedBox(height: 8.0),
             padding: const EdgeInsets.symmetric(
               vertical: 16,
               horizontal: SIDE_PADDING,
