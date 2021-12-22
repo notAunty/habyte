@@ -17,6 +17,7 @@ const NULL_STRING_PLACEHOLDER = 'null';
 const NULL_INT_PLACEHOLDER = -1;
 const NULL_BOOL_PLACEHOLDER = false;
 
+const REMINDER_BODY = 'Habyte task reminder';
 const MEMBERSHIP_TIER = ['Novice', 'Apprentice', 'Expert', 'Master'];
 // User Keys
 const USER_NAME = "name";
