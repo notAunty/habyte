@@ -14,7 +14,6 @@ final lightTheme = ThemeData(
   ),
   cardColor: WHITE_01,
   canvasColor: WHITE_01,
-  splashColor: Colors.transparent,
   iconTheme: const IconThemeData(color: GREY_01),
   buttonTheme: const ButtonThemeData(
     height: 16,
@@ -162,7 +161,6 @@ final darkTheme = ThemeData(
   cardColor: BLACK_03,
   canvasColor: BLACK_03,
   disabledColor: GREY_02,
-  splashColor: Colors.transparent,
   cardTheme: const CardTheme(elevation: 8),
   iconTheme: const IconThemeData(color: WHITE_02),
   buttonTheme: const ButtonThemeData(

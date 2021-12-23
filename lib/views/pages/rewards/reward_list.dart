@@ -39,7 +39,12 @@ class RewardList extends StatelessWidget {
             itemBuilder: (context, index) => RewardItem(
               name: rewardName[index],
               points: rewardPoint[index],
-              onTap: () {},
+              onTap: () {
+                print('bb');
+              },
+              onEdit: () {
+                print('aa');
+              },
             ),
           ),
         ),
