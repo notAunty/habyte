@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/taskEntry.dart';
 import 'package:habyte/services/notifications.dart';
@@ -12,7 +13,9 @@ import 'package:habyte/viewmodels/reminderEntry.dart';
 /// - Other operations
 class TaskEntryVM {
   static final TaskEntryVM _taskEntryVM = TaskEntryVM._internal();
-  TaskEntryVM._internal();
+  TaskEntryVM._internal() {
+    _numEntriesNotifier = ValueNotifier(0);
+  }
 
   /// Get the `TaskEntry` instance for user `CRUD` and other operations
   factory TaskEntryVM.getInstance() => _taskEntryVM;
@@ -21,10 +24,14 @@ class TaskEntryVM {
   final BoxType _boxType = BoxType.taskEntry;
   List<TaskEntry> _currentTaskEntries = [];
 
+  late ValueNotifier<int> _numEntriesNotifier;
+
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
-  void setCurrentTaskEntries(List<TaskEntry> taskEntryList) =>
-      _currentTaskEntries = taskEntryList;
+  void setCurrentTaskEntries(List<TaskEntry> taskEntryList) {
+    _currentTaskEntries = taskEntryList;
+    _numEntriesNotifier.value = taskEntryList.length;
+  }
 
   /// **Create TaskEntry** (`C` in CRUD)
   ///
@@ -44,10 +51,13 @@ class TaskEntryVM {
     _currentTaskEntries.add(_taskEntry);
     _general.addBoxItem(_boxType, _taskEntry.id, _taskEntry);
 
+    _numEntriesNotifier.value += 1;
+
     // Once done create taskEntry, notification for today should be off
     ReminderEntry _reminderEntry = ReminderEntryVM.getInstance()
         .retrieveReminderEntryByTaskId(_taskEntry.taskId);
-    await NotificationHandler.getInstance().cancelNotification(_reminderEntry.id);
+    await NotificationHandler.getInstance()
+        .cancelNotification(_reminderEntry.id);
     return _taskEntry;
   }
 
@@ -127,6 +137,8 @@ class TaskEntryVM {
         (taskEntry) => taskEntry.taskId == taskId,
         orElse: () => TaskEntry().nullClass(),
       );
+
+  ValueNotifier<int> getNumOfEntriesNotifier() => _numEntriesNotifier;
 
   /// Private function to convert `List of TaskEntry` to `List of Map`
   List<Map<String, dynamic>> _toListOfMap() {

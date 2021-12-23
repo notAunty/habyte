@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:habyte/models/user.dart';
 import 'package:habyte/viewmodels/general.dart';
 import 'package:habyte/views/constant/constants.dart';
@@ -8,9 +9,15 @@ import 'package:habyte/views/constant/constants.dart';
 /// - User Model
 /// - CRUD
 /// - Other operations
+/// **Remark:**
+/// - `Point` can be earned through completing tasks. Is used to redeem rewards.
+/// - `Score` is commutative of point. Will get deducted when habit is skipped on a day.
 class UserVM {
   static final UserVM _userVM = UserVM._internal();
-  UserVM._internal();
+  UserVM._internal() {
+    _scoreNotifier = ValueNotifier(0);
+    _pointNotifier = ValueNotifier(0);
+  }
 
   /// Get the `User` instance for user `CRUD` and other operations
   factory UserVM.getInstance() => _userVM;
@@ -18,13 +25,19 @@ class UserVM {
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.main;
   final String _key = BOX_USER;
-  User? _currentUser;
+  late User? _currentUser;
   Map<String, dynamic> _tempUserJson = {};
+
+  late ValueNotifier<int> _scoreNotifier;
+  late ValueNotifier<int> _pointNotifier;
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
-  void setCurrentUser(Map<String, dynamic> userJson) =>
-      _currentUser = User.fromJson(userJson);
+  void setCurrentUser(Map<String, dynamic> userJson) {
+    _currentUser = User.fromJson(userJson);
+    _scoreNotifier.value = _currentUser!.scores;
+    _pointNotifier.value = _currentUser!.points;
+  }
 
   /// Add temp user data, since multiple pages for user registration
   ///
@@ -89,14 +102,42 @@ class UserVM {
     _general.deleteBoxItem(_boxType, _key);
   }
 
-  /// This function is used to minus score if user accidentall or intentionally
+  // PointScore section
+  ValueNotifier<int> getScoreNotifier() => _scoreNotifier;
+  ValueNotifier<int> getPointNotifier() => _pointNotifier;
+
+  /// This function is used to add score whenever user done taskEntry.
+  void addPointScore(int taskPoint) {
+    _currentUser!.scores += taskPoint;
+    _currentUser!.points += taskPoint;
+    _valueNotifierSyncPointScore();
+    _general.updateBoxItem(_boxType, _key, _currentUser!.toMap());
+    print(_currentUser!.toMap());
+  }
+
+  /// This function is used to deduct point whenever user redeem reward
+  void deductPoint(int redeemedPoint) {
+    _currentUser!.points -= redeemedPoint;
+    _valueNotifierSyncPointScore();
+    _general.updateBoxItem(_boxType, _key, _currentUser!.toMap());
+    print(_currentUser!.toMap());
+  }
+
+  /// This function is used to deduct score if user accidentally or intentionally
   /// skip the tasks.
-  void minusScore(int numOfScore) {
+  void deductScore(int numOfScore) {
     if (_currentUser!.scores >= numOfScore) {
       _currentUser!.scores -= numOfScore;
     } else {
       _currentUser!.scores = 0;
     }
+    _valueNotifierSyncPointScore();
     _general.updateBoxItem(_boxType, _key, _currentUser!.toMap());
+    print(_currentUser!.toMap());
+  }
+
+  void _valueNotifierSyncPointScore() {
+    _scoreNotifier.value = _currentUser!.scores;
+    _pointNotifier.value = _currentUser!.points;
   }
 }
