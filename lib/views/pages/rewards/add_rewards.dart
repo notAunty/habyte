@@ -7,7 +7,7 @@ void onAddRewardsPressed(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) => RewardEdit(
-      isUpdate: true,
+      isUpdate: false,
     ),
   );
 }
