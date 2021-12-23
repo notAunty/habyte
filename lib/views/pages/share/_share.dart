@@ -34,7 +34,7 @@ class SharePage extends StatelessWidget {
       Uint8List pngBytes = byteData.buffer.asUint8List();
       imageInMemory = pngBytes;
       if (kDebugMode) {
-        print(imageInMemory);
+        // print(imageInMemory);
       }
       return pngBytes;
     } catch (e) {
