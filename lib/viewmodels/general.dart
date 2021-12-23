@@ -129,7 +129,7 @@ class General {
 
   /// This function is used to check all the skipped tasks.
   void checkSkippedTasks() {
-    int totalMarksToBeDeducted = 0;
+    int totalScoresToBeDeducted = 0;
 
     for (Task task in TaskVM.getInstance().retrieveAllTasks()) {
       TaskEntry latestTaskEntry =
@@ -139,12 +139,12 @@ class General {
             _daysBetween(latestTaskEntry.completedDate, DateTime.now());
         if (currentTaskSkippedDays > 0) {
           // amount to be fixed
-          totalMarksToBeDeducted += SKIPPED_MARKS_DEDUCTED;
+          totalScoresToBeDeducted += SKIPPED_MARKS_DEDUCTED;
         }
       }
     }
 
-    UserVM.getInstance().minusScore(totalMarksToBeDeducted);
+    UserVM.getInstance().deductScore(totalScoresToBeDeducted);
   }
 
   /// Private function to find days difference.
