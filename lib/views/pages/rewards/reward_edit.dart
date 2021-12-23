@@ -23,6 +23,13 @@ class RewardEdit extends StatelessWidget {
     return AlertDialog(
       title: Text(isUpdate ? 'Edit reward' : 'Create reward'),
       actions: <Widget>[
+        if (isUpdate) TextButton(
+          onPressed: () {
+            // TODO: wp - delete
+            Navigator.of(context).pop();
+          },
+          child: Text('Delete', style: TextStyle().copyWith(color: Colors.red),),
+        ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Cancel'),
