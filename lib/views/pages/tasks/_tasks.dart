@@ -239,11 +239,24 @@ class _TasksPageState extends State<TasksPage> {
       context: context,
       builder: (BuildContext context) => StatefulBuilder(
         builder: (context, setState) {
-          return SingleChildScrollView(
-            child: AlertDialog(
-              insetPadding: const EdgeInsets.all(10),
-              title: Text(title),
-              content: Form(
+          return AlertDialog(
+            title: Text(title),
+            insetPadding: const EdgeInsets.all(10),
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => taskToBeEdited != null
+                    ? onClickDone(taskId: taskToBeEdited[TASK_ID])
+                    : onClickDone(),
+                child: const Text('Done'),
+              )
+            ],
+            content: SingleChildScrollView(
+              child: Form(
                 key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,18 +341,6 @@ class _TasksPageState extends State<TasksPage> {
                   ],
                 ),
               ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () => taskToBeEdited != null
-                      ? onClickDone(taskId: taskToBeEdited[TASK_ID])
-                      : onClickDone(),
-                  child: const Text('Done'),
-                )
-              ],
             ),
           );
         },
@@ -350,6 +351,10 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: onClickAdd,
+        child: const Icon(Icons.add, color: WHITE_01),
+      ),
       body: SizedBox(
         width: double.infinity,
         child: Column(
@@ -382,16 +387,16 @@ class _TasksPageState extends State<TasksPage> {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: WHITE_01, //Theme.of(context).colorScheme.onSurface,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(60),
                       topRight: Radius.circular(60)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
                       blurRadius: 7,
+                      spreadRadius: 5,
                       offset: const Offset(0, 3),
+                      color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.07),
                     ),
                   ],
                 ),
@@ -421,13 +426,6 @@ class _TasksPageState extends State<TasksPage> {
               ),
             ),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: onClickAdd,
-        child: const Icon(
-          Icons.add,
-          color: WHITE_01,
         ),
       ),
     );
