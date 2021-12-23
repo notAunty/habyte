@@ -28,7 +28,7 @@ class _RewardListState extends State<RewardList> {
     "Visit an Art Exhibition"
   ];
 
-  void onEditRewards(context, String rewardId) {
+  void onEditReward(context, String rewardId) {
     showDialog(
       context: context,
       builder: (context) => RewardEdit(
@@ -36,6 +36,30 @@ class _RewardListState extends State<RewardList> {
         rewardId: rewardId,
       ),
     ).then((_) => setState(() {}));
+  }
+
+  void onTapReward(context, String rewardId) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Redeem this reward?'),
+        content: Text(
+          '${rewardName[int.parse(rewardId)]} (${rewardPoint[int.parse(rewardId)]} points)',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Confirm'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -55,10 +79,8 @@ class _RewardListState extends State<RewardList> {
           itemBuilder: (context, index) => RewardItem(
             name: rewardName[index],
             points: rewardPoint[index],
-            onTap: () {
-              print('bb');
-            },
-            onEdit: () => onEditRewards(context, index.toString()),
+            onTap: () => onTapReward(context, index.toString()),
+            onEdit: () => onEditReward(context, index.toString()),
           ),
         ),
       ),
