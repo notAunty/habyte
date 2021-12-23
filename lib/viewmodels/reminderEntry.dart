@@ -46,6 +46,8 @@ class ReminderEntryVM {
   /// from there
   Future<ReminderEntry> createReminderEntry(
       Map<String, dynamic> reminderEntryJson) async {
+    // By default, when a reminderEntry is created, its status is true
+    reminderEntryJson = {...reminderEntryJson, REMINDER_ENTRY_STATUS: true};
     ReminderEntry _reminderEntry = ReminderEntry.fromJson(reminderEntryJson);
     _reminderEntry.id = _general.getBoxItemNewId(_boxType);
     _currentReminderEntries.add(_reminderEntry);
