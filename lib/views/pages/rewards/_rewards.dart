@@ -4,6 +4,7 @@ import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/pages/rewards/reward_list.dart';
 import 'package:habyte/views/pages/rewards/reward_list_redeemed.dart';
 import 'package:habyte/views/widgets/profile_score_card.dart';
+import 'package:habyte/views/widgets/share_reward_card.dart';
 
 class RewardsPage extends StatelessWidget {
   const RewardsPage({Key? key}) : super(key: key);

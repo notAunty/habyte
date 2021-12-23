@@ -3,6 +3,8 @@ import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/pages/rewards/reward_edit.dart';
 import 'package:habyte/views/pages/rewards/reward_item.dart';
+import 'package:habyte/views/pages/share/initiate_share_card.dart';
+import 'package:habyte/views/widgets/share_reward_card.dart';
 
 class RewardList extends StatefulWidget {
   const RewardList({Key? key}) : super(key: key);
@@ -54,6 +56,7 @@ class _RewardListState extends State<RewardList> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
+              initiateShareCard(context, shareWidget: ShareRewardCard(rewardId: rewardId));
             },
             child: const Text('Confirm'),
           ),
