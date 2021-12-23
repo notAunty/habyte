@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -77,6 +79,7 @@ class _MainLayoutState extends State<MainLayout> {
       ),
       floatingActionButton: (_onFabClicked[_selectedIndex] != null)
           ? FloatingActionButton(
+              heroTag: Random.secure().nextDouble(),
               child: const Icon(FeatherIcons.plus, color: WHITE_01),
               onPressed: () => _onFabClicked[_selectedIndex]!(context),
             )
