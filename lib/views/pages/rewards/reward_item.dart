@@ -95,7 +95,7 @@ class RedeemedRewardItem extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           tileColor: Theme.of(context).colorScheme.surface,
           leading: Container(
-            width: 64,
+            width: 56,
             color: GREY_02.withOpacity(0.5),
             child: Padding(
               padding: const EdgeInsets.all(1.0),
