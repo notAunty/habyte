@@ -61,6 +61,7 @@ class RewardItem extends StatelessWidget {
         trailing: IconButton(
           iconSize: 16,
           icon: const Icon(FeatherIcons.edit2),
+          color: Theme.of(context).colorScheme.onPrimary,
           onPressed: () => onEdit(),
         ),
       ),

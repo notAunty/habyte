@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
                       theme: lightTheme,
                       darkTheme: darkTheme,
                       // TODO: soh - undo following
-                      themeMode: ThemeMode.light,
+                      themeMode: ThemeMode.dark,
                       // themeMode: themeModeFromString(
                       //   context.read<Box>().get(BOX_SETTINGS_THEME, defaultValue: ""),
                       // ),
