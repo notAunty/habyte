@@ -16,7 +16,7 @@ class DashboardPage extends StatelessWidget {
       children: [
         const SizedBox(height: TOP_PADDING, width: double.infinity),
         const DashboardHeader(),
-        ProfileScoreCard(),
+        ProfileScoreCard(heroTag: 'dashboard',),
         const DashboardTaskHeader(),
         const DashboardTaskList(),
       ],

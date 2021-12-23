@@ -9,8 +9,9 @@ import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/widgets/profile_picture.dart';
 
 class ProfileScoreCard extends StatelessWidget {
-  ProfileScoreCard({Key? key}) : super(key: key);
+  ProfileScoreCard({Key? key, this.heroTag}) : super(key: key);
 
+  final Object? heroTag;
   final UserVM _userVM = UserVM.getInstance();
   final TaskEntryVM _taskEntryVM = TaskEntryVM.getInstance();
 
@@ -21,7 +22,7 @@ class ProfileScoreCard extends StatelessWidget {
     final int _numOfEntries = _taskEntryVM.retrieveAllTaskEntries().length;
 
     return Hero(
-      tag: 'profile_score_card',
+      tag: heroTag ?? Random.secure().nextDouble(),
       child: Padding(
         padding:
             const EdgeInsets.symmetric(horizontal: SIDE_PADDING, vertical: 8),

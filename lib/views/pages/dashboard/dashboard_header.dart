@@ -21,7 +21,7 @@ class DashboardHeader extends StatelessWidget {
               icon: const Icon(FeatherIcons.share),
               onPressed: () => initiateShareCard(
                 context,
-                shareWidget: ProfileScoreCard(),
+                shareWidget: ProfileScoreCard(heroTag: 'dashboard',),
               ),
             ),
           ),
