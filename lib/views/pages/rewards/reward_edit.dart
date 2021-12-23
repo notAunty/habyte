@@ -4,12 +4,12 @@ import 'package:habyte/views/widgets/text_fields.dart';
 class RewardEdit extends StatelessWidget {
   RewardEdit({
     Key? key,
-    required this.rewardId,
+    this.rewardId,
     required this.isUpdate,
   }) : super(key: key);
 
   final bool isUpdate;
-  final String rewardId;
+  final String? rewardId;
   final GlobalKey<FormState> formKey = GlobalKey();
   late TextEditingController nameController;
   late TextEditingController pointsController;
@@ -17,8 +17,8 @@ class RewardEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: wp - fetch and insert initial values in following 2 lines
-    nameController = TextEditingController(text: "");
-    pointsController = TextEditingController(text: 0.toString());
+    nameController = TextEditingController(text: (rewardId == null) ? "" : "Editing");
+    pointsController = TextEditingController(text: (rewardId == null) ? "0" : "100");
 
     return AlertDialog(
       title: Text(isUpdate ? 'Edit reward' : 'Create reward'),
@@ -31,6 +31,13 @@ class RewardEdit extends StatelessWidget {
           onPressed: () {
             if (formKey.currentState!.validate()) {
               // TODO: wp - save
+              if (isUpdate) {
+
+              } else {
+                // Create new
+
+              }
+
               Navigator.of(context).pop();
             }
           },

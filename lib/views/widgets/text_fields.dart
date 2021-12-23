@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
     this.hintText = '',
     this.onChanged,
     this.onTap,
-    this.maxInt=100,
+    this.maxInt=999999999999999999,
     this.minInt=0,
     this.onEditingComplete,
     required this.controller,
