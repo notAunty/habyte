@@ -13,13 +13,19 @@ const BOX_REMINDER_ENTRY = 'reminderEntry';
 
 // Constant Value
 const MODEL_ID_LENGTH = 4;
-const SKIPPED_MARKS_DEDUCTED = 0;
+const SKIPPED_MARKS_DEDUCTED = 1;
 const NULL_STRING_PLACEHOLDER = 'null';
 const NULL_INT_PLACEHOLDER = -1;
 const NULL_BOOL_PLACEHOLDER = false;
 
 const REMINDER_BODY = 'Habyte task reminder';
 const MEMBERSHIP_TIER = ['Novice', 'Apprentice', 'Expert', 'Master'];
+const MEMBERSHIP_TIER_MIN_SCORE = {
+  'Novice': 0,
+  'Apprentice': 10,
+  'Expert': 20,
+  'Master': 30
+};
 // User Keys
 const USER_FIRST_NAME = "firstName";
 const USER_LAST_NAME = "lastName";
@@ -39,6 +45,8 @@ const TASK_END_DATE = "endDate";
 const REWARD_ID = "id";
 const REWARD_NAME = "name";
 const REWARD_POINTS = "points";
+const REWARD_AVAILABLE = "available";
+const REWARD_REDEEMED = "redeemed";
 
 // ReminderEntry Keys
 const REMINDER_ENTRY_ID = "id";
