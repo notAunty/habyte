@@ -1,6 +1,7 @@
 import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/utils/date_time.dart';
 import 'package:habyte/viewmodels/reminderEntry.dart';
+import 'package:habyte/views/constant/sizes.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:habyte/viewmodels/task.dart';
@@ -241,7 +242,7 @@ class _TasksPageState extends State<TasksPage> {
         builder: (context, setState) {
           return AlertDialog(
             title: Text(title),
-            insetPadding: const EdgeInsets.all(10),
+            insetPadding: const EdgeInsets.all(SIDE_PADDING / 3),
             backgroundColor: Theme.of(context).colorScheme.surface,
             actions: <Widget>[
               TextButton(
