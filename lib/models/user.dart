@@ -1,21 +1,24 @@
 import 'package:habyte/views/constant/constants.dart';
 
 class User {
-  late String name;
+  late String firstName;
+  late String lastName;
   late String? about;
   late String? profilePicPath;
   late int points;
   late int scores;
 
   User.fromJson(Map<String, dynamic> json)
-      : name = json[USER_NAME],
+      : firstName = json[USER_FIRST_NAME],
+        lastName = json[USER_LAST_NAME],
         about = json[USER_ABOUT],
         profilePicPath = json[USER_PROFILE_PIC_PATH],
         points = json[USER_POINTS],
         scores = json[USER_SCORES];
 
   Map<String, dynamic> toMap() => {
-        USER_NAME: name,
+        USER_FIRST_NAME: firstName,
+        USER_LAST_NAME: lastName,
         USER_ABOUT: about,
         USER_PROFILE_PIC_PATH: profilePicPath,
         USER_POINTS: points,

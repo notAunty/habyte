@@ -9,12 +9,17 @@ class RegistationPage1 extends StatelessWidget {
   final GlobalKey formKey;
   final UserVM _userVM = UserVM.getInstance();
 
-  void addTempName(String value) => _userVM.addTempUserData({USER_NAME: value});
-  void addTempAboutMe(String value) => _userVM.addTempUserData({USER_ABOUT: value});
+  void addTempFirstName(String value) =>
+      _userVM.addTempUserData({USER_FIRST_NAME: value});
+  void addTempLastName(String value) =>
+      _userVM.addTempUserData({USER_LAST_NAME: value});
+  void addTempAboutMe(String value) =>
+      _userVM.addTempUserData({USER_ABOUT: value});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
+    TextEditingController firstNameController = TextEditingController();
+    TextEditingController lastNameController = TextEditingController();
     TextEditingController aboutMeController = TextEditingController();
 
     return Padding(
@@ -37,12 +42,22 @@ class RegistationPage1 extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               CustomTextFieldLabel(
-                label: 'Name*',
+                label: 'First Name*',
                 child: CustomTextField(
                   maxWords: -1,
                   isRequired: true,
-                  controller: nameController,
-                  onChanged: (value) => addTempName(value),
+                  controller: firstNameController,
+                  onChanged: (value) => addTempFirstName(value),
+                ),
+              ),
+              const SizedBox(height: 24),
+              CustomTextFieldLabel(
+                label: 'Last Name*',
+                child: CustomTextField(
+                  maxWords: -1,
+                  isRequired: true,
+                  controller: lastNameController,
+                  onChanged: (value) => addTempLastName(value),
                 ),
               ),
               const SizedBox(height: 24),

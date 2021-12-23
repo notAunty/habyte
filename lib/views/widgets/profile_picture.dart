@@ -73,12 +73,17 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
     double radius = widget.radius;
     bool isRegistering = widget.isRegistering;
 
-    final String? _userName = isRegistering
-        ? _userVM.retrieveTempUserJson()[USER_NAME]
-        : _userVM.retrieveUser()!.toMap()[USER_NAME];
+    final String _userFirstName = isRegistering
+        ? _userVM.retrieveTempUserJson()[USER_FIRST_NAME]
+        : _userVM.retrieveUser()!.toMap()[USER_FIRST_NAME];
+    final String _userLastName = isRegistering
+        ? _userVM.retrieveTempUserJson()[USER_LAST_NAME]
+        : _userVM.retrieveUser()!.toMap()[USER_LAST_NAME];
     final String? _profilePicPath = isRegistering
         ? _userVM.retrieveTempUserJson()[USER_PROFILE_PIC_PATH]
         : _userVM.retrieveUser()!.toMap()[USER_PROFILE_PIC_PATH];
+
+    final String _userName = _userFirstName + ' ' + _userLastName;
 
     return Stack(
       alignment: Alignment.center,
@@ -135,7 +140,7 @@ class _ProfilePictureHolderState extends State<ProfilePictureHolder> {
           Padding(
             padding: EdgeInsets.only(top: radius * 0.15),
             child: Text(
-              getNameInitials(_userName).toUpperCase(),
+              getNameInitials(name: _userName).toUpperCase(),
               style: TextStyle(
                   color: WHITE_01,
                   fontWeight: FontWeight.w600,

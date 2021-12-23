@@ -1,5 +1,6 @@
 // Constants should be ALL_CAPS
 // ignore_for_file: constant_identifier_names
+const APP_TITLE = 'Habyte';
 
 // Hive Box
 const BOX_NAME = 'default';
@@ -20,7 +21,8 @@ const NULL_BOOL_PLACEHOLDER = false;
 const REMINDER_BODY = 'Habyte task reminder';
 const MEMBERSHIP_TIER = ['Novice', 'Apprentice', 'Expert', 'Master'];
 // User Keys
-const USER_NAME = "name";
+const USER_FIRST_NAME = "firstName";
+const USER_LAST_NAME = "lastName";
 const USER_ABOUT = "about";
 const USER_PROFILE_PIC_PATH = "profilePicPath";
 const USER_POINTS = "points";

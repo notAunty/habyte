@@ -17,7 +17,10 @@ class ProfileScoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String? _userName = _userVM.retrieveUser()!.toMap()[USER_NAME];
+
+    final String _userFirstName = _userVM.retrieveUser()!.toMap()[USER_FIRST_NAME];
+    final String _userLastName =  _userVM.retrieveUser()!.toMap()[USER_LAST_NAME];
+    final String _userName = _userFirstName + ' ' + _userLastName;
     final int? _userScore = _userVM.retrieveUser()!.toMap()[USER_SCORES];
     final int _numOfEntries = _taskEntryVM.retrieveAllTaskEntries().length;
 
@@ -50,7 +53,7 @@ class ProfileScoreCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _userName!,
+                        _userName,
                         style: Theme.of(context)
                             .textTheme
                             .headline4!

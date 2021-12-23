@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
                     );
                   } else {
                     return MaterialApp(
-                      title: 'Habyte',
+                      title: APP_TITLE,
                       theme: lightTheme,
                       darkTheme: darkTheme,
                       // TODO: undo following

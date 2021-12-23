@@ -10,7 +10,9 @@ class RegistationPage2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String _userName = _userVM.retrieveTempUserJson()[USER_NAME];
+    final String _userFirstName =
+        _userVM.retrieveTempUserJson()[USER_FIRST_NAME];
+    final String _userLastName = _userVM.retrieveTempUserJson()[USER_LAST_NAME];
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -21,7 +23,7 @@ class RegistationPage2 extends StatelessWidget {
         children: [
           SizedBox(height: MediaQuery.of(context).size.height * 0.07),
           Text(
-            'Hi there, $_userName!',
+            'Hi there, $_userFirstName $_userLastName!',
             style: Theme.of(context).textTheme.headline6!.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
