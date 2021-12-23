@@ -45,11 +45,11 @@ class ShareRewardCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(SIDE_PADDING * 0.75, 0, 16, 0),
+                    padding: const EdgeInsets.fromLTRB(SIDE_PADDING * 0.75, 0, 16, 0),
                     child: Row(
                       children: [
-                        ProfilePictureHolder(radius: 16),
-                        SizedBox(width: 8),
+                        const ProfilePictureHolder(radius: 16),
+                        const SizedBox(width: 8),
                         Text(
                           _userName,
                           style: Theme.of(context).textTheme.bodyText1!.copyWith(
@@ -60,7 +60,7 @@ class ShareRewardCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.fromLTRB(16, 0, SIDE_PADDING * 0.75, 0),
                     child: AppLogo(),
                   ),
@@ -76,16 +76,16 @@ class ShareRewardCard extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2!
-                      .copyWith(color: WHITE_01.withOpacity(0.85)),
+                      .copyWith(color: WHITE_01.withOpacity(0.9)),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('With Habyte, I have redeemed'),
+                      const Text('With Habyte, I have redeemed'),
                       Flexible(
                         child: AutoSizeText(
                           // TODO: wp - link reward name
-                          'Have a cheat meal at McDonaldd\'s! YEAH!!!!!',
+                          'Ahh... WP, remember to change ahh. tq boss.',
                           maxLines: 5,
                           minFontSize: 6,
                           style: Theme.of(context).textTheme.headline3!.copyWith(
@@ -94,7 +94,7 @@ class ShareRewardCard extends StatelessWidget {
                         ),
                       ),
                       // TODO: wp - link reward points
-                      Text('by completing ${50}\nconsecutive habits.')
+                      const Text('by completing ${69}\nconsecutive habits.')
                     ],
                   ),
                 ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/pages/rewards/reward_item.dart';
+import 'package:habyte/views/pages/share/initiate_share_card.dart';
+import 'package:habyte/views/widgets/share_reward_card.dart';
 
 class RewardListRedeemed extends StatelessWidget {
   const RewardListRedeemed({Key? key}) : super(key: key);
@@ -31,7 +33,11 @@ class RewardListRedeemed extends StatelessWidget {
             itemBuilder: (context, index) => RedeemedRewardItem(
               name: rewardName[index],
               points: rewardPoint[index],
-              onTap: () {},
+              onTap: () => initiateShareCard(
+                context,
+                // TODO: wp - link to the correct rewardId
+                shareWidget: ShareRewardCard(rewardId: index.toString()),
+              ),
             ),
           ),
         ),

@@ -90,6 +90,7 @@ class RedeemedRewardItem extends StatelessWidget {
       child: Opacity(
         opacity: 0.5,
         child: ListTile(
+          onTap: () => onTap(),
           horizontalTitleGap: 0,
           contentPadding: EdgeInsets.zero,
           tileColor: Theme.of(context).colorScheme.surface,
@@ -109,7 +110,7 @@ class RedeemedRewardItem extends StatelessWidget {
                         .headline6!
                         .copyWith(fontWeight: FontWeight.w500),
                   ),
-                  Text('pts'),
+                  const Text('pts'),
                 ],
               ),
             ),
