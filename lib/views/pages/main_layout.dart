@@ -39,11 +39,11 @@ class _MainLayoutState extends State<MainLayout> {
       icon: FeatherIcons.user,
     ),
   ];
-  final List<Widget> _pages = const [
+  final List<Widget> _pages = [
     DashboardPage(),
     TasksPage(),
     RewardsPage(),
-    ProfilePage(),
+    Profile(),
   ];
   late List<void Function(BuildContext)?> _onFabClicked;
 
