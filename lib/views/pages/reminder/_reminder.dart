@@ -22,8 +22,8 @@ class _ReminderPageState extends State<ReminderPage> {
         title: const Text('Reminder'),
         centerTitle: true,
       ),
-      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const SizedBox(height: TOP_PADDING, width: double.infinity),
+      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
+        SizedBox(height: TOP_PADDING, width: double.infinity),
       ]),
     );
   }

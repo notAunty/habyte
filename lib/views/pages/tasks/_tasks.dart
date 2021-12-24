@@ -1,6 +1,7 @@
 import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/utils/date_time.dart';
 import 'package:habyte/viewmodels/reminderEntry.dart';
+import 'package:habyte/views/constant/sizes.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:habyte/viewmodels/task.dart';
@@ -144,7 +145,7 @@ class _TasksPageState extends State<TasksPage> {
     ).then((time) {
       if (time != null) {
         setState(() {
-          this.reminder = time;
+          reminder = time;
           reminderInput.text = timeOfDayFormatter(time);
         });
         print(reminder!.hour);
@@ -179,31 +180,31 @@ class _TasksPageState extends State<TasksPage> {
       if (date != null) {
         if (isStartDate) {
           setState(() {
-            this.startDate = date;
+            startDate = date;
             startDateInput.text = DateFormat('yyyy-MM-dd').format(startDate!);
           });
           if (endDate != null && endDate!.compareTo(startDate!) < 0) {
             print('exe');
             setState(() {
-              this.endDate = null;
+              endDate = null;
               endDateInput.text = '';
             });
           }
         } else {
           setState(() {
-            this.endDate = date;
+            endDate = date;
             endDateInput.text = DateFormat('yyyy-MM-dd').format(endDate!);
           });
         }
       } else {
         if (isStartDate) {
           setState(() {
-            this.startDate = null;
+            startDate = null;
             startDateInput.text = '';
           });
         } else {
           setState(() {
-            this.endDate = null;
+            endDate = null;
             endDateInput.text = '';
           });
         }
@@ -241,7 +242,7 @@ class _TasksPageState extends State<TasksPage> {
         builder: (context, setState) {
           return AlertDialog(
             title: Text(title),
-            insetPadding: const EdgeInsets.all(10),
+            insetPadding: const EdgeInsets.all(SIDE_PADDING / 3),
             backgroundColor: Theme.of(context).colorScheme.surface,
             actions: <Widget>[
               TextButton(

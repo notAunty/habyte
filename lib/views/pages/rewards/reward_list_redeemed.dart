@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+import 'package:habyte/views/constant/colors.dart';
+import 'package:habyte/views/constant/sizes.dart';
+import 'package:habyte/views/pages/rewards/reward_item.dart';
+import 'package:habyte/views/pages/share/initiate_share_card.dart';
+import 'package:habyte/views/widgets/share_reward_card.dart';
+
+class RewardListRedeemed extends StatelessWidget {
+  const RewardListRedeemed({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Mock
+    final List<int> rewardPoint = [5, 10];
+
+    final List<String> rewardName = [
+      "Have a cheat meal at MCDonald's",
+      "Visit an Art Exhibition"
+    ];
+    return StatefulBuilder(
+      builder: (context, setState) => SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: TOP_PADDING * 3),
+          child: ListView.separated(
+            primary: false,
+            shrinkWrap: true,
+            itemCount: rewardPoint.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 8.0),
+            padding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: SIDE_PADDING,
+            ),
+            itemBuilder: (context, index) => RedeemedRewardItem(
+              name: rewardName[index],
+              points: rewardPoint[index],
+              onTap: () => initiateShareCard(
+                context,
+                // TODO: wp - link to the correct rewardId
+                shareWidget: ShareRewardCard(rewardId: index.toString()),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

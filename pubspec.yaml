@@ -41,6 +41,7 @@ dependencies:
   share_plus: ^3.0.4
   flutter_local_notifications: ^9.1.5
   table_calendar: ^3.0.3
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   hive_generator: ^1.1.1

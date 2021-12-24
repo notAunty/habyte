@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
     this.hintText = '',
     this.onChanged,
     this.onTap,
-    this.maxInt=100,
+    this.maxInt=999999999999999999,
     this.minInt=0,
     this.onEditingComplete,
     required this.controller,
@@ -69,10 +69,10 @@ class CustomTextField extends StatelessWidget {
             return 'Must be an integer.';
           }else if (isInt &&
               ((int.tryParse(str!)! > maxInt))) {
-            return 'Maximum value is ${maxInt}.';
+            return 'Maximum value is $maxInt.';
           }else if (isInt &&
               ((int.tryParse(str!)! < minInt))) {
-            return 'Minimum value is ${minInt}.';
+            return 'Minimum value is $minInt.';
           } else if (isNumeric && double.tryParse(str!) == null) {
             return 'Must be a number.';
           } else if (isPositive && double.parse(str!) < 0) {

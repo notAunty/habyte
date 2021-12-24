@@ -73,7 +73,7 @@ class TaskCard extends StatelessWidget {
                 ],
               ),
               Container(
-                child: this.edit == null && this.delete == null
+                child: edit == null && delete == null
                     ? Container()
                     : Column(
                         children: [
