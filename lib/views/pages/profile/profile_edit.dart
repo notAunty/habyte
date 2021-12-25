@@ -26,9 +26,12 @@ class _ProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController firstNameController = TextEditingController();
-    TextEditingController lastNameController = TextEditingController();
-    TextEditingController aboutController = TextEditingController();
+    TextEditingController firstNameController = TextEditingController(
+        text: _userVM.retrieveTempUserJson()[USER_FIRST_NAME]);
+    TextEditingController lastNameController = TextEditingController(
+        text: _userVM.retrieveTempUserJson()[USER_LAST_NAME]);
+    TextEditingController aboutController =
+        TextEditingController(text: _userVM.retrieveTempUserJson()[USER_ABOUT]);
 
     return Scaffold(
       appBar: buildAppBar(context),
