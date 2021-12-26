@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:habyte/main.dart';
 import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/taskEntry.dart';
+import 'package:habyte/utils/date_time.dart';
 import 'package:habyte/viewmodels/task.dart';
 import 'package:habyte/viewmodels/taskEntry.dart';
 import 'package:habyte/views/constant/constants.dart';
@@ -39,20 +40,21 @@ class NotificationHandler {
     await flutterLocalNotificationsPlugin.cancelAll();
     for (ReminderEntry reminderEntry in reminderEntries) {
       if (reminderEntry.status) {
-        TaskEntry latestTaskEntry = TaskEntryVM.getInstance()
+        TaskEntry? latestTaskEntry = TaskEntryVM.getInstance()
             .getLatestTaskEntryByTaskId(reminderEntry.taskId);
-        if (latestTaskEntry.id != NULL_STRING_PLACEHOLDER) {
+        if (latestTaskEntry.id == NULL_STRING_PLACEHOLDER) {
+          latestTaskEntry = null;
+        }
+        if (latestTaskEntry != null) {
           // If same year, same month, same day, then means already done for that day
-          if (latestTaskEntry.completedDate.year == DateTime.now().year &&
-              latestTaskEntry.completedDate.month == DateTime.now().month &&
-              latestTaskEntry.completedDate.day == DateTime.now().day) {
+          if (isToday(latestTaskEntry.completedDate)) {
             continue;
           }
-          await createNotification(
-              reminderEntry.id,
-              TaskVM.getInstance().retrieveTaskById(reminderEntry.taskId).name,
-              reminderEntry.reminderTime);
         }
+        await createNotification(
+            reminderEntry.id,
+            TaskVM.getInstance().retrieveTaskById(reminderEntry.taskId).name,
+            reminderEntry.reminderTime);
       }
     }
     // await createNotification('T0003', 'Testing Title', 'Testing Body', const TimeOfDay(hour: 17, minute: 13));
