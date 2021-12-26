@@ -116,6 +116,7 @@ class ReminderEntryVM {
       ..._currentReminderEntries[_index].toMap(),
       ...jsonToUpdate,
     });
+    _updatedReminderEntry.id = id;
     _currentReminderEntries[_index] = _updatedReminderEntry;
     _general.updateBoxItem(
         _boxType, _updatedReminderEntry.id, _updatedReminderEntry);
@@ -148,11 +149,9 @@ class ReminderEntryVM {
   ///
   /// Call this function when need to delete reminderEntry
   void deleteReminderEntry(String id) {
-    int index = _currentReminderEntries
-        .indexWhere((reminderEntry) => reminderEntry.id == id);
-    // if (_index == -1) // do some alert
-    String removedId = _currentReminderEntries.removeAt(index).id;
-    _general.deleteBoxItem(_boxType, removedId);
+    _currentReminderEntries
+        .removeWhere((reminderEntry) => reminderEntry.id == id);
+    _general.deleteBoxItem(_boxType, id);
   }
 
   /// Private function to convert `List of ReminderEntry` to `List of Map`

@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/taskEntry.dart';
 import 'package:habyte/services/notifications.dart';
 import 'package:habyte/viewmodels/general.dart';
+import 'package:habyte/viewmodels/notifiers.dart';
 import 'package:habyte/viewmodels/reminderEntry.dart';
+import 'package:habyte/viewmodels/task.dart';
+import 'package:habyte/viewmodels/user.dart';
+import 'package:habyte/views/constant/constants.dart';
 
 /// **TaskEntry ViewModel Class**
 ///
@@ -13,24 +16,27 @@ import 'package:habyte/viewmodels/reminderEntry.dart';
 /// - Other operations
 class TaskEntryVM {
   static final TaskEntryVM _taskEntryVM = TaskEntryVM._internal();
-  TaskEntryVM._internal() {
-    _numEntriesNotifier = ValueNotifier(0);
-  }
+  TaskEntryVM._internal();
 
   /// Get the `TaskEntry` instance for user `CRUD` and other operations
   factory TaskEntryVM.getInstance() => _taskEntryVM;
 
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.taskEntry;
+  final Notifiers _notifiers = Notifiers.getInstance();
+  final NotifierType _currentTaskEntriesNotifierType =
+      NotifierType.currentTaskEntries;
+  final NotifierType _tasksInIdCheckedNotifierType =
+      NotifierType.tasksInIdChecked;
   List<TaskEntry> _currentTaskEntries = [];
-
-  late ValueNotifier<int> _numEntriesNotifier;
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
   void setCurrentTaskEntries(List<TaskEntry> taskEntryList) {
     _currentTaskEntries = taskEntryList;
-    _numEntriesNotifier.value = taskEntryList.length;
+    for (TaskEntry taskEntry in taskEntryList) {
+      _notifiers.addNotifierValue(_currentTaskEntriesNotifierType, taskEntry);
+    }
   }
 
   /// **Create TaskEntry** (`C` in CRUD)
@@ -39,25 +45,33 @@ class TaskEntryVM {
   ///
   /// Below are the keys for creating `TaskEntry`:
   /// - `TASK_ENTRY_TASK_ID`
-  /// - `TASK_ENTRY_COMPLETED_DATE`
   ///
   /// Return the created taskEntry
   ///
-  /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
-  /// from there
+  /// **Remark:**
+  /// - Above keys are gotten from `constant.dart`. Kindly import from there
+  /// - Completed Date is not required, because createTaskEntry will definitely
+  /// be now
   Future<TaskEntry> createTaskEntry(Map<String, dynamic> taskEntryJson) async {
-    TaskEntry _taskEntry = TaskEntry.fromJson(taskEntryJson);
+    TaskEntry _taskEntry = TaskEntry.fromJson(
+        {...taskEntryJson, TASK_ENTRY_COMPLETED_DATE: DateTime.now()});
     _taskEntry.id = _general.getBoxItemNewId(_boxType);
     _currentTaskEntries.add(_taskEntry);
     _general.addBoxItem(_boxType, _taskEntry.id, _taskEntry);
 
-    _numEntriesNotifier.value += 1;
+    _notifiers.addNotifierValue(_currentTaskEntriesNotifierType, _taskEntry);
+    _notifiers.updateNotifierValue(
+        _tasksInIdCheckedNotifierType, {_taskEntry.taskId: true});
+    UserVM.getInstance().addPointScore(
+        TaskVM.getInstance().retrieveTaskById(_taskEntry.taskId).points);
 
     // Once done create taskEntry, notification for today should be off
     ReminderEntry _reminderEntry = ReminderEntryVM.getInstance()
         .retrieveReminderEntryByTaskId(_taskEntry.taskId);
-    await NotificationHandler.getInstance()
-        .cancelNotification(_reminderEntry.id);
+    if (_reminderEntry.id != NULL_STRING_PLACEHOLDER) {
+      await NotificationHandler.getInstance()
+          .cancelNotification(_reminderEntry.id);
+    }
     return _taskEntry;
   }
 
@@ -114,8 +128,13 @@ class TaskEntryVM {
       ..._currentTaskEntries[_index].toMap(),
       ...jsonToUpdate,
     });
+    _updatedTaskEntry.id = id;
     _currentTaskEntries[_index] = _updatedTaskEntry;
     _general.updateBoxItem(_boxType, _updatedTaskEntry.id, _updatedTaskEntry);
+
+    _notifiers.updateNotifierValue(
+        _currentTaskEntriesNotifierType, _updatedTaskEntry);
+
     return _updatedTaskEntry;
   }
 
@@ -123,11 +142,10 @@ class TaskEntryVM {
   ///
   /// Call this function when need to delete taskEntry
   void deleteTaskEntry(String id) {
-    int index =
-        _currentTaskEntries.indexWhere((taskEntry) => taskEntry.id == id);
-    // if (_index == -1) // do some alert
-    String removedId = _currentTaskEntries.removeAt(index).id;
-    _general.deleteBoxItem(_boxType, removedId);
+    _currentTaskEntries.removeWhere((taskEntry) => taskEntry.id == id);
+    _general.deleteBoxItem(_boxType, id);
+
+    _notifiers.removeOrDeductNotifierValue(_currentTaskEntriesNotifierType, id);
   }
 
   /// Get the latest taskEntry by Task ID to get the completedDate in order to
@@ -137,8 +155,6 @@ class TaskEntryVM {
         (taskEntry) => taskEntry.taskId == taskId,
         orElse: () => TaskEntry().nullClass(),
       );
-
-  ValueNotifier<int> getNumOfEntriesNotifier() => _numEntriesNotifier;
 
   /// Private function to convert `List of TaskEntry` to `List of Map`
   List<Map<String, dynamic>> _toListOfMap() {

@@ -102,6 +102,7 @@ class RewardVM {
       ..._currentRewards[_index].toMap(),
       ...jsonToUpdate,
     });
+    _updatedReward.id = id;
     _currentRewards[_index] = _updatedReward;
     _general.updateBoxItem(_boxType, _updatedReward.id, _updatedReward);
     return _updatedReward;
@@ -111,10 +112,8 @@ class RewardVM {
   ///
   /// Call this function when need to delete reward
   void deleteReward(String id) {
-    int index = _currentRewards.indexWhere((reward) => reward.id == id);
-    // if (_index == -1) // do some alert
-    String removedId = _currentRewards.removeAt(index).id;
-    _general.deleteBoxItem(_boxType, removedId);
+    _currentRewards.removeWhere((reward) => reward.id == id);
+    _general.deleteBoxItem(_boxType, id);
   }
 
   /// Call this function when user redeem the reward
