@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/utils/date_time.dart';
 import 'package:habyte/viewmodels/reminderEntry.dart';
@@ -58,11 +60,12 @@ class _TasksPageState extends State<TasksPage> {
     Navigator.of(context).pop();
   }
 
-  Future deleteTask(Map<String, dynamic> taskToBeDeleted) async {
+  Future deleteTask(Map<String, dynamic> taskToBeDeleted, cardSetState) async {
     _taskVM.deleteTask(taskToBeDeleted[TASK_ID]);
-
-    setState(() {
-      taskList = _taskVM.retrieveAllTasksInListOfMap();
+    cardSetState(() {
+      setState(() {
+        taskList = _taskVM.retrieveAllTasksInListOfMap();
+      });
     });
   }
 
@@ -84,13 +87,14 @@ class _TasksPageState extends State<TasksPage> {
     }*/
     setState(() {
       int updatedTaskIndex =
-          taskList.firstWhere((task) => task[TASK_ID] == taskId)[TASK_ID];
+          taskList.indexWhere((task) => task[TASK_ID] == taskId);
       taskList[updatedTaskIndex] = _taskVM.updateTask(taskId, {
         TASK_NAME: nameInput.text,
         TASK_POINTS: int.parse(pointInput.text),
         TASK_START_DATE: startDate,
         TASK_END_DATE: endDate,
       }).toMap();
+      print(taskList);
     });
     Navigator.of(context).pop();
   }
@@ -99,17 +103,18 @@ class _TasksPageState extends State<TasksPage> {
   void deleteNotification() {}
   void updateNotification() {}
 
-  void onClickEdit(Map<String, dynamic> task) {
+  void onClickEdit(Map<String, dynamic> task, cardSetState) {
     /* NotificationDetail editNotification =
         _notificationVM.retrieveNotificationDetailByTaskId(task['id']);*/
-
-    setState(() {
-      //isReminderOn=editNotification == null ? false : true;
-      //reminder= editNotification.notificationTime;
-      //reminderInput= formatTimeOfDay(editNotification.notificationTime);
-      //editNotification = editNotification;
+    cardSetState(() {
+      setState(() {
+        //isReminderOn=editNotification == null ? false : true;
+        //reminder= editNotification.notificationTime;
+        //reminderInput= formatTimeOfDay(editNotification.notificationTime);
+        //editNotification = editNotification;
+      });
+      toggleDialog(taskToBeEdited: task);
     });
-    toggleDialog(taskToBeEdited: task);
   }
 
   void onClickAdd() {
@@ -353,6 +358,7 @@ class _TasksPageState extends State<TasksPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        heroTag: Random.secure().nextDouble(),
         onPressed: onClickAdd,
         child: const Icon(Icons.add, color: WHITE_01),
       ),
@@ -387,6 +393,7 @@ class _TasksPageState extends State<TasksPage> {
             ),
             Expanded(
               child: Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   borderRadius: const BorderRadius.only(
@@ -397,30 +404,25 @@ class _TasksPageState extends State<TasksPage> {
                       blurRadius: 7,
                       spreadRadius: 5,
                       offset: const Offset(0, 3),
-                      color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.07),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onPrimary
+                          .withOpacity(0.07),
                     ),
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: taskList
-                              .map((task) => TaskCard(
-                                    task: task,
-                                    delete: deleteTask,
-                                    edit: onClickEdit,
-                                  ))
-                              .toList(),
-                        ),
-                      ],
+                      children: taskList
+                          .map((task) => TaskCard(
+                                task: task,
+                                delete: deleteTask,
+                                edit: onClickEdit,
+                              ))
+                          .toList(),
                     ),
                   ),
                 ),
