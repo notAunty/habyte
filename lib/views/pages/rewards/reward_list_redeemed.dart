@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:habyte/views/constant/colors.dart';
+import 'package:habyte/viewmodels/notifiers.dart';
+import 'package:habyte/views/constant/constants.dart';
 import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/pages/rewards/reward_item.dart';
 import 'package:habyte/views/pages/share/initiate_share_card.dart';
@@ -10,36 +11,36 @@ class RewardListRedeemed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mock
-    final List<int> rewardPoint = [5, 10];
+    final Notifiers _notifiers = Notifiers.getInstance();
 
-    final List<String> rewardName = [
-      "Have a cheat meal at MCDonald's",
-      "Visit an Art Exhibition"
-    ];
-    return StatefulBuilder(
-      builder: (context, setState) => SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: TOP_PADDING * 3),
-          child: ListView.separated(
-            primary: false,
-            shrinkWrap: true,
-            itemCount: rewardPoint.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 8.0),
-            padding: const EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: SIDE_PADDING,
-            ),
-            itemBuilder: (context, index) => RedeemedRewardItem(
-              name: rewardName[index],
-              points: rewardPoint[index],
-              onTap: () => initiateShareCard(
-                context,
-                // TODO: wp - link to the correct rewardId
-                shareWidget: ShareRewardCard(rewardId: index.toString()),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: TOP_PADDING * 3),
+        child: ValueListenableBuilder<Object>(
+          valueListenable: _notifiers.getRedeemedRewardsNotifier(),
+          builder: (context, redeemedRewardlist, _) {
+            return ListView.separated(
+              primary: false,
+              shrinkWrap: true,
+              itemCount:
+                  (redeemedRewardlist as List<Map<String, dynamic>>).length,
+              separatorBuilder: (context, index) => const SizedBox(height: 8.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 16,
+                horizontal: SIDE_PADDING,
               ),
-            ),
-          ),
+              itemBuilder: (context, index) => RedeemedRewardItem(
+                name: redeemedRewardlist[index][REWARD_NAME],
+                points: redeemedRewardlist[index][REWARD_POINTS],
+                onTap: () => initiateShareCard(
+                  context,
+                  shareWidget: ShareRewardCard(
+                    rewardId: redeemedRewardlist[index][REWARD_ID],
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
