@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habyte/views/constant/colors.dart';
-import 'package:habyte/views/widgets/task_card.dart';
+import 'package:habyte/views/widgets/task_item.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class ViewTask extends StatefulWidget {
@@ -99,7 +99,7 @@ class _ViewTaskState extends State<ViewTask> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: todayTaskList
-                            .map((task) => TaskCard(
+                            .map((task) => TaskItem(
                                   task: task,
                                 ))
                             .toList(),

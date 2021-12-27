@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:habyte/viewmodels/task.dart';
 import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/pages/tasks/_viewTask.dart';
-import 'package:habyte/views/widgets/task_card.dart';
+import 'package:habyte/views/widgets/task_item.dart';
 import 'package:habyte/views/widgets/text_fields.dart';
 import 'package:habyte/views/constant/constants.dart';
 
@@ -412,17 +412,20 @@ class _TasksPageState extends State<TasksPage> {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
+                  padding: const EdgeInsets.only(top: TOP_PADDING * 2.5),
                   child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: taskList
-                          .map((task) => TaskCard(
-                                task: task,
-                                delete: deleteTask,
-                                edit: onClickEdit,
-                              ))
-                          .toList(),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: TOP_PADDING * 4),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: taskList
+                            .map((task) => TaskItem(
+                                  task: task,
+                                  onEdit: onClickEdit,
+                                  onDelete: deleteTask,
+                                ))
+                            .toList(),
+                      ),
                     ),
                   ),
                 ),

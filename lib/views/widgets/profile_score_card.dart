@@ -63,7 +63,6 @@ class ProfileScoreCard extends StatelessWidget {
                                 Opacity(
                                   opacity: 0.7,
                                   child: Text(
-                                    // TODO
                                     getMembershipTierByScores(score),
                                     style: Theme.of(context)
                                         .textTheme

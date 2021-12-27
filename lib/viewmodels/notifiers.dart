@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:habyte/models/taskEntry.dart';
 
 enum NotifierType {
   userNme,
