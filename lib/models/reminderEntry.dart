@@ -22,10 +22,9 @@ class ReminderEntry {
 
   ReminderEntry();
 
-  //// By default, when a reminderEntry is created, its status is true
   ReminderEntry.fromJson(Map<String, dynamic> json)
       : taskId = json[REMINDER_ENTRY_TASK_ID],
-        status = true,
+        status = json[REMINDER_ENTRY_STATUS],
         reminderTime = json[REMINDER_ENTRY_TIME];
 
   Map<String, dynamic> toMap() => {

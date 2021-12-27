@@ -18,7 +18,7 @@ class DashboardPage extends StatelessWidget {
         const DashboardHeader(),
         ProfileScoreCard(heroTag: 'dashboard',),
         const DashboardTaskHeader(),
-        const DashboardTaskList(),
+        DashboardTaskList(),
       ],
     );
   }

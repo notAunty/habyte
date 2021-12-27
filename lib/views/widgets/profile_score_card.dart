@@ -1,163 +1,167 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:habyte/viewmodels/taskEntry.dart';
-import 'package:habyte/viewmodels/user.dart';
+import 'package:habyte/utils/membership_tier.dart';
+import 'package:habyte/viewmodels/notifiers.dart';
 import 'package:habyte/views/constant/colors.dart';
-import 'package:habyte/views/constant/constants.dart';
 import 'package:habyte/views/constant/sizes.dart';
+import 'package:habyte/views/widgets/double_value_listenable_builder.dart';
 import 'package:habyte/views/widgets/profile_picture.dart';
 
 class ProfileScoreCard extends StatelessWidget {
   ProfileScoreCard({Key? key, this.heroTag}) : super(key: key);
 
   final Object? heroTag;
-  final UserVM _userVM = UserVM.getInstance();
-  final TaskEntryVM _taskEntryVM = TaskEntryVM.getInstance();
+  final Notifiers _notifiers = Notifiers.getInstance();
 
   @override
   Widget build(BuildContext context) {
-
-    final String _userFirstName = _userVM.retrieveUser()!.toMap()[USER_FIRST_NAME];
-    final String _userLastName =  _userVM.retrieveUser()!.toMap()[USER_LAST_NAME];
-    final String _userName = _userFirstName + ' ' + _userLastName;
-    final int? _userScore = _userVM.retrieveUser()!.toMap()[USER_SCORES];
-    final int _numOfEntries = _taskEntryVM.retrieveAllTaskEntries().length;
-
-    return Hero(
-      tag: heroTag ?? Random.secure().nextDouble(),
-      child: Padding(
-        padding:
-            const EdgeInsets.symmetric(horizontal: SIDE_PADDING, vertical: 8),
-        child: Container(
-          height: 160,
-          decoration: BoxDecoration(
-            color: MEMBERSHIP_COLOR[Random().nextInt(MEMBERSHIP_COLOR.length)],
-            borderRadius: BorderRadius.circular(BORDER_RADIUS),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(SIDE_PADDING * 0.75, 0, 16, 0),
-                    child: ProfilePictureHolder(radius: 28),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _userName,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline4!
-                            .copyWith(color: WHITE_01),
-                      ),
-                      Opacity(
-                        opacity: 0.7,
-                        child: Text(
-                          // TODO
-                          'Novice',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(color: WHITE_01),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: SIDE_PADDING * 0.75),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          _userScore.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(color: WHITE_01),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          'pts',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(color: WHITE_01),
-                        ),
-                      ],
+    return ValueListenableBuilder<String>(
+      valueListenable: _notifiers.getNameNotifier(),
+      builder: (_, userName, __) {
+        return DoubleValueListenableBuilder<int, int>(
+            firstValueListenable: _notifiers.getScoreNotifier(),
+            secondValueListenable: _notifiers.getNumEntriesNotifier(),
+            builder: (context, score, numEntries) {
+              return Hero(
+                tag: heroTag ?? Random.secure().nextDouble(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: SIDE_PADDING, vertical: 8),
+                  child: Container(
+                    height: 160,
+                    decoration: BoxDecoration(
+                      // color: MEMBERSHIP_COLOR[Random().nextInt(MEMBERSHIP_COLOR.length)],
+                      color: getCardColorByScores(score),
+                      borderRadius: BorderRadius.circular(BORDER_RADIUS),
                     ),
-                    Row(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(
-                          _numOfEntries.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(color: WHITE_01),
+                        const Spacer(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                  SIDE_PADDING * 0.75, 0, 16, 0),
+                              child: ProfilePictureHolder(radius: 28),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  userName,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4!
+                                      .copyWith(color: WHITE_01),
+                                ),
+                                Opacity(
+                                  opacity: 0.7,
+                                  child: Text(
+                                    // TODO
+                                    getMembershipTierByScores(score),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(color: WHITE_01),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 4),
-                        Text(
-                          'entries',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(color: WHITE_01),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: SIDE_PADDING * 0.75),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      height: 12,
-                      child: Row(
-                        children: [
-                          Image.asset('assets/logo/white.png'),
-                          const SizedBox(width: 2),
-                          Text(
-                            'Habyte',
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle2!
-                                .copyWith(color: WHITE_01),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: SIDE_PADDING * 0.75),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    score.toString(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4!
+                                        .copyWith(color: WHITE_01),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'pts',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(color: WHITE_01),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    numEntries.toString(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4!
+                                        .copyWith(color: WHITE_01),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'entries',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(color: WHITE_01),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    )
-                  ],
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: SIDE_PADDING * 0.75),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                height: 12,
+                                child: Row(
+                                  children: [
+                                    Image.asset('assets/logo/white.png'),
+                                    const SizedBox(width: 2),
+                                    Text(
+                                      'Habyte',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2!
+                                          .copyWith(color: WHITE_01),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: SIDE_PADDING * 0.75,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: SIDE_PADDING * 0.75,
-              ),
-            ],
-          ),
-        ),
-      ),
+              );
+            });
+      },
     );
   }
 }

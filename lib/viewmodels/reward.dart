@@ -1,5 +1,7 @@
 import 'package:habyte/models/reward.dart';
 import 'package:habyte/viewmodels/general.dart';
+import 'package:habyte/viewmodels/user.dart';
+import 'package:habyte/views/constant/constants.dart';
 
 /// **Reward ViewModel Class**
 ///
@@ -48,11 +50,27 @@ class RewardVM {
   /// Call this function when you need the info in `List of Reward`.
   List<Reward> retrieveAllRewards() => _currentRewards;
 
+  /// **Retrieve Reward (Split)** (`R` in CRUD)
+  ///
+  /// Call this function when you need the info in `List of Reward` (
+  /// `available` and `redeemed` in different list).
+  Map<String, List<Reward>> retrieveAllSplitRewards() =>
+      _splitAvailableRedeemed() as Map<String, List<Reward>>;
+
   /// **Retrieve Reward** (`R` in CRUD)
   ///
   /// Call this function when you need the info in `List of Map`
   /// (converted from `Reward`).
   List<Map<String, dynamic>> retrieveAllRewardsInListOfMap() => _toListOfMap();
+
+  /// **Retrieve Reward** (`R` in CRUD)
+  ///
+  /// Call this function when you need the info in `List of Map`
+  /// (converted from `Reward` - `available` and `redeemed` in different list).
+  Map<String, List<Map<String, dynamic>>>
+      retrieveAllAplitRewardsInListOfMap() =>
+          _splitAvailableRedeemed(toMap: true)
+              as Map<String, List<Map<String, dynamic>>>;
 
   /// **Retrieve Reward** (`R` in CRUD)
   ///
@@ -84,6 +102,7 @@ class RewardVM {
       ..._currentRewards[_index].toMap(),
       ...jsonToUpdate,
     });
+    _updatedReward.id = id;
     _currentRewards[_index] = _updatedReward;
     _general.updateBoxItem(_boxType, _updatedReward.id, _updatedReward);
     return _updatedReward;
@@ -93,10 +112,31 @@ class RewardVM {
   ///
   /// Call this function when need to delete reward
   void deleteReward(String id) {
-    int index = _currentRewards.indexWhere((reward) => reward.id == id);
-    // if (_index == -1) // do some alert
-    String removedId = _currentRewards.removeAt(index).id;
-    _general.deleteBoxItem(_boxType, removedId);
+    _currentRewards.removeWhere((reward) => reward.id == id);
+    _general.deleteBoxItem(_boxType, id);
+  }
+
+  /// Call this function when user redeem the reward
+  void redeemReward(String id) {
+    Reward redeemedReward = updateReward(id, {REWARD_AVAILABLE: false});
+    UserVM.getInstance().deductPoint(redeemedReward.points);
+  }
+
+  Map<String, List<dynamic>> _splitAvailableRedeemed({bool toMap = false}) {
+    Map<String, List<dynamic>> splitRewards = {
+      REWARD_AVAILABLE: [],
+      REWARD_REDEEMED: []
+    };
+
+    for (var reward in _currentRewards) {
+      if (reward.available) {
+        splitRewards[REWARD_AVAILABLE]!.add(toMap ? reward.toMap() : reward);
+      } else {
+        splitRewards[REWARD_REDEEMED]!.add(reward);
+      }
+    }
+
+    return splitRewards;
   }
 
   /// Private function to convert `List of Reward` to `List of Map`

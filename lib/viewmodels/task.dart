@@ -1,5 +1,10 @@
 import 'package:habyte/models/task.dart';
+import 'package:habyte/models/taskEntry.dart';
+import 'package:habyte/utils/date_time.dart';
 import 'package:habyte/viewmodels/general.dart';
+import 'package:habyte/viewmodels/notifiers.dart';
+import 'package:habyte/viewmodels/taskEntry.dart';
+import 'package:habyte/views/constant/constants.dart';
 
 /// **Task ViewModel Class**
 ///
@@ -16,11 +21,31 @@ class TaskVM {
 
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.task;
+  final Notifiers _notifiers = Notifiers.getInstance();
+  final NotifierType _tasksInIdNameNotifierType = NotifierType.tasksInIdName;
+  final NotifierType _tasksInIdCheckedNotifierType =
+      NotifierType.tasksInIdChecked;
   List<Task> _currentTasks = [];
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
-  void setCurrentTasks(List<Task> taskList) => _currentTasks = taskList;
+  void setCurrentTasks(List<Task> taskList) {
+    _currentTasks = taskList;
+
+    for (Task task in _currentTasks) {
+      _notifiers.updateNotifierValue(
+          _tasksInIdNameNotifierType, {task.id: task.name});
+      TaskEntry? latestTaskEntry =
+          TaskEntryVM.getInstance().getLatestTaskEntryByTaskId(task.id);
+      if (latestTaskEntry.id == NULL_STRING_PLACEHOLDER) {
+        latestTaskEntry = null;
+      }
+      _notifiers.updateNotifierValue(_tasksInIdCheckedNotifierType, {
+        task.id:
+            latestTaskEntry != null && isToday(latestTaskEntry.completedDate)
+      });
+    }
+  }
 
   /// **Create Task** (`C` in CRUD)
   ///
@@ -41,6 +66,12 @@ class TaskVM {
     _task.id = _general.getBoxItemNewId(_boxType);
     _currentTasks.add(_task);
     _general.addBoxItem(_boxType, _task.id, _task);
+
+    _notifiers
+        .addNotifierValue(_tasksInIdNameNotifierType, {_task.id: _task.name});
+    _notifiers
+        .addNotifierValue(_tasksInIdCheckedNotifierType, {_task.id: false});
+
     return _task;
   }
 
@@ -87,8 +118,13 @@ class TaskVM {
       ..._currentTasks[_index].toMap(),
       ...jsonToUpdate,
     });
+    _updatedTask.id = id;
     _currentTasks[_index] = _updatedTask;
     _general.updateBoxItem(_boxType, _updatedTask.id, _updatedTask);
+
+    _notifiers.updateNotifierValue(
+        _tasksInIdNameNotifierType, {_updatedTask.id: _updatedTask.name});
+
     return _updatedTask;
   }
 
@@ -96,10 +132,11 @@ class TaskVM {
   ///
   /// Call this function when need to delete task
   void deleteTask(String id) {
-    int index = _currentTasks.indexWhere((task) => task.id == id);
-    // if (_index == -1) // do some alert
-    String removedId = _currentTasks.removeAt(index).id;
-    _general.deleteBoxItem(_boxType, removedId);
+    _currentTasks.removeWhere((task) => task.id == id);
+    _general.deleteBoxItem(_boxType, id);
+
+    _notifiers.removeOrDeductNotifierValue(_tasksInIdNameNotifierType, id);
+    _notifiers.removeOrDeductNotifierValue(_tasksInIdCheckedNotifierType, id);
   }
 
   /// Private function to convert `List of Task` to `List of Map`

@@ -1,5 +1,7 @@
+import 'package:flutter/widgets.dart';
 import 'package:habyte/models/user.dart';
 import 'package:habyte/viewmodels/general.dart';
+import 'package:habyte/viewmodels/notifiers.dart';
 import 'package:habyte/views/constant/constants.dart';
 
 /// **User ViewModel Class**
@@ -8,6 +10,9 @@ import 'package:habyte/views/constant/constants.dart';
 /// - User Model
 /// - CRUD
 /// - Other operations
+/// **Remark:**
+/// - `Point` can be earned through completing tasks. Is used to redeem rewards.
+/// - `Score` is commutative of point. Will get deducted when habit is skipped on a day.
 class UserVM {
   static final UserVM _userVM = UserVM._internal();
   UserVM._internal();
@@ -17,14 +22,23 @@ class UserVM {
 
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.main;
+  final Notifiers _notifiers = Notifiers.getInstance();
+  final NotifierType _nameNotifierType = NotifierType.userNme;
+  final NotifierType _scoreNotifierType = NotifierType.userScore;
+  final NotifierType _pointNotifierType = NotifierType.userPoint;
   final String _key = BOX_USER;
-  User? _currentUser;
+  late User? _currentUser;
   Map<String, dynamic> _tempUserJson = {};
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
-  void setCurrentUser(Map<String, dynamic> userJson) =>
-      _currentUser = User.fromJson(userJson);
+  void setCurrentUser(Map<String, dynamic> userJson) {
+    _currentUser = User.fromJson(userJson);
+    _notifiers.updateNotifierValue(_nameNotifierType,
+        '${_currentUser!.firstName} ${_currentUser!.lastName}');
+    _notifiers.updateNotifierValue(_scoreNotifierType, _currentUser!.scores);
+    _notifiers.updateNotifierValue(_pointNotifierType, _currentUser!.points);
+  }
 
   /// Add temp user data, since multiple pages for user registration
   ///
@@ -54,6 +68,9 @@ class UserVM {
     };
     setCurrentUser(_tempUserJson);
     _general.addBoxItem(_boxType, _key, _tempUserJson);
+
+    _notifiers.updateNotifierValue(_nameNotifierType,
+        '${_tempUserJson[USER_FIRST_NAME]} ${_tempUserJson[USER_LAST_NAME]}');
   }
 
   /// **Retrieve User** (`R` in CRUD)
@@ -76,6 +93,9 @@ class UserVM {
   void updateUser(Map<String, dynamic> jsonToUpdate) {
     setCurrentUser({..._currentUser!.toMap(), ...jsonToUpdate});
     _general.addBoxItem(_boxType, _key, _currentUser!.toMap());
+
+    _notifiers.updateNotifierValue(_nameNotifierType,
+        '${_currentUser!.firstName} ${_currentUser!.lastName}');
   }
 
   /// **Delete User** (`D` in CRUD)
@@ -87,16 +107,44 @@ class UserVM {
   void deleteUser() {
     _currentUser = null;
     _general.deleteBoxItem(_boxType, _key);
+
+    _notifiers.updateNotifierValue(_nameNotifierType, '');
   }
 
-  /// This function is used to minus score if user accidentall or intentionally
-  /// skip the tasks.
-  void minusScore(int numOfScore) {
+  /// This function is used to add score whenever user done taskEntry.
+  void addPointScore(int taskPoint) {
+    _currentUser!.scores += taskPoint;
+    _currentUser!.points += taskPoint;
+    _general.updateBoxItem(_boxType, _key, _currentUser!.toMap());
+    print(_currentUser!.toMap());
+
+    _notifiers.addNotifierValue(_scoreNotifierType, taskPoint);
+    _notifiers.addNotifierValue(_pointNotifierType, taskPoint);
+  }
+
+  /// This function is used to deduct point whenever 
+  /// - User redeem reward
+  /// - Undo taskEntry
+  void deductPoint(int redeemedPoint) {
+    _currentUser!.points -= redeemedPoint;
+    _general.updateBoxItem(_boxType, _key, _currentUser!.toMap());
+    print(_currentUser!.toMap());
+
+    _notifiers.removeOrDeductNotifierValue(_pointNotifierType, redeemedPoint);
+  }
+
+  /// This function is used to deduct score if 
+  /// - User accidentally or intentionally skip the tasks.
+  /// - Undo taskEntry
+  void deductScore(int numOfScore) {
     if (_currentUser!.scores >= numOfScore) {
       _currentUser!.scores -= numOfScore;
+      _notifiers.removeOrDeductNotifierValue(_scoreNotifierType, numOfScore);
     } else {
       _currentUser!.scores = 0;
+      _notifiers.updateNotifierValue(_scoreNotifierType, 0);
     }
     _general.updateBoxItem(_boxType, _key, _currentUser!.toMap());
+    print(_currentUser!.toMap());
   }
 }

@@ -31,3 +31,10 @@ String timeOfDayFormatter(TimeOfDay tod) {
   final format = DateFormat.jm();
   return format.format(dt);
 }
+
+bool isToday(DateTime date) {
+  DateTime dateWithoutHourMinute = DateTime(date.year, date.month, date.day);
+  DateTime now = DateTime.now();
+  DateTime nowWithoutHourMinute = DateTime(now.year, now.month, now.day);
+  return dateWithoutHourMinute.isAtSameMomentAs(nowWithoutHourMinute);
+}
