@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:habyte/models/taskEntry.dart';
-import 'package:habyte/utils/date_time.dart';
-import 'package:habyte/viewmodels/taskEntry.dart';
 import 'package:habyte/views/constant/colors.dart';
 import 'package:habyte/views/constant/constants.dart';
 import 'package:intl/intl.dart';
@@ -13,13 +10,6 @@ class TaskCard extends StatelessWidget {
 
   const TaskCard({Key? key, required this.task, this.delete, this.edit})
       : super(key: key);
-
-  void checkIn(setState) {
-    setState(() {
-      TaskEntryVM.getInstance()
-          .createTaskEntry({TASK_ENTRY_TASK_ID: task[TASK_ID]});
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,36 +86,13 @@ class TaskCard extends StatelessWidget {
                 child: edit == null && delete == null
                     ? Container()
                     : StatefulBuilder(builder: (context, setState) {
-                        TaskEntry? latestTaskEntry = TaskEntryVM.getInstance()
-                            .getLatestTaskEntryByTaskId(task[TASK_ID]);
-                        if (latestTaskEntry.id == NULL_STRING_PLACEHOLDER) {
-                          latestTaskEntry = null;
-                        }
-                        bool taskEntryCompleted = latestTaskEntry != null &&
-                            isToday(latestTaskEntry.completedDate);
-
                         return Column(
                           children: [
                             const SizedBox(height: 8),
                             const Divider(),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Opacity(
-                                  opacity: taskEntryCompleted ? 0.5 : 1.0,
-                                  child: TextButton(
-                                    onPressed: () => taskEntryCompleted
-                                        ? {}
-                                        : checkIn(setState),
-                                    child: Row(
-                                      children: const [
-                                        Icon(Icons.assignment_turned_in),
-                                        SizedBox(width: 4),
-                                        Text('Check in')
-                                      ],
-                                    ),
-                                  ),
-                                ),
                                 TextButton(
                                   onPressed: () {
                                     edit!(task, setState);

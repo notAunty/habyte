@@ -7,8 +7,7 @@ enum NotifierType {
   userPoint,
   tasksInIdName,
   tasksInIdChecked,
-  numEntries,
-  currentTaskEntries
+  numEntries
 }
 
 class Notifiers {
@@ -25,7 +24,6 @@ class Notifiers {
 
     // Task Entry
     _numEntriesNotifier = ValueNotifier(0);
-    _currentTaskEntriesNotifier = ValueNotifier([]);
   }
 
   /// Get the `NotifierVM` instance.
@@ -53,10 +51,6 @@ class Notifiers {
   // Task Entry
   late ValueNotifier<int> _numEntriesNotifier;
   ValueNotifier<int> getNumEntriesNotifier() => _numEntriesNotifier;
-
-  late ValueNotifier<List<TaskEntry>> _currentTaskEntriesNotifier;
-  ValueNotifier<List<TaskEntry>> getCurrentTaskEntriesNotifier() =>
-      _currentTaskEntriesNotifier;
 
   void addNotifierValue(NotifierType notifierType, Object value) {
     switch (notifierType) {
@@ -86,13 +80,7 @@ class Notifiers {
         };
         break;
       case NotifierType.numEntries:
-        // Do NOTHING
-        break;
-      case NotifierType.currentTaskEntries:
-        assert(value is TaskEntry);
-        _currentTaskEntriesNotifier.value.add(value as TaskEntry);
-        _currentTaskEntriesNotifier.value =
-            List.from(_currentTaskEntriesNotifier.value);
+        assert(value is int);
         _numEntriesNotifier.value += 1;
         break;
     }
@@ -124,14 +112,6 @@ class Notifiers {
         assert(value is int);
         _numEntriesNotifier.value = value as int;
         break;
-      case NotifierType.currentTaskEntries:
-        assert(value is TaskEntry);
-        int index = _currentTaskEntriesNotifier.value
-            .indexWhere((taskEntry) => taskEntry.id == (value as TaskEntry).id);
-        _currentTaskEntriesNotifier.value[index] = value as TaskEntry;
-        _currentTaskEntriesNotifier.value =
-            List.from(_currentTaskEntriesNotifier.value);
-        break;
     }
   }
 
@@ -159,14 +139,7 @@ class Notifiers {
         _tasksInIdCheckedNotifier.value = {..._tasksInIdCheckedNotifier.value};
         break;
       case NotifierType.numEntries:
-        // Do NOTHING
-        break;
-      case NotifierType.currentTaskEntries:
-        assert(value is String);
-        _currentTaskEntriesNotifier.value
-            .removeWhere((taskEntry) => taskEntry.id == value as String);
-        _currentTaskEntriesNotifier.value =
-            List.from(_currentTaskEntriesNotifier.value);
+        assert(value is int);
         _numEntriesNotifier.value -= 1;
         break;
     }

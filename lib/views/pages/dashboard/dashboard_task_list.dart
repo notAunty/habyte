@@ -59,15 +59,16 @@ class DashboardTaskList extends StatelessWidget {
               onTap: () {
                 !tasksInIdChecked[tasksInIdName.keys.toList()[index]]!
                     ? {
-                        tasksInIdChecked[tasksInIdName.keys.toList()[index]] =
-                            true,
                         _taskEntryVM.createTaskEntry({
                           TASK_ENTRY_TASK_ID:
                               tasksInIdName.keys.toList()[index],
                           TASK_ENTRY_COMPLETED_DATE: DateTime.now()
                         })
                       }
-                    : {};
+                    : {
+                        _taskEntryVM.deleteTaskEntryByTaskId(
+                            tasksInIdName.keys.toList()[index])
+                      };
               },
             ),
           ),
