@@ -6,7 +6,6 @@ enum NotifierType {
   userPoint,
   tasksInIdName,
   tasksInIdChecked,
-  numEntries
 }
 
 class Notifiers {
@@ -20,9 +19,6 @@ class Notifiers {
     // Task
     _tasksInIdNameNotifier = ValueNotifier({});
     _tasksInIdCheckedNotifier = ValueNotifier({});
-
-    // Task Entry
-    _numEntriesNotifier = ValueNotifier(0);
   }
 
   /// Get the `NotifierVM` instance.
@@ -46,10 +42,6 @@ class Notifiers {
   late ValueNotifier<Map<String, bool>> _tasksInIdCheckedNotifier;
   ValueNotifier<Map<String, bool>> getTasksInIdCheckedNotifier() =>
       _tasksInIdCheckedNotifier;
-
-  // Task Entry
-  late ValueNotifier<int> _numEntriesNotifier;
-  ValueNotifier<int> getNumEntriesNotifier() => _numEntriesNotifier;
 
   void addNotifierValue(NotifierType notifierType, Object value) {
     switch (notifierType) {
@@ -78,10 +70,6 @@ class Notifiers {
           ...value as Map
         };
         break;
-      case NotifierType.numEntries:
-        assert(value is int);
-        _numEntriesNotifier.value += 1;
-        break;
     }
   }
 
@@ -106,10 +94,6 @@ class Notifiers {
       case NotifierType.tasksInIdChecked:
         assert(value is Map);
         addNotifierValue(notifierType, value);
-        break;
-      case NotifierType.numEntries:
-        assert(value is int);
-        _numEntriesNotifier.value = value as int;
         break;
     }
   }
@@ -136,10 +120,6 @@ class Notifiers {
         assert(value is String);
         _tasksInIdCheckedNotifier.value.remove(value as String);
         _tasksInIdCheckedNotifier.value = {..._tasksInIdCheckedNotifier.value};
-        break;
-      case NotifierType.numEntries:
-        assert(value is int);
-        _numEntriesNotifier.value -= 1;
         break;
     }
   }

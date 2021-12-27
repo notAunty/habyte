@@ -27,16 +27,12 @@ class TaskEntryVM {
   final Notifiers _notifiers = Notifiers.getInstance();
   final NotifierType _tasksInIdCheckedNotifierType =
       NotifierType.tasksInIdChecked;
-  final NotifierType __numEntriesNotifierType = NotifierType.numEntries;
   List<TaskEntry> _currentTaskEntries = [];
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
-  void setCurrentTaskEntries(List<TaskEntry> taskEntryList) {
-    _currentTaskEntries = taskEntryList;
-    _notifiers.updateNotifierValue(
-        __numEntriesNotifierType, taskEntryList.length);
-  }
+  void setCurrentTaskEntries(List<TaskEntry> taskEntryList) =>
+      _currentTaskEntries = taskEntryList;
 
   /// **Create TaskEntry** (`C` in CRUD)
   ///
@@ -58,7 +54,6 @@ class TaskEntryVM {
     _currentTaskEntries.add(_taskEntry);
     _general.addBoxItem(_boxType, _taskEntry.id, _taskEntry);
 
-    _notifiers.addNotifierValue(__numEntriesNotifierType, 1);
     _notifiers.updateNotifierValue(
         _tasksInIdCheckedNotifierType, {_taskEntry.taskId: true});
     UserVM.getInstance().addPointScore(
@@ -145,8 +140,6 @@ class TaskEntryVM {
     _general.deleteBoxItem(_boxType, id);
     UserVM.getInstance().deductPoint(
         TaskVM.getInstance().retrieveTaskById(removedTaskEntry.taskId).points);
-
-    _notifiers.removeOrDeductNotifierValue(__numEntriesNotifierType, 1);
   }
 
   /// **Delete TaskEntry** (`D` in CRUD)
@@ -164,8 +157,6 @@ class TaskEntryVM {
         .deductPoint(TaskVM.getInstance().retrieveTaskById(taskId).points);
     UserVM.getInstance()
         .deductScore(TaskVM.getInstance().retrieveTaskById(taskId).points);
-
-    _notifiers.removeOrDeductNotifierValue(__numEntriesNotifierType, 1);
   }
 
   /// Get the latest taskEntry by Task ID to get the completedDate in order to
