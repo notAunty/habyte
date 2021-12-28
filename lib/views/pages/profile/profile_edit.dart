@@ -27,11 +27,11 @@ class _ProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     TextEditingController firstNameController = TextEditingController(
-        text: _userVM.retrieveTempUserJson()[USER_FIRST_NAME]);
+        text: _userVM.retrieveUser()!.firstName);
     TextEditingController lastNameController = TextEditingController(
-        text: _userVM.retrieveTempUserJson()[USER_LAST_NAME]);
+        text: _userVM.retrieveUser()!.lastName);
     TextEditingController aboutController =
-        TextEditingController(text: _userVM.retrieveTempUserJson()[USER_ABOUT]);
+        TextEditingController(text: _userVM.retrieveUser()!.about);
 
     return Scaffold(
       appBar: buildAppBar(context),
@@ -103,8 +103,8 @@ class _ProfilePageState extends State<EditProfilePage> {
 
   Widget buildName(UserVM _userVM) {
     final String _userFirstName =
-        _userVM.retrieveTempUserJson()[USER_FIRST_NAME];
-    final String _userLastName = _userVM.retrieveTempUserJson()[USER_LAST_NAME];
+        _userVM.retrieveUser()!.firstName;
+    final String _userLastName = _userVM.retrieveUser()!.lastName;
     return Column(
       children: [
         Text(

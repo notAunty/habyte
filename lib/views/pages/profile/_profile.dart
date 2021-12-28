@@ -19,15 +19,17 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePreference()),
-              );
-            },
-            icon: Icon(Icons.settings),
-          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePreference()),
+                );
+              },
+              icon: Icon(Icons.settings),
+            ),
+          ],
           //title: Text('Proflie'),
         ),
         body: Container(
@@ -80,9 +82,8 @@ class Profile extends StatelessWidget {
       );
 
   Widget buildName(UserVM _userVM) {
-    final String _userFirstName =
-        _userVM.retrieveTempUserJson()[USER_FIRST_NAME];
-    final String _userLastName = _userVM.retrieveTempUserJson()[USER_LAST_NAME];
+    final String _userFirstName = _userVM.retrieveUser()!.firstName;
+    final String _userLastName = _userVM.retrieveUser()!.lastName;
     return Column(
       children: [
         Text(
@@ -94,15 +95,17 @@ class Profile extends StatelessWidget {
   }
 
   Widget buildAbout(UserVM _userVM, context) {
-    final String about = _userVM.retrieveTempUserJson()[USER_ABOUT];
+    final String about = _userVM.retrieveUser()!.about ?? '';
 
     return Column(
       children: [
-        Text('$about',
-            style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                  height: 1.25,
-                  fontWeight: FontWeight.w200,
-                ))
+        Text(
+          about,
+          style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                height: 1.25,
+                fontWeight: FontWeight.w200,
+              ),
+        ),
       ],
     );
   }
