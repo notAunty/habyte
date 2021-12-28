@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:habyte/views/constant/sizes.dart';
-import 'package:habyte/views/widgets/profile_picture.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:habyte/viewmodels/user.dart';
+
+import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/constant/constants.dart';
+import 'package:habyte/views/widgets/profile_picture.dart';
+import 'package:habyte/views/pages/settings/_settings.dart';
 import 'package:habyte/views/pages/profile/profile_edit.dart';
-import 'package:habyte/views/pages/profile/profile_preference.dart';
 
 class Profile extends StatelessWidget {
   final UserVM _userVM = UserVM.getInstance();
@@ -24,10 +26,10 @@ class Profile extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePreference()),
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
                 );
               },
-              icon: Icon(Icons.settings),
+              icon: Icon(FeatherIcons.settings),
             ),
           ],
           //title: Text('Proflie'),
