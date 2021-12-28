@@ -20,9 +20,9 @@ class ProfileScoreCard extends StatelessWidget {
       valueListenable: _notifiers.getNameNotifier(),
       builder: (_, userName, __) {
         return DoubleValueListenableBuilder<int, int>(
-            firstValueListenable: _notifiers.getScoreNotifier(),
-            secondValueListenable: _notifiers.getNumEntriesNotifier(),
-            builder: (context, score, numEntries) {
+            firstValueListenable: _notifiers.getPointNotifier(),
+            secondValueListenable: _notifiers.getScoreNotifier(),
+            builder: (context, point, score) {
               return Hero(
                 tag: heroTag ?? Random.secure().nextDouble(),
                 child: Padding(
@@ -63,7 +63,6 @@ class ProfileScoreCard extends StatelessWidget {
                                 Opacity(
                                   opacity: 0.7,
                                   child: Text(
-                                    // TODO
                                     getMembershipTierByScores(score),
                                     style: Theme.of(context)
                                         .textTheme
@@ -86,7 +85,7 @@ class ProfileScoreCard extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    score.toString(),
+                                    point.toString(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline4!
@@ -105,7 +104,7 @@ class ProfileScoreCard extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    numEntries.toString(),
+                                    score.toString(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline4!
@@ -113,7 +112,7 @@ class ProfileScoreCard extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    'entries',
+                                    'scores',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1!

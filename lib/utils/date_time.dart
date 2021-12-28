@@ -25,6 +25,9 @@ String getDayOfMonthSuffix(int dayNum) {
 String dateFormatter(DateTime dt) =>
     DateFormat("d'${getDayOfMonthSuffix(dt.day)}' MMMM yyyy").format(dt);
 
+String dateFormatterWithYYYYMMDD(DateTime dt) =>
+    DateFormat("yyyy-MM-dd").format(dt);
+
 String timeOfDayFormatter(TimeOfDay tod) {
   final now = DateTime.now();
   final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);

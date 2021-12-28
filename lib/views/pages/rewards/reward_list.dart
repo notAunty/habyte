@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:habyte/views/constant/colors.dart';
+import 'package:habyte/viewmodels/notifiers.dart';
+import 'package:habyte/viewmodels/reward.dart';
+import 'package:habyte/views/constant/constants.dart';
 import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/pages/rewards/reward_edit.dart';
 import 'package:habyte/views/pages/rewards/reward_item.dart';
@@ -14,21 +16,8 @@ class RewardList extends StatefulWidget {
 }
 
 class _RewardListState extends State<RewardList> {
-  // Mock
-  final List<int> rewardPoint = [5, 10, 15, 20, 25, 30, 5, 5, 5, 10];
-
-  final List<String> rewardName = [
-    "Have a cheat meal at MCDonald's",
-    "Have a cheat meal at MCDonald's",
-    "Have a cheat meal at MCDonald's",
-    "Have a cheat meal at MCDonald's",
-    "Have a cheat meal at MCDonald's",
-    "Have a cheat meal at MCDonald's",
-    "Have a cheat meal at MCDonald's",
-    "Have a cheat meal at MCDonald's",
-    "Have a cheat meal at MCDonald's",
-    "Visit an Art Exhibition"
-  ];
+  final RewardVM _rewardVM = RewardVM.getInstance();
+  final Notifiers _notifiers = Notifiers.getInstance();
 
   void onEditReward(context, String rewardId) {
     showDialog(
@@ -40,13 +29,13 @@ class _RewardListState extends State<RewardList> {
     ).then((_) => setState(() {}));
   }
 
-  void onTapReward(context, String rewardId) {
+  void onTapReward(context, String rewardId, String name, int point) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Redeem this reward?'),
         content: Text(
-          '${rewardName[int.parse(rewardId)]} (${rewardPoint[int.parse(rewardId)]} points)',
+          '$name ($point points)',
         ),
         actions: [
           TextButton(
@@ -55,8 +44,12 @@ class _RewardListState extends State<RewardList> {
           ),
           TextButton(
             onPressed: () {
+              _rewardVM.redeemReward(rewardId);
               Navigator.of(context).pop();
-              initiateShareCard(context, shareWidget: ShareRewardCard(rewardId: rewardId));
+              initiateShareCard(context,
+                  shareWidget: ShareRewardCard(
+                    rewardId: rewardId,
+                  ));
             },
             child: const Text('Confirm'),
           ),
@@ -70,21 +63,35 @@ class _RewardListState extends State<RewardList> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.only(bottom: TOP_PADDING * 3),
-        child: ListView.separated(
-          primary: false,
-          shrinkWrap: true,
-          itemCount: rewardPoint.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 8.0),
-          padding: const EdgeInsets.symmetric(
-            vertical: 16,
-            horizontal: SIDE_PADDING,
-          ),
-          itemBuilder: (context, index) => RewardItem(
-            name: rewardName[index],
-            points: rewardPoint[index],
-            onTap: () => onTapReward(context, index.toString()),
-            onEdit: () => onEditReward(context, index.toString()),
-          ),
+        child: ValueListenableBuilder<Object>(
+          valueListenable: _notifiers.getAvailableRewardsNotifier(),
+          builder: (context, availableRewardlist, _) {
+            return ListView.separated(
+              primary: false,
+              shrinkWrap: true,
+              itemCount:
+                  (availableRewardlist as List<Map<String, dynamic>>).length,
+              separatorBuilder: (context, index) => const SizedBox(height: 8.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 16,
+                horizontal: SIDE_PADDING,
+              ),
+              itemBuilder: (context, index) => RewardItem(
+                name: availableRewardlist[index][REWARD_NAME],
+                points: availableRewardlist[index][REWARD_POINTS],
+                onTap: () => onTapReward(
+                  context,
+                  availableRewardlist[index][REWARD_ID],
+                  availableRewardlist[index][REWARD_NAME],
+                  availableRewardlist[index][REWARD_POINTS],
+                ),
+                onEdit: () => onEditReward(
+                  context,
+                  availableRewardlist[index][REWARD_ID],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
