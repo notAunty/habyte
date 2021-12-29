@@ -3,13 +3,13 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:habyte/viewmodels/user.dart';
 
 import 'package:habyte/views/constant/sizes.dart';
-import 'package:habyte/views/constant/constants.dart';
 import 'package:habyte/views/pages/profile/profile_header.dart';
 import 'package:habyte/views/widgets/profile_picture.dart';
-import 'package:habyte/views/pages/settings/_settings.dart';
 import 'package:habyte/views/pages/profile/profile_edit.dart';
 
-class Profile extends StatelessWidget {
+class ProfilePage extends StatelessWidget {
+  ProfilePage({Key? key}) : super(key: key);
+
   final UserVM _userVM = UserVM.getInstance();
 
   @override
@@ -48,7 +48,7 @@ class Profile extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EditProfilePage()),
+                          builder: (context) => const EditProfilePage()),
                     );
                   },
                 ),

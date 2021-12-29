@@ -3,14 +3,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+
 import 'package:habyte/views/constant/colors.dart';
+import 'package:habyte/views/widgets/animated_indexed_stack.dart';
 
 import 'package:habyte/views/pages/dashboard/_dashboard.dart';
 import 'package:habyte/views/pages/profile/_profile.dart';
 import 'package:habyte/views/pages/rewards/_rewards.dart';
 import 'package:habyte/views/pages/rewards/add_rewards.dart';
 import 'package:habyte/views/pages/tasks/_tasks.dart';
-import 'package:habyte/views/widgets/animated_indexed_stack.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({Key? key}) : super(key: key);
@@ -43,7 +44,7 @@ class _MainLayoutState extends State<MainLayout> {
     DashboardPage(),
     TasksPage(),
     RewardsPage(),
-    Profile(),
+    ProfilePage(),
   ];
   late List<void Function(BuildContext)?> _onFabClicked;
 
