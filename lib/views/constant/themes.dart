@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:habyte/views/constant/colors.dart';
 
@@ -27,6 +29,9 @@ final lightTheme = ThemeData(
       textStyle: const TextStyle().copyWith(
         fontWeight: FontWeight.w400,
       ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(999),
+      )
     ),
   ),
   snackBarTheme: SnackBarThemeData(
@@ -120,6 +125,7 @@ final lightTheme = ThemeData(
       color: BLACK_01,
       fontWeight: FontWeight.w500,
       height: 1.15,
+
       // letterSpacing: 0.5,
     ),
     caption: TextStyle(
@@ -176,6 +182,9 @@ final darkTheme = ThemeData(
       textStyle: const TextStyle().copyWith(
         fontWeight: FontWeight.w400,
       ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(999),
+      )
     ),
   ),
   // inputDecorationTheme: const InputDecorationTheme(
