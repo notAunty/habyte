@@ -37,43 +37,37 @@ class DashboardTaskList extends StatelessWidget {
               itemCount: tasksInIdName.keys.toList().length,
               itemBuilder: (context, index) {
                 // Reverse it, view from the latest to the oldest
-                String currentKey = tasksInIdName.keys
+                String currentId = tasksInIdName.keys
                     .toList()[tasksInIdName.keys.toList().length - 1 - index];
                 return AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
-                  opacity: tasksInIdChecked[tasksInIdName.keys.toList()[index]]!
-                      ? 0.5
-                      : 1.0,
+                  opacity: tasksInIdChecked[currentId]! ? 0.5 : 1.0,
                   child: ListTile(
                     dense: true,
                     contentPadding: EdgeInsets.zero,
                     horizontalTitleGap: 0,
                     leading: SizedBox(
                       width: 32,
-                      child: tasksInIdChecked[currentKey]!
+                      child: tasksInIdChecked[currentId]!
                           ? Image.asset('assets/check/checked.png')
                           : Image.asset('assets/check/unchecked.png'),
                     ),
                     title: Text(
-                      tasksInIdName[currentKey]!,
+                      tasksInIdName[currentId]!,
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          decoration: tasksInIdChecked[currentKey]!
+                          decoration: tasksInIdChecked[currentId]!
                               ? TextDecoration.lineThrough
                               : TextDecoration.none),
                     ),
                     onTap: () {
-                      !tasksInIdChecked[currentKey]!
+                      !tasksInIdChecked[currentId]!
                           ? {
                               _taskEntryVM.createTaskEntry({
-                                TASK_ENTRY_TASK_ID:
-                                    tasksInIdName.keys.toList()[index],
+                                TASK_ENTRY_TASK_ID: currentId,
                                 TASK_ENTRY_COMPLETED_DATE: DateTime.now()
                               })
                             }
-                          : {
-                              _taskEntryVM.deleteTaskEntryByTaskId(
-                                  tasksInIdName.keys.toList()[index])
-                            };
+                          : {_taskEntryVM.deleteTaskEntryByTaskId(currentId)};
                     },
                   ),
                 );

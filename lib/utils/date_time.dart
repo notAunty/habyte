@@ -35,7 +35,8 @@ String timeOfDayFormatter(TimeOfDay tod) {
   return format.format(dt);
 }
 
-bool isToday(DateTime date) {
+bool isToday(DateTime? date) {
+  if (date == null) return false;
   DateTime dateWithoutHourMinute = DateTime(date.year, date.month, date.day);
   DateTime now = DateTime.now();
   DateTime nowWithoutHourMinute = DateTime(now.year, now.month, now.day);

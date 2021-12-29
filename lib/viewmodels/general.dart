@@ -2,6 +2,7 @@ import 'package:habyte/models/taskEntry.dart';
 import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/reward.dart';
 import 'package:habyte/models/task.dart';
+import 'package:habyte/utils/date_time.dart';
 // import 'package:habyte/models/user.dart';
 import 'package:habyte/viewmodels/taskEntry.dart';
 import 'package:habyte/viewmodels/reminderEntry.dart';
@@ -45,6 +46,7 @@ class General {
         Map<String, dynamic>.from(_mainBox.get(BOX_USER) ?? {});
     if (userJson.isEmpty) return false;
     UserVM.getInstance().setCurrentUser(userJson);
+    print(userJson);
 
     List<TaskEntry> taskEntryList = _taskEntryBox.values.toList();
     if (taskEntryList.isNotEmpty) {
@@ -131,20 +133,27 @@ class General {
   void checkSkippedTasks() {
     int totalScoresToBeDeducted = 0;
 
-    for (Task task in TaskVM.getInstance().retrieveAllTasks()) {
-      TaskEntry latestTaskEntry =
-          TaskEntryVM.getInstance().getLatestTaskEntryByTaskId(task.id);
-      if (latestTaskEntry.id != NULL_STRING_PLACEHOLDER) {
-        int currentTaskSkippedDays =
-            _daysBetween(latestTaskEntry.completedDate, DateTime.now());
-        if (currentTaskSkippedDays > 0) {
-          // amount to be fixed
-          totalScoresToBeDeducted += SKIPPED_MARKS_DEDUCTED;
+    if (!isToday(
+        UserVM.getInstance().retrieveUser()!.lastScoreDeductedDateTime)) {
+      for (Task task in TaskVM.getInstance().retrieveAllTasks()) {
+        TaskEntry latestTaskEntry =
+            TaskEntryVM.getInstance().getLatestTaskEntryByTaskId(task.id);
+        if (latestTaskEntry.id != NULL_STRING_PLACEHOLDER) {
+          int currentTaskSkippedDays =
+              _daysBetween(latestTaskEntry.completedDate, DateTime.now());
+          if (currentTaskSkippedDays > 0) {
+            // amount to be fixed
+            totalScoresToBeDeducted += SKIPPED_MARKS_DEDUCTED;
+          }
         }
       }
-    }
 
-    UserVM.getInstance().deductScore(totalScoresToBeDeducted);
+      UserVM.getInstance().deductScore(totalScoresToBeDeducted);
+      UserVM.getInstance().updateUser({
+        USER_LAST_SCORE_DEDUCTED_DATE_TIME: DateTime.now(),
+      });
+      print(UserVM.getInstance().retrieveUser()!.toMap());
+    }
   }
 
   /// Private function to find days difference.
