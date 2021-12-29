@@ -58,6 +58,7 @@ class ProfilePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: SIDE_PADDING),
               child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
                     'About',

@@ -71,7 +71,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 label: 'About',
                 child: CustomTextField(
                   maxWords: -1,
-                  isRequired: true,
+                  isRequired: false,
                   controller: aboutController,
                   onChanged: (about) => addTempAbout(about),
                   isMultiline: true,
