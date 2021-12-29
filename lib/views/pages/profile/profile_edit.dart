@@ -84,10 +84,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   child: const Text('Done'),
                   onPressed: () {
                     _userVM.updateUser(_userVM.retrieveTempUserJson());
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ProfilePage()),
-                    );
+                    Navigator.pop(context);
                   },
                 ),
               ),
