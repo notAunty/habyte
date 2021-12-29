@@ -29,16 +29,21 @@ class RewardListRedeemed extends StatelessWidget {
                 vertical: 16,
                 horizontal: SIDE_PADDING,
               ),
-              itemBuilder: (context, index) => RedeemedRewardItem(
-                name: redeemedRewardlist[index][REWARD_NAME],
-                points: redeemedRewardlist[index][REWARD_POINTS],
-                onTap: () => initiateShareCard(
-                  context,
-                  shareWidget: ShareRewardCard(
-                    rewardId: redeemedRewardlist[index][REWARD_ID],
+              itemBuilder: (context, index) {
+                // Reverse it, view from the latest to the oldest
+                Map<String, dynamic> currentRedeemedReward =
+                    redeemedRewardlist[redeemedRewardlist.length - 1 - index];
+                return RedeemedRewardItem(
+                  name: currentRedeemedReward[REWARD_NAME],
+                  points: currentRedeemedReward[REWARD_POINTS],
+                  onTap: () => initiateShareCard(
+                    context,
+                    shareWidget: ShareRewardCard(
+                      rewardId: currentRedeemedReward[REWARD_ID],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
         ),

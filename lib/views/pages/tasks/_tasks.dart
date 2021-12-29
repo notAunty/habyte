@@ -41,19 +41,22 @@ class _TasksPageState extends State<TasksPage> {
   @override
   void initState() {
     super.initState();
-    taskList = _taskVM.retrieveAllTasksInListOfMap();
+    taskList = List.from(_taskVM.retrieveAllTasksInListOfMap().reversed);
   }
 
   void addTask() {
     //TO DO: add notification
     //addNotification()
     setState(() {
-      taskList.add(_taskVM.createTask({
-        TASK_NAME: nameInput.text,
-        TASK_POINTS: int.parse(pointInput.text),
-        TASK_START_DATE: startDate,
-        TASK_END_DATE: endDate,
-      }).toMap());
+      taskList.insert(
+        0,
+        _taskVM.createTask({
+          TASK_NAME: nameInput.text,
+          TASK_POINTS: int.parse(pointInput.text),
+          TASK_START_DATE: startDate,
+          TASK_END_DATE: endDate,
+        }).toMap(),
+      );
       print(taskList);
     });
 
@@ -64,7 +67,7 @@ class _TasksPageState extends State<TasksPage> {
     _taskVM.deleteTask(taskToBeDeleted[TASK_ID]);
     cardSetState(() {
       setState(() {
-        taskList = _taskVM.retrieveAllTasksInListOfMap();
+        taskList = List.from(_taskVM.retrieveAllTasksInListOfMap().reversed);
       });
     });
   }

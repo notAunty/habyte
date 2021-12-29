@@ -33,6 +33,7 @@ const USER_ABOUT = "about";
 const USER_PROFILE_PIC_PATH = "profilePicPath";
 const USER_POINTS = "points";
 const USER_SCORES = "scores";
+const USER_LAST_SCORE_DEDUCTED_DATE_TIME = "lastScoreDeductedDateTime";
 
 // Task Keys
 const TASK_ID = "id";

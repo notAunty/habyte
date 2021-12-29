@@ -179,15 +179,19 @@ class RewardVM {
   }
 
   /// Call this function when user redeem the reward
-  void redeemReward(String id) {
+  bool redeemReward(String id) {
+    bool successDeduct =
+        UserVM.getInstance().deductPoint(retrieveRewardById(id).points);
+    if (!successDeduct) return false;
+
     Reward redeemedReward = updateReward(id, {REWARD_AVAILABLE: false});
-    UserVM.getInstance().deductPoint(redeemedReward.points);
 
     print(_toListOfMap());
     _notifiers.removeOrDeductNotifierValue(
         _availableRewardsNotifierType, redeemedReward.toMap());
     _notifiers.addNotifierValue(
         _redeemedRewardsNotifierType, redeemedReward.toMap());
+    return true;
   }
 
   Map<String, List<Reward>> _splitAvailableRedeemed() {

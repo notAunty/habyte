@@ -7,6 +7,7 @@ class User {
   late String? profilePicPath;
   late int points;
   late int scores;
+  late DateTime? lastScoreDeductedDateTime;
 
   User.fromJson(Map<String, dynamic> json)
       : firstName = json[USER_FIRST_NAME],
@@ -14,7 +15,8 @@ class User {
         about = json[USER_ABOUT],
         profilePicPath = json[USER_PROFILE_PIC_PATH],
         points = json[USER_POINTS],
-        scores = json[USER_SCORES];
+        scores = json[USER_SCORES],
+        lastScoreDeductedDateTime = json[USER_LAST_SCORE_DEDUCTED_DATE_TIME];
 
   Map<String, dynamic> toMap() => {
         USER_FIRST_NAME: firstName,
@@ -22,6 +24,7 @@ class User {
         USER_ABOUT: about,
         USER_PROFILE_PIC_PATH: profilePicPath,
         USER_POINTS: points,
-        USER_SCORES: scores
+        USER_SCORES: scores,
+        USER_LAST_SCORE_DEDUCTED_DATE_TIME: lastScoreDeductedDateTime
       };
 }
