@@ -34,6 +34,7 @@ class UserVM {
   /// to insert the data stored.
   void setCurrentUser(Map<String, dynamic> userJson) {
     _currentUser = User.fromJson(userJson);
+    _tempUserJson = _currentUser!.toMap();
     _notifiers.updateNotifierValue(_nameNotifierType,
         '${_currentUser!.firstName} ${_currentUser!.lastName}');
     _notifiers.updateNotifierValue(_scoreNotifierType, _currentUser!.scores);

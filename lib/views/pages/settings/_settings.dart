@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:habyte/viewmodels/reminderEntry.dart';
 import 'package:habyte/views/constant/sizes.dart';
+import 'package:habyte/viewmodels/reminderEntry.dart';
 
-class ReminderPage extends StatefulWidget {
-  const ReminderPage({Key? key}) : super(key: key);
-
-  @override
-  State<ReminderPage> createState() => _ReminderPageState();
-}
-
-class _ReminderPageState extends State<ReminderPage> {
-  final formKey = GlobalKey<FormState>();
+class SettingsPage extends StatelessWidget {
+  SettingsPage({ Key? key }) : super(key: key);
   final ReminderEntryVM _reminderEntryVM = ReminderEntryVM.getInstance();
 
   @override
