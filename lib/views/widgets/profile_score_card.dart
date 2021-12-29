@@ -49,28 +49,31 @@ class ProfileScoreCard extends StatelessWidget {
                                   SIDE_PADDING * 0.75, 0, 16, 0),
                               child: ProfilePictureHolder(radius: 28),
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  userName,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline4!
-                                      .copyWith(color: WHITE_01),
-                                ),
-                                Opacity(
-                                  opacity: 0.7,
-                                  child: Text(
-                                    getMembershipTierByScores(score),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    userName,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
+                                        .headline4!
                                         .copyWith(color: WHITE_01),
+                                        overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                              ],
+                                  Opacity(
+                                    opacity: 0.7,
+                                    child: Text(
+                                      getMembershipTierByScores(score),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .copyWith(color: WHITE_01),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
