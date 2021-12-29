@@ -119,7 +119,7 @@ class TaskItem extends StatelessWidget {
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: () => onDelete!(task),
+                                  onPressed: () => onDelete!(task, setState),
                                   child: Row(
                                     children: const [
                                       Icon(Icons.delete),

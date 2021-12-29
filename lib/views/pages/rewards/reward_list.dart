@@ -44,12 +44,29 @@ class _RewardListState extends State<RewardList> {
           ),
           TextButton(
             onPressed: () {
-              _rewardVM.redeemReward(rewardId);
               Navigator.of(context).pop();
-              initiateShareCard(context,
-                  shareWidget: ShareRewardCard(
-                    rewardId: rewardId,
-                  ));
+              if (_rewardVM.redeemReward(rewardId)) {
+                initiateShareCard(context,
+                    shareWidget: ShareRewardCard(
+                      rewardId: rewardId,
+                    ));
+              } else {
+                print("User point is not enough");
+                //TODO: Change to Snackbar
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Redeem Unsuccessful"),
+                    content: const Text("Point is not enough"),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Cancel'),
+                      )
+                    ],
+                  ),
+                );
+              }
             },
             child: const Text('Confirm'),
           ),
@@ -76,20 +93,25 @@ class _RewardListState extends State<RewardList> {
                 vertical: 16,
                 horizontal: SIDE_PADDING,
               ),
-              itemBuilder: (context, index) => RewardItem(
-                name: availableRewardlist[index][REWARD_NAME],
-                points: availableRewardlist[index][REWARD_POINTS],
-                onTap: () => onTapReward(
-                  context,
-                  availableRewardlist[index][REWARD_ID],
-                  availableRewardlist[index][REWARD_NAME],
-                  availableRewardlist[index][REWARD_POINTS],
-                ),
-                onEdit: () => onEditReward(
-                  context,
-                  availableRewardlist[index][REWARD_ID],
-                ),
-              ),
+              itemBuilder: (context, index) {
+                // Reverse it, view from the latest to the oldest
+                Map<String, dynamic> currentReward =
+                    availableRewardlist[availableRewardlist.length - 1 - index];
+                return RewardItem(
+                  name: currentReward[REWARD_NAME],
+                  points: currentReward[REWARD_POINTS],
+                  onTap: () => onTapReward(
+                    context,
+                    currentReward[REWARD_ID],
+                    currentReward[REWARD_NAME],
+                    currentReward[REWARD_POINTS],
+                  ),
+                  onEdit: () => onEditReward(
+                    context,
+                    currentReward[REWARD_ID],
+                  ),
+                );
+              },
             );
           },
         ),

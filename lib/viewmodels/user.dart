@@ -122,18 +122,20 @@ class UserVM {
     _notifiers.addNotifierValue(_pointNotifierType, taskPoint);
   }
 
-  /// This function is used to deduct point whenever 
+  /// This function is used to deduct point whenever
   /// - User redeem reward
   /// - Undo taskEntry
-  void deductPoint(int redeemedPoint) {
+  bool deductPoint(int redeemedPoint) {
+    if (_currentUser!.points < redeemedPoint) return false;
     _currentUser!.points -= redeemedPoint;
     _general.updateBoxItem(_boxType, _key, _currentUser!.toMap());
     print(_currentUser!.toMap());
 
     _notifiers.removeOrDeductNotifierValue(_pointNotifierType, redeemedPoint);
+    return true;
   }
 
-  /// This function is used to deduct score if 
+  /// This function is used to deduct score if
   /// - User accidentally or intentionally skip the tasks.
   /// - Undo taskEntry
   void deductScore(int numOfScore) {
