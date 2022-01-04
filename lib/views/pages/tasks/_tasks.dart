@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/utils/date_time.dart';
 import 'package:habyte/viewmodels/reminderEntry.dart';
@@ -45,8 +44,6 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   void addTask() {
-    //TO DO: add notification
-    //addNotification()
     setState(() {
       taskList.insert(
         0,
@@ -57,7 +54,10 @@ class _TasksPageState extends State<TasksPage> {
           TASK_END_DATE: endDate,
         }).toMap(),
       );
-      print(taskList);
+      if (isReminderOn == true) {
+      //test after notification done
+      //addNotification();
+    }
     });
 
     Navigator.of(context).pop();
@@ -73,21 +73,17 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   Future editTask(String taskId) async {
-    //TODO: edit task
-    /* _taskVM.updateTask(editItem['id'], {
-      TASK_NAME: nameInput.text,
-      TASK_POINTS: int.parse(pointInput.text),
-      TASK_START_DATE: startDate,
-      TASK_END_DATE: endDate,
-    });*/
 
-    /*if(editNotification==null && isReminderOn==true){
-        //addNotification()
-    }else if(editNotification!=null && isReminderOn==false){
-      //deleteNotification()
-    }else if(editNotification!=null && editNotification.notificationTime!=reminder){
-      //updateNotification()
+    //test after notification done
+    /*  if (editReminder!.id == null && isReminderOn == true) {
+      addNotification();
+    } else if (editReminder!.id != null && isReminderOn == false) {
+      deleteNotification();
+    } else if (editReminder!.id != null &&
+        editReminder!.reminderTime != reminder) {
+      updateNotification();
     }*/
+
     setState(() {
       int updatedTaskIndex =
           taskList.indexWhere((task) => task[TASK_ID] == taskId);
@@ -102,19 +98,29 @@ class _TasksPageState extends State<TasksPage> {
     Navigator.of(context).pop();
   }
 
-  void addNotification() {}
-  void deleteNotification() {}
-  void updateNotification() {}
+  void addNotification() {
+    String taskId = taskList[taskList.length - 1][TASK_ID];
+    print(taskId);
+    _reminderEntryVM.createReminderEntry(
+        {REMINDER_ENTRY_TASK_ID: taskId, REMINDER_ENTRY_TIME: reminder});
+  }
+
+   void deleteNotification() {
+    _reminderEntryVM.deleteReminderEntry(editReminder!.id);
+  }
+
+  void updateNotification() {
+    _reminderEntryVM.updateReminderEntry(editReminder!.id, {
+      REMINDER_ENTRY_TASK_ID: editReminder!.taskId,
+      REMINDER_ENTRY_TIME: reminder
+    });
+  }
 
   void onClickEdit(Map<String, dynamic> task, cardSetState) {
-    /* NotificationDetail editNotification =
-        _notificationVM.retrieveNotificationDetailByTaskId(task['id']);*/
+
     cardSetState(() {
       setState(() {
-        //isReminderOn=editNotification == null ? false : true;
-        //reminder= editNotification.notificationTime;
-        //reminderInput= formatTimeOfDay(editNotification.notificationTime);
-        //editNotification = editNotification;
+        editReminder = _reminderEntryVM.retrieveReminderEntryById(task[TASK_ID]);
       });
       toggleDialog(taskToBeEdited: task);
     });
@@ -232,6 +238,11 @@ class _TasksPageState extends State<TasksPage> {
       endDateInput.text = taskToBeEdited[TASK_END_DATE] != null
           ? DateFormat('yyyy-MM-dd').format(taskToBeEdited[TASK_END_DATE]!)
           : '';
+      isReminderOn = editReminder!.id == NULL_STRING_PLACEHOLDER ? false : true;
+      reminder = editReminder!.id == NULL_STRING_PLACEHOLDER ? null : editReminder!.reminderTime;
+      reminderInput.text = editReminder!.id == NULL_STRING_PLACEHOLDER
+          ? ''
+          : timeOfDayFormatter(editReminder!.reminderTime);
     } else {
       nameInput.text = '';
       pointInput.text = '';
