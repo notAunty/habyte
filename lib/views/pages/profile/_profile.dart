@@ -5,6 +5,7 @@ import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/pages/profile/profile_about.dart';
 import 'package:habyte/views/pages/profile/profile_header.dart';
+import 'package:habyte/views/pages/profile/profile_settings.dart';
 import 'package:habyte/views/widgets/profile_picture.dart';
 import 'package:habyte/views/pages/profile/profile_edit.dart';
 
@@ -19,11 +20,10 @@ class ProfilePage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: SIDE_PADDING),
+            padding: const EdgeInsets.symmetric(horizontal: SIDE_PADDING, vertical: TOP_PADDING),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const SizedBox(height: TOP_PADDING, width: double.infinity),
                 const ProfileHeader(),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -39,6 +39,8 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const SizedBox(height: TOP_PADDING),
                 const ProfileAbout(),
+                const SizedBox(height: TOP_PADDING),
+                const ProfileSettings(),
               ],
             ),
           ),

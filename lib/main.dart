@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:habyte/models/task.dart';
+import 'package:habyte/models/reward.dart';
 import 'package:habyte/models/taskEntry.dart';
 import 'package:habyte/models/reminderEntry.dart';
-import 'package:habyte/models/reward.dart';
-import 'package:habyte/models/task.dart';
+import 'package:habyte/utils/theme_mode.dart';
 import 'package:habyte/viewmodels/general.dart';
 import 'package:habyte/views/pages/onboarding/onboarding_flow.dart';
 import 'package:habyte/views/constant/themes.dart';
 import 'package:habyte/views/pages/main_layout.dart';
 import 'package:habyte/views/constant/constants.dart';
 import 'package:habyte/views/classes/global_scaffold.dart';
-import 'package:habyte/views/pages/tasks/_viewTask.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -64,11 +64,9 @@ class MyApp extends StatelessWidget {
                       title: APP_TITLE,
                       theme: lightTheme,
                       darkTheme: darkTheme,
-                      // TODO: soh - undo following
-                      themeMode: ThemeMode.light,
-                      // themeMode: themeModeFromString(
-                      //   context.read<Box>().get(BOX_SETTINGS_THEME, defaultValue: ""),
-                      // ),
+                      themeMode: themeModeFromString(
+                        context.read<Box>().get(BOX_SETTINGS_THEME, defaultValue: ""),
+                      ),
                       scaffoldMessengerKey: context.read<GlobalScaffold>().key,
                       home: snapshot.data as bool
                           ? const MainLayout()
