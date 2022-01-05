@@ -28,14 +28,11 @@ class ProfilePage extends StatelessWidget {
               children: <Widget>[
                 const SizedBox(height: TOP_PADDING, width: double.infinity),
                 const ProfileHeader(),
-                const SizedBox(height: TOP_PADDING, width: double.infinity),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: SIDE_PADDING),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(
-                        width: double.infinity,
-                      ),
                       const ProfilePictureHolder(radius: 64),
                       const SizedBox(height: TOP_PADDING),
                       Text(
@@ -70,15 +67,10 @@ class ProfilePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
-                        'About',
-                        style: Theme.of(context).textTheme.overline,
-                      ),
+                      Text('About',
+                          style: Theme.of(context).textTheme.overline),
                       const SizedBox(height: 8),
-                      Text(
-                        about,
-                        style: Theme.of(context).textTheme.bodyText2,
-                      ),
+                      Text(about, style: Theme.of(context).textTheme.bodyText2),
                     ],
                   ),
                 ),
