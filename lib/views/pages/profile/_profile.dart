@@ -5,6 +5,7 @@ import 'package:habyte/viewmodels/user.dart';
 import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/pages/profile/profile_about.dart';
 import 'package:habyte/views/pages/profile/profile_header.dart';
+import 'package:habyte/views/pages/profile/profile_reminders.dart';
 import 'package:habyte/views/pages/profile/profile_settings.dart';
 import 'package:habyte/views/widgets/profile_picture.dart';
 import 'package:habyte/views/pages/profile/profile_edit.dart';
@@ -40,7 +41,11 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: TOP_PADDING),
                 const ProfileAbout(),
                 const SizedBox(height: TOP_PADDING),
+                const Divider(),
+                const SizedBox(height: 8),
                 const ProfileSettings(),
+                const SizedBox(height: TOP_PADDING),
+                ProfileReminders(),
               ],
             ),
           ),

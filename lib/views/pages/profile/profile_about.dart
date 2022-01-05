@@ -11,7 +11,7 @@ class ProfileAbout extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('About', style: Theme.of(context).textTheme.overline),
+        Text('About'.toUpperCase(), style: Theme.of(context).textTheme.overline),
         const SizedBox(height: 8),
         Text(_userVM.retrieveUser()!.about ?? '',
             style: Theme.of(context).textTheme.bodyText2),

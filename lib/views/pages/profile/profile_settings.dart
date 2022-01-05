@@ -10,12 +10,10 @@ class ProfileSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UserVM _userVM = UserVM.getInstance();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('Settings', style: Theme.of(context).textTheme.overline),
+        Text('Settings'.toUpperCase(), style: Theme.of(context).textTheme.overline),
         ValueListenableBuilder(
           valueListenable:
               context.read<Box>().listenable(keys: [BOX_SETTINGS_THEME]),
@@ -30,6 +28,7 @@ class ProfileSettings extends StatelessWidget {
                 const Text('Dark Mode'),
                 Switch(
                   value: currentlyDark,
+                  activeColor: Theme.of(context).colorScheme.primary,
                   onChanged: (newValue) {
                     if (newValue) {
                       context.read<Box>().put(BOX_SETTINGS_THEME, "dark");
