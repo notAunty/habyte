@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:habyte/views/constant/constants.dart';
 
 enum NotifierType {
-  userNme,
+  userName,
+  userAbout,
   userScore,
   userPoint,
   tasksInIdName,
@@ -16,6 +17,7 @@ class Notifiers {
   Notifiers._internal() {
     // User
     _nameNotifier = ValueNotifier('');
+    _aboutNotifier = ValueNotifier('');
     _scoreNotifier = ValueNotifier(0);
     _pointNotifier = ValueNotifier(0);
 
@@ -34,6 +36,8 @@ class Notifiers {
   // User
   late ValueNotifier<String> _nameNotifier;
   ValueNotifier<String> getNameNotifier() => _nameNotifier;
+  late ValueNotifier<String> _aboutNotifier;
+  ValueNotifier<String> getAboutNotifier() => _aboutNotifier;
   late ValueNotifier<int> _scoreNotifier;
   ValueNotifier<int> getScoreNotifier() => _scoreNotifier;
   late ValueNotifier<int> _pointNotifier;
@@ -57,7 +61,10 @@ class Notifiers {
 
   void addNotifierValue(NotifierType notifierType, Object value) {
     switch (notifierType) {
-      case NotifierType.userNme:
+      case NotifierType.userName:
+        // Do NOTHING
+        break;
+      case NotifierType.userAbout:
         // Do NOTHING
         break;
       case NotifierType.userScore:
@@ -107,9 +114,13 @@ class Notifiers {
 
   void updateNotifierValue(NotifierType notifierType, Object value) {
     switch (notifierType) {
-      case NotifierType.userNme:
+      case NotifierType.userName:
         assert(value is String);
         _nameNotifier.value = value as String;
+        break;
+      case NotifierType.userAbout:
+        assert(value is String);
+        _aboutNotifier.value = value as String;
         break;
       case NotifierType.userScore:
         assert(value is int);
@@ -148,7 +159,10 @@ class Notifiers {
 
   void removeOrDeductNotifierValue(NotifierType notifierType, Object value) {
     switch (notifierType) {
-      case NotifierType.userNme:
+      case NotifierType.userName:
+        // Do NOTHING
+        break;
+      case NotifierType.userAbout:
         // Do NOTHING
         break;
       case NotifierType.userScore:
