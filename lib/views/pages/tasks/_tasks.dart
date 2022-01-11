@@ -1,8 +1,10 @@
 import 'dart:math';
 import 'package:habyte/models/reminderEntry.dart';
+import 'package:habyte/models/task.dart';
 import 'package:habyte/utils/date_time.dart';
 import 'package:habyte/viewmodels/reminderEntry.dart';
 import 'package:habyte/views/constant/sizes.dart';
+import 'package:habyte/views/widgets/calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:habyte/viewmodels/task.dart';
@@ -25,6 +27,7 @@ class _TasksPageState extends State<TasksPage> {
   final ReminderEntryVM _reminderEntryVM = ReminderEntryVM.getInstance();
 
   List<Map<String, dynamic>> taskList = [];
+  Map<String, Map<String, dynamic>> reminderByTaskId = {};
   ReminderEntry? editReminder;
   DateTime? startDate;
   DateTime? endDate;
@@ -43,21 +46,19 @@ class _TasksPageState extends State<TasksPage> {
     taskList = List.from(_taskVM.retrieveAllTasksInListOfMap().reversed);
   }
 
-  void addTask() {
-    setState(() {
+  Future addTask() async {
+    setState(() async {
+      Task newTask = _taskVM.createTask({
+        TASK_NAME: nameInput.text,
+        TASK_POINTS: int.parse(pointInput.text),
+        TASK_START_DATE: startDate,
+        TASK_END_DATE: endDate,
+      });
       taskList.insert(
         0,
-        _taskVM.createTask({
-          TASK_NAME: nameInput.text,
-          TASK_POINTS: int.parse(pointInput.text),
-          TASK_START_DATE: startDate,
-          TASK_END_DATE: endDate,
-        }).toMap(),
+        newTask.toMap(),
       );
-      if (isReminderOn == true) {
-      //test after notification done
-      //addNotification();
-    }
+      if (isReminderOn == true) await addNotification(newTask.id);
     });
 
     Navigator.of(context).pop();
@@ -73,7 +74,6 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   Future editTask(String taskId) async {
-
     //test after notification done
     /*  if (editReminder!.id == null && isReminderOn == true) {
       addNotification();
@@ -98,14 +98,17 @@ class _TasksPageState extends State<TasksPage> {
     Navigator.of(context).pop();
   }
 
-  void addNotification() {
-    String taskId = taskList[taskList.length - 1][TASK_ID];
-    print(taskId);
-    _reminderEntryVM.createReminderEntry(
-        {REMINDER_ENTRY_TASK_ID: taskId, REMINDER_ENTRY_TIME: reminder});
+  Future<void> addNotification(String taskId) async {
+    ReminderEntry newReminderEntry = await _reminderEntryVM.createReminderEntry(
+      {
+        REMINDER_ENTRY_TASK_ID: taskId,
+        REMINDER_ENTRY_TIME: reminder,
+      },
+    );
+    reminderByTaskId[taskId] = newReminderEntry.toMap();
   }
 
-   void deleteNotification() {
+  void deleteNotification() {
     _reminderEntryVM.deleteReminderEntry(editReminder!.id);
   }
 
@@ -117,10 +120,10 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   void onClickEdit(Map<String, dynamic> task, cardSetState) {
-
     cardSetState(() {
       setState(() {
-        editReminder = _reminderEntryVM.retrieveReminderEntryById(task[TASK_ID]);
+        editReminder =
+            _reminderEntryVM.retrieveReminderEntryById(task[TASK_ID]);
       });
       toggleDialog(taskToBeEdited: task);
     });
@@ -141,91 +144,6 @@ class _TasksPageState extends State<TasksPage> {
     }
   }
 
-  Future showTimeInput(BuildContext context) async {
-    await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 8, minute: 0),
-      initialEntryMode: TimePickerEntryMode.dial,
-      builder: (context, child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light().copyWith(
-              primary: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    ).then((time) {
-      if (time != null) {
-        setState(() {
-          reminder = time;
-          reminderInput.text = timeOfDayFormatter(time);
-        });
-        print(reminder!.hour);
-      }
-    });
-  }
-
-  Future showCalendar(bool isStartDate) async {
-    DateTime dateRange = isStartDate
-        ? DateTime.now()
-        : startDate == null
-            ? DateTime.now()
-            : startDate!;
-
-    await showDatePicker(
-      context: context,
-      initialDate: startDate ?? DateTime.now(),
-      firstDate: dateRange,
-      cancelText: 'Clear',
-      lastDate: dateRange.add(const Duration(days: 3650)),
-      builder: (context, child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light().copyWith(
-              primary: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    ).then((date) {
-      if (date != null) {
-        if (isStartDate) {
-          setState(() {
-            startDate = date;
-            startDateInput.text = DateFormat('yyyy-MM-dd').format(startDate!);
-          });
-          if (endDate != null && endDate!.compareTo(startDate!) < 0) {
-            print('exe');
-            setState(() {
-              endDate = null;
-              endDateInput.text = '';
-            });
-          }
-        } else {
-          setState(() {
-            endDate = date;
-            endDateInput.text = DateFormat('yyyy-MM-dd').format(endDate!);
-          });
-        }
-      } else {
-        if (isStartDate) {
-          setState(() {
-            startDate = null;
-            startDateInput.text = '';
-          });
-        } else {
-          setState(() {
-            endDate = null;
-            endDateInput.text = '';
-          });
-        }
-      }
-    });
-  }
-
   Future toggleDialog({Map<String, dynamic>? taskToBeEdited}) async {
     String title = taskToBeEdited != null ? 'Edit Task' : 'New Task';
     if (taskToBeEdited != null) {
@@ -239,7 +157,9 @@ class _TasksPageState extends State<TasksPage> {
           ? DateFormat('yyyy-MM-dd').format(taskToBeEdited[TASK_END_DATE]!)
           : '';
       isReminderOn = editReminder!.id == NULL_STRING_PLACEHOLDER ? false : true;
-      reminder = editReminder!.id == NULL_STRING_PLACEHOLDER ? null : editReminder!.reminderTime;
+      reminder = editReminder!.id == NULL_STRING_PLACEHOLDER
+          ? null
+          : editReminder!.reminderTime;
       reminderInput.text = editReminder!.id == NULL_STRING_PLACEHOLDER
           ? ''
           : timeOfDayFormatter(editReminder!.reminderTime);
@@ -310,7 +230,13 @@ class _TasksPageState extends State<TasksPage> {
                         isRequired: true,
                         controller: startDateInput,
                         readOnly: true,
-                        onTap: () => showCalendar(true),
+                        onTap: () async {
+                          Map<String, dynamic> startDateMap =
+                              await showCalendar(context);
+                          startDate = startDateMap['startDate'];
+                          startDateInput.text =
+                              startDateMap['startDateInputText'];
+                        },
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -320,7 +246,13 @@ class _TasksPageState extends State<TasksPage> {
                         maxWords: -1,
                         controller: endDateInput,
                         readOnly: true,
-                        onTap: () => showCalendar(false),
+                        onTap: () async {
+                          Map<String, dynamic> endDateMap =
+                              await showCalendar(context, startDate: startDate, isStartDate: false);
+                          endDate = endDateMap['endDate'];
+                          endDateInput.text =
+                              endDateMap['endDateInputText'];
+                        },
                       ),
                     ),
                     const SizedBox(height: 10),

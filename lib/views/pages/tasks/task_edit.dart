@@ -25,10 +25,11 @@ class TaskEdit extends StatelessWidget {
   late TextEditingController _nameController;
   late TextEditingController _pointsController;
   late TextEditingController _startDateController;
-  late DateTime _startDate;
   late TextEditingController _endDateController;
-  late DateTime _endDate;
   late TextEditingController _reminderController;
+
+  late DateTime _startDate;
+  late DateTime _endDate;
 
   Map<String, dynamic> getTaskDetailsFromControllers() => {
         TASK_NAME: _nameController.text,
@@ -43,6 +44,7 @@ class TaskEdit extends StatelessWidget {
       _task = _taskVM.retrieveTaskById(taskId!);
       _reminderEntry = _reminderEntryVM.retrieveReminderEntryByTaskId(taskId!);
     }
+    
     _nameController =
         TextEditingController(text: (taskId == null) ? "" : _task.name);
     _pointsController = TextEditingController(
