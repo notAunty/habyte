@@ -60,6 +60,7 @@ class TaskEdit extends StatelessWidget {
 
     return AlertDialog(
       title: Text(isUpdate ? 'Edit Task' : 'New Task'),
+      insetPadding: const EdgeInsets.all(SIDE_PADDING / 3)
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
@@ -72,6 +73,37 @@ class TaskEdit extends StatelessWidget {
           child: const Text('Done'),
         )
       ],
+      content: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.min,
+            children: [
+              CustomTextFieldLabel(
+                label: 'Task Name',
+                child: CustomTextField(
+                  maxWords: -1,
+                  isRequired: true,
+                  controller: nameInput,
+                ),
+              ),
+              const SizedBox(height: 10),
+              CustomTextFieldLabel(
+                label: 'Points (1-5)',
+                child: CustomTextField(
+                  maxWords: -1,
+                  isRequired: true,
+                  controller: pointInput,
+                  isInt: true,
+                  maxInt: 5,
+                  minInt: 1,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
