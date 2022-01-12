@@ -13,20 +13,11 @@ class DashboardTaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mock
-    // final List<String> mockTasks = [
-    //   'Wake up at 7:00am',
-    //   'Walk 10k steps per day',
-    //   'Sleep at least 8 hours'
-    // ];
-    // late List<bool> mockChecked;
-
-    // mockChecked = mockTasks.map((e) => false).toList();
-
-    return DoubleValueListenableBuilder<Map<String, String>, Map<String, bool>>(
-      firstValueListenable: _notifiers.getTasksInIdNameNotifier(),
+    return DoubleValueListenableBuilder<List<Map<String, dynamic>>,
+        Map<String, bool>>(
+      firstValueListenable: _notifiers.getTasksNotifier(),
       secondValueListenable: _notifiers.getTasksInIdCheckedNotifier(),
-      builder: (context, tasksInIdName, tasksInIdChecked) {
+      builder: (context, taskList, tasksInIdChecked) {
         return Expanded(
           child: SingleChildScrollView(
             child: ListView.builder(
@@ -34,11 +25,10 @@ class DashboardTaskList extends StatelessWidget {
               shrinkWrap: true,
               padding: const EdgeInsets.fromLTRB(
                   SIDE_PADDING - 4, 8, SIDE_PADDING, 0),
-              itemCount: tasksInIdName.keys.toList().length,
+              itemCount: taskList.length,
               itemBuilder: (context, index) {
                 // Reverse it, view from the latest to the oldest
-                String currentId = tasksInIdName.keys
-                    .toList()[tasksInIdName.keys.toList().length - 1 - index];
+                String currentId = taskList[index][TASK_ID];
                 return AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
                   opacity: tasksInIdChecked[currentId]! ? 0.5 : 1.0,
@@ -53,7 +43,7 @@ class DashboardTaskList extends StatelessWidget {
                           : Image.asset('assets/check/unchecked.png'),
                     ),
                     title: Text(
-                      tasksInIdName[currentId]!,
+                      taskList[index][TASK_NAME],
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           decoration: tasksInIdChecked[currentId]!
                               ? TextDecoration.lineThrough
