@@ -37,10 +37,10 @@ class RewardsPage extends StatelessWidget {
                   // other pages of indexedStack. Remove to try it out
                   child: Material(
                     color: Theme.of(context).colorScheme.background,
-                    child: const TabBarView(
+                    child: TabBarView(
                       children: [
                         RewardList(),
-                        RewardListRedeemed(),
+                        const RewardListRedeemed(),
                       ],
                     ),
                   ),
