@@ -48,7 +48,7 @@ class ReminderEntryVM {
       Map<String, dynamic> reminderEntryJson) async {
     // By default, when a reminderEntry is created, its status is true
     reminderEntryJson = {...reminderEntryJson, REMINDER_ENTRY_STATUS: true};
-    ReminderEntry _reminderEntry = ReminderEntry.fromJson(reminderEntryJson);
+    ReminderEntry _reminderEntry = ReminderEntry.createFromJson(reminderEntryJson);
     _reminderEntry.id = _general.getBoxItemNewId(_boxType);
     _currentReminderEntries.add(_reminderEntry);
     _general.addBoxItem(_boxType, _reminderEntry.id, _reminderEntry);
@@ -80,7 +80,7 @@ class ReminderEntryVM {
   ReminderEntry retrieveReminderEntryById(String id) =>
       _currentReminderEntries.singleWhere(
         (reminderEntry) => reminderEntry.id == id,
-        orElse: () => ReminderEntry().nullClass(),
+        orElse: () => ReminderEntry.nullClass(),
       );
 
   /// **Retrieve ReminderEntry** (`R` in CRUD)
@@ -91,7 +91,7 @@ class ReminderEntryVM {
   ReminderEntry retrieveReminderEntryByTaskId(String taskId) =>
       _currentReminderEntries.singleWhere(
         (reminderEntry) => reminderEntry.taskId == taskId,
-        orElse: () => ReminderEntry().nullClass(),
+        orElse: () => ReminderEntry.nullClass(),
       );
 
   /// **Update ReminderEntry** (`U` in CRUD)
@@ -115,29 +115,6 @@ class ReminderEntryVM {
     ReminderEntry _updatedReminderEntry = ReminderEntry.fromJson({
       ..._currentReminderEntries[_index].toMap(),
       ...jsonToUpdate,
-    });
-    _updatedReminderEntry.id = id;
-    _currentReminderEntries[_index] = _updatedReminderEntry;
-    _general.updateBoxItem(
-        _boxType, _updatedReminderEntry.id, _updatedReminderEntry);
-    return _updatedReminderEntry;
-  }
-
-  /// **Update ReminderEntry's Status** (`U` in CRUD)
-  ///
-  /// Update reminderEntry's status would just need to pass the reminderEntry id
-  /// This updateStatus is for toggle status from false -> true and vise versa.
-  ///
-  /// Return the updated reminderEntry
-  ReminderEntry updateStatus(String id) {
-    int _index = _currentReminderEntries
-        .indexWhere((reminderEntry) => reminderEntry.id == id);
-    // if (_index == -1) // do some alert
-    bool _currentStatus =
-        _currentReminderEntries[_index].toMap()[REMINDER_ENTRY_STATUS];
-    ReminderEntry _updatedReminderEntry = ReminderEntry.fromJson({
-      ..._currentReminderEntries[_index].toMap(),
-      REMINDER_ENTRY_STATUS: !_currentStatus,
     });
     _currentReminderEntries[_index] = _updatedReminderEntry;
     _general.updateBoxItem(

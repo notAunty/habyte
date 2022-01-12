@@ -22,7 +22,7 @@ class TaskVM {
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.task;
   final Notifiers _notifiers = Notifiers.getInstance();
-  final NotifierType _tasksInIdNameNotifierType = NotifierType.tasksInIdName;
+  final NotifierType _tasksNotifierType = NotifierType.tasks;
   final NotifierType _tasksInIdCheckedNotifierType =
       NotifierType.tasksInIdChecked;
   List<Task> _currentTasks = [];
@@ -33,18 +33,19 @@ class TaskVM {
     _currentTasks = taskList;
 
     for (Task task in _currentTasks) {
-      _notifiers.updateNotifierValue(
-          _tasksInIdNameNotifierType, {task.id: task.name});
+      _notifiers
+          .addNotifierValue(_tasksNotifierType, task.toMap());
       TaskEntry? latestTaskEntry =
           TaskEntryVM.getInstance().getLatestTaskEntryByTaskId(task.id);
       if (latestTaskEntry.id == NULL_STRING_PLACEHOLDER) {
         latestTaskEntry = null;
       }
-      _notifiers.updateNotifierValue(_tasksInIdCheckedNotifierType, {
+      _notifiers.addNotifierValue(_tasksInIdCheckedNotifierType, {
         task.id:
             latestTaskEntry != null && isToday(latestTaskEntry.completedDate)
       });
     }
+    print(_toListOfMap());
   }
 
   /// **Create Task** (`C` in CRUD)
@@ -62,16 +63,16 @@ class TaskVM {
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
   Task createTask(Map<String, dynamic> taskJson) {
-    Task _task = Task.fromJson(taskJson);
+    Task _task = Task.createFromJson(taskJson);
     _task.id = _general.getBoxItemNewId(_boxType);
     _currentTasks.add(_task);
     _general.addBoxItem(_boxType, _task.id, _task);
 
-    _notifiers
-        .addNotifierValue(_tasksInIdNameNotifierType, {_task.id: _task.name});
+    _notifiers.addNotifierValue(_tasksNotifierType, _task.toMap());
     _notifiers
         .addNotifierValue(_tasksInIdCheckedNotifierType, {_task.id: false});
 
+    print(_toListOfMap());
     return _task;
   }
 
@@ -93,7 +94,7 @@ class TaskVM {
   /// Parameter required: `id` from `Task`.
   Task retrieveTaskById(String id) => _currentTasks.singleWhere(
         (task) => task.id == id,
-        orElse: () => Task().nullClass(),
+        orElse: () => Task.nullClass(),
       );
 
   /// **Update Task** (`U` in CRUD)
@@ -118,13 +119,13 @@ class TaskVM {
       ..._currentTasks[_index].toMap(),
       ...jsonToUpdate,
     });
-    _updatedTask.id = id;
     _currentTasks[_index] = _updatedTask;
     _general.updateBoxItem(_boxType, _updatedTask.id, _updatedTask);
 
     _notifiers.updateNotifierValue(
-        _tasksInIdNameNotifierType, {_updatedTask.id: _updatedTask.name});
+        _tasksNotifierType, {_updatedTask.id: _updatedTask});
 
+    print(_toListOfMap());
     return _updatedTask;
   }
 
@@ -135,7 +136,8 @@ class TaskVM {
     _currentTasks.removeWhere((task) => task.id == id);
     _general.deleteBoxItem(_boxType, id);
 
-    _notifiers.removeOrDeductNotifierValue(_tasksInIdNameNotifierType, id);
+    print(_toListOfMap());
+    _notifiers.removeOrDeductNotifierValue(_tasksNotifierType, id);
     _notifiers.removeOrDeductNotifierValue(_tasksInIdCheckedNotifierType, id);
   }
 

@@ -6,7 +6,7 @@ enum NotifierType {
   userAbout,
   userScore,
   userPoint,
-  tasksInIdName,
+  tasks,
   tasksInIdChecked,
   availableRewards,
   redeemedRewards
@@ -22,7 +22,7 @@ class Notifiers {
     _pointNotifier = ValueNotifier(0);
 
     // Task
-    _tasksInIdNameNotifier = ValueNotifier({});
+    _tasksNotifier = ValueNotifier([]);
     _tasksInIdCheckedNotifier = ValueNotifier({});
 
     // Reward
@@ -44,9 +44,9 @@ class Notifiers {
   ValueNotifier<int> getPointNotifier() => _pointNotifier;
 
   // Task
-  late ValueNotifier<Map<String, String>> _tasksInIdNameNotifier;
-  ValueNotifier<Map<String, String>> getTasksInIdNameNotifier() =>
-      _tasksInIdNameNotifier;
+  late ValueNotifier<List<Map<String, dynamic>>> _tasksNotifier;
+  ValueNotifier<List<Map<String, dynamic>>> getTasksNotifier() =>
+      _tasksNotifier;
   late ValueNotifier<Map<String, bool>> _tasksInIdCheckedNotifier;
   ValueNotifier<Map<String, bool>> getTasksInIdCheckedNotifier() =>
       _tasksInIdCheckedNotifier;
@@ -75,12 +75,14 @@ class Notifiers {
         assert(value is int);
         _pointNotifier.value += value as int;
         break;
-      case NotifierType.tasksInIdName:
+      case NotifierType.tasks:
         assert(value is Map);
-        _tasksInIdNameNotifier.value = {
-          ..._tasksInIdNameNotifier.value,
-          ...value as Map
-        };
+        int index = _tasksNotifier.value.indexWhere(
+            (taskInMap) => taskInMap[TASK_ID] == (value as Map)[TASK_ID]);
+        if (index == -1) {
+          _tasksNotifier.value.add(value as Map<String, dynamic>);
+          _tasksNotifier.value = List.from(_tasksNotifier.value);
+        }
         break;
       case NotifierType.tasksInIdChecked:
         assert(value is Map);
@@ -130,9 +132,12 @@ class Notifiers {
         assert(value is int);
         _pointNotifier.value = value as int;
         break;
-      case NotifierType.tasksInIdName:
+      case NotifierType.tasks:
         assert(value is Map);
-        addNotifierValue(notifierType, value);
+        int index = _tasksNotifier.value.indexWhere(
+            (taskInMap) => taskInMap[TASK_ID] == (value as Map)[TASK_ID]);
+        _tasksNotifier.value[index] = value as Map<String, dynamic>;
+        _tasksNotifier.value = List.from(_tasksNotifier.value);
         break;
       case NotifierType.tasksInIdChecked:
         assert(value is Map);
@@ -173,10 +178,11 @@ class Notifiers {
         assert(value is int);
         _pointNotifier.value -= value as int;
         break;
-      case NotifierType.tasksInIdName:
+      case NotifierType.tasks:
         assert(value is String);
-        _tasksInIdNameNotifier.value.remove(value as String);
-        _tasksInIdNameNotifier.value = {..._tasksInIdNameNotifier.value};
+        _tasksNotifier.value
+            .removeWhere((taskInMap) => taskInMap[TASK_ID] == value);
+        _tasksNotifier.value = List.from(_tasksNotifier.value);
         break;
       case NotifierType.tasksInIdChecked:
         assert(value is String);
@@ -184,16 +190,16 @@ class Notifiers {
         _tasksInIdCheckedNotifier.value = {..._tasksInIdCheckedNotifier.value};
         break;
       case NotifierType.availableRewards:
-        assert(value is Map);
-        _availableRewardsNotifier.value.removeWhere((rewardInMap) =>
-            rewardInMap[REWARD_ID] == (value as Map)[REWARD_ID]);
+        assert(value is String);
+        _availableRewardsNotifier.value
+            .removeWhere((rewardInMap) => rewardInMap[REWARD_ID] == value);
         _availableRewardsNotifier.value =
             List.from(_availableRewardsNotifier.value);
         break;
       case NotifierType.redeemedRewards:
-        assert(value is Map);
-        _redeemedRewardsNotifier.value.removeWhere((rewardInMap) =>
-            rewardInMap[REWARD_ID] == (value as Map)[REWARD_ID]);
+        assert(value is String);
+        _redeemedRewardsNotifier.value
+            .removeWhere((rewardInMap) => rewardInMap[REWARD_ID] == value);
         _redeemedRewardsNotifier.value =
             List.from(_redeemedRewardsNotifier.value);
         break;

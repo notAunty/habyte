@@ -60,7 +60,7 @@ class RewardVM {
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
   Reward createReward(Map<String, dynamic> rewardJson) {
-    Reward _reward = Reward.fromJson(rewardJson);
+    Reward _reward = Reward.createFromJson(rewardJson);
     _reward.id = _general.getBoxItemNewId(_boxType);
     _currentRewards.add(_reward);
     _general.addBoxItem(_boxType, _reward.id, _reward);
@@ -133,7 +133,7 @@ class RewardVM {
   /// Parameter required: `id` from `Reward`.
   Reward retrieveRewardById(String id) => _currentRewards.singleWhere(
         (reward) => reward.id == id,
-        orElse: () => Reward().nullClass(),
+        orElse: () => Reward.nullClass(),
       );
 
   /// **Update Reward** (`U` in CRUD)
@@ -156,7 +156,6 @@ class RewardVM {
       ..._currentRewards[_index].toMap(),
       ...jsonToUpdate,
     });
-    _updatedReward.id = id;
     _currentRewards[_index] = _updatedReward;
     _general.updateBoxItem(_boxType, _updatedReward.id, _updatedReward);
 
@@ -188,7 +187,7 @@ class RewardVM {
 
     print(_toListOfMap());
     _notifiers.removeOrDeductNotifierValue(
-        _availableRewardsNotifierType, redeemedReward.toMap());
+        _availableRewardsNotifierType, id);
     _notifiers.addNotifierValue(
         _redeemedRewardsNotifierType, redeemedReward.toMap());
     return true;

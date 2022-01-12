@@ -48,7 +48,7 @@ class TaskEntryVM {
   /// - Completed Date is not required, because createTaskEntry will definitely
   /// be now
   Future<TaskEntry> createTaskEntry(Map<String, dynamic> taskEntryJson) async {
-    TaskEntry _taskEntry = TaskEntry.fromJson(
+    TaskEntry _taskEntry = TaskEntry.createFromJson(
         {...taskEntryJson, TASK_ENTRY_COMPLETED_DATE: DateTime.now()});
     _taskEntry.id = _general.getBoxItemNewId(_boxType);
     _currentTaskEntries.add(_taskEntry);
@@ -88,7 +88,7 @@ class TaskEntryVM {
   /// Parameter required: `id` from `TaskEntry`.
   TaskEntry retrieveTaskEntryById(String id) => _currentTaskEntries.singleWhere(
         (taskEntry) => taskEntry.id == id,
-        orElse: () => TaskEntry().nullClass(),
+        orElse: () => TaskEntry.nullClass(),
       );
 
   /// **Retrieve TaskEntry** (`R` in CRUD)
@@ -122,7 +122,6 @@ class TaskEntryVM {
       ..._currentTaskEntries[_index].toMap(),
       ...jsonToUpdate,
     });
-    _updatedTaskEntry.id = id;
     _currentTaskEntries[_index] = _updatedTaskEntry;
     _general.updateBoxItem(_boxType, _updatedTaskEntry.id, _updatedTaskEntry);
 
@@ -164,7 +163,7 @@ class TaskEntryVM {
   TaskEntry getLatestTaskEntryByTaskId(String taskId) =>
       _currentTaskEntries.lastWhere(
         (taskEntry) => taskEntry.taskId == taskId,
-        orElse: () => TaskEntry().nullClass(),
+        orElse: () => TaskEntry.nullClass(),
       );
 
   /// Private function to convert `List of TaskEntry` to `List of Map`
