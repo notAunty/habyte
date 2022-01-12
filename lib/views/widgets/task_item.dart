@@ -12,8 +12,8 @@ class TaskItem extends StatelessWidget {
   }) : super(key: key);
 
   final Map<String, dynamic> task;
-  final Function? onDelete;
   final Function? onEdit;
+  final Function? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -98,41 +98,45 @@ class TaskItem extends StatelessWidget {
               Container(
                 child: onEdit == null && onDelete == null
                     ? Container()
-                    : StatefulBuilder(builder: (context, setState) {
-                        return Column(
-                          children: [
-                            const SizedBox(height: 8),
-                            const Divider(
-                              thickness: 1.5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                TextButton(
-                                  onPressed: () => onEdit!(task, setState),
-                                  child: Row(
-                                    children: const [
-                                      Icon(Icons.edit),
-                                      SizedBox(width: 4),
-                                      Text('Edit')
-                                    ],
-                                  ),
+                    : Column(
+                        children: [
+                          const SizedBox(height: 8),
+                          const Divider(
+                            thickness: 1.5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TextButton(
+                                onPressed: () => onEdit!(
+                                  context,
+                                  task[TASK_ID],
                                 ),
-                                TextButton(
-                                  onPressed: () => onDelete!(task, setState),
-                                  child: Row(
-                                    children: const [
-                                      Icon(Icons.delete),
-                                      SizedBox(width: 4),
-                                      Text('Delete')
-                                    ],
-                                  ),
+                                child: Row(
+                                  children: const [
+                                    Icon(Icons.edit),
+                                    SizedBox(width: 4),
+                                    Text('Edit')
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ],
-                        );
-                      }),
+                              ),
+                              TextButton(
+                                onPressed: () => onDelete!(
+                                  context,
+                                  task[TASK_ID],
+                                ),
+                                child: Row(
+                                  children: const [
+                                    Icon(Icons.delete),
+                                    SizedBox(width: 4),
+                                    Text('Delete')
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
               ),
             ],
           ),

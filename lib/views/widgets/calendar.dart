@@ -3,10 +3,9 @@ import 'package:habyte/utils/date_time.dart';
 import 'package:intl/intl.dart';
 
 Future<Map<String, dynamic>> showCalendar(BuildContext context,
-    {DateTime? startDate, bool isStartDate = true}) async {
+    {DateTime? startDate}) async {
   Map<String, dynamic> toReturn = {};
-  DateTime dateRange =
-      isStartDate ? DateTime.now() : startDate ?? DateTime.now();
+  DateTime dateRange = startDate ?? DateTime.now();
 
   await showDatePicker(
     context: context,
@@ -25,27 +24,12 @@ Future<Map<String, dynamic>> showCalendar(BuildContext context,
       );
     },
   ).then((date) {
-    if (date != null) {
-      if (isStartDate) {
-        toReturn['startDate'] = date;
-        toReturn['startDateInputText'] = DateFormat('yyyy-MM-dd').format(date);
-        // if (endDate != null && endDate!.compareTo(startDate!) < 0) {
-        //   endDate = null;
-        //   endDateInput.text = '';
-        // }
-      } else {
-        toReturn['endDate'] = date;
-        toReturn['endDateInputText'] = DateFormat('yyyy-MM-dd').format(date);
-      }
-    } else {
-      if (isStartDate) {
-        toReturn['startDate'] = null;
-        toReturn['startDateInputText'] = '';
-      } else {
-        toReturn['endDate'] = null;
-        toReturn['endDateInputText'] = '';
-      }
-    }
+    toReturn['date'] = date;
+    toReturn['dateInputText'] = date != null ? DateFormat('yyyy-MM-dd').format(date) : '';
+    // if (endDate != null && endDate!.compareTo(startDate!) < 0) {
+    //   endDate = null;
+    //   endDateInput.text = '';
+    // }
   });
 
   return toReturn;
@@ -68,12 +52,8 @@ Future<Map<String, dynamic>> showTimeInput(BuildContext context) async {
       );
     },
   ).then((time) {
-    if (time != null) {
-      toReturn['reminder'] = time;
-      toReturn['reminderInputText'] = timeOfDayFormatter(time);
-
-      print(time.hour);
-    }
+    toReturn['timeOfDay'] = time;
+    toReturn['timeOfDayInputText'] = time != null ? timeOfDayFormatter(time) : '';
   });
 
   return toReturn;
