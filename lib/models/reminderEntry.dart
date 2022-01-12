@@ -22,6 +22,10 @@ class ReminderEntry {
 
   ReminderEntry();
 
+  ReminderEntry.createFromJson(Map<String, dynamic> json)
+      : status = json[REMINDER_ENTRY_STATUS],
+        reminderTime = json[REMINDER_ENTRY_TIME];
+
   ReminderEntry.fromJson(Map<String, dynamic> json)
       : taskId = json[REMINDER_ENTRY_TASK_ID],
         status = json[REMINDER_ENTRY_STATUS],
@@ -34,9 +38,9 @@ class ReminderEntry {
         REMINDER_ENTRY_TIME: reminderTime,
       };
 
-  ReminderEntry nullClass() => ReminderEntry()
-    ..id = NULL_STRING_PLACEHOLDER
-    ..taskId = NULL_STRING_PLACEHOLDER
-    ..status = NULL_BOOL_PLACEHOLDER
-    ..reminderTime = TimeOfDay.now();
+  ReminderEntry.nullClass()
+      : id = NULL_STRING_PLACEHOLDER,
+        taskId = NULL_STRING_PLACEHOLDER,
+        status = NULL_BOOL_PLACEHOLDER,
+        reminderTime = TimeOfDay.now();
 }

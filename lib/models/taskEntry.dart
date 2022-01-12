@@ -17,8 +17,13 @@ class TaskEntry {
 
   TaskEntry();
 
-  TaskEntry.fromJson(Map<String, dynamic> json)
+  TaskEntry.createFromJson(Map<String, dynamic> json)
       : taskId = json[TASK_ENTRY_TASK_ID],
+        completedDate = json[TASK_ENTRY_COMPLETED_DATE];
+
+  TaskEntry.fromJson(Map<String, dynamic> json)
+      : id = json[TASK_ID],
+        taskId = json[TASK_ENTRY_TASK_ID],
         completedDate = json[TASK_ENTRY_COMPLETED_DATE];
 
   Map<String, dynamic> toMap() => {
@@ -27,8 +32,8 @@ class TaskEntry {
         TASK_ENTRY_COMPLETED_DATE: completedDate,
       };
 
-  TaskEntry nullClass() => TaskEntry()
-    ..id = NULL_STRING_PLACEHOLDER
-    ..taskId = NULL_STRING_PLACEHOLDER
-    ..completedDate = DateTime.now();
+  TaskEntry.nullClass()
+      : id = NULL_STRING_PLACEHOLDER,
+        taskId = NULL_STRING_PLACEHOLDER,
+        completedDate = DateTime.now();
 }
