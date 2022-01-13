@@ -9,7 +9,8 @@ enum NotifierType {
   tasks,
   tasksInIdChecked,
   availableRewards,
-  redeemedRewards
+  redeemedRewards,
+  reminderEntries,
 }
 
 class Notifiers {
@@ -28,6 +29,9 @@ class Notifiers {
     // Reward
     _availableRewardsNotifier = ValueNotifier([]);
     _redeemedRewardsNotifier = ValueNotifier([]);
+
+    // Reminder Entry
+    _reminderEntriesNotifier = ValueNotifier([]);
   }
 
   /// Get the `NotifierVM` instance.
@@ -58,6 +62,11 @@ class Notifiers {
   late ValueNotifier<List<Map<String, dynamic>>> _redeemedRewardsNotifier;
   ValueNotifier<List<Map<String, dynamic>>> getRedeemedRewardsNotifier() =>
       _redeemedRewardsNotifier;
+
+  // Reminder Entry
+  late ValueNotifier<List<Map<String, dynamic>>> _reminderEntriesNotifier;
+  ValueNotifier<List<Map<String, dynamic>>> getReminderEntriesNotifier() =>
+      _reminderEntriesNotifier;
 
   void addNotifierValue(NotifierType notifierType, Object value) {
     switch (notifierType) {
@@ -111,6 +120,19 @@ class Notifiers {
               List.from(_redeemedRewardsNotifier.value);
         }
         break;
+      case NotifierType.reminderEntries:
+        assert(value is Map);
+        int index = _reminderEntriesNotifier.value.indexWhere(
+            (reminderEntryInMap) =>
+                reminderEntryInMap[REMINDER_ENTRY_ID] ==
+                (value as Map)[REMINDER_ENTRY_ID]);
+        if (index == -1) {
+          _reminderEntriesNotifier.value.add(value as Map<String, dynamic>);
+          _reminderEntriesNotifier.value = List.from(
+            _reminderEntriesNotifier.value,
+          );
+        }
+        break;
     }
   }
 
@@ -159,6 +181,17 @@ class Notifiers {
         _redeemedRewardsNotifier.value =
             List.from(_redeemedRewardsNotifier.value);
         break;
+      case NotifierType.reminderEntries:
+        assert(value is Map);
+        int index = _reminderEntriesNotifier.value.indexWhere(
+            (reminderEntryInMap) =>
+                reminderEntryInMap[REMINDER_ENTRY_ID] ==
+                (value as Map)[REMINDER_ENTRY_ID]);
+        _reminderEntriesNotifier.value[index] = value as Map<String, dynamic>;
+        _reminderEntriesNotifier.value = List.from(
+          _reminderEntriesNotifier.value,
+        );
+        break;
     }
   }
 
@@ -202,6 +235,13 @@ class Notifiers {
             .removeWhere((rewardInMap) => rewardInMap[REWARD_ID] == value);
         _redeemedRewardsNotifier.value =
             List.from(_redeemedRewardsNotifier.value);
+        break;
+      case NotifierType.reminderEntries:
+        assert(value is String);
+        _reminderEntriesNotifier.value.removeWhere((reminderEntryInMap) =>
+            reminderEntryInMap[REMINDER_ENTRY_ID] == value);
+        _reminderEntriesNotifier.value =
+            List.from(_reminderEntriesNotifier.value);
         break;
     }
   }
