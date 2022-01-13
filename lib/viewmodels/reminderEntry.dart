@@ -2,6 +2,7 @@ import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/task.dart';
 import 'package:habyte/services/notifications.dart';
 import 'package:habyte/viewmodels/general.dart';
+import 'package:habyte/viewmodels/notifiers.dart';
 import 'package:habyte/viewmodels/task.dart';
 import 'package:habyte/views/constant/constants.dart';
 
@@ -20,6 +21,9 @@ class ReminderEntryVM {
 
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.reminderEntry;
+  final Notifiers _notifiers = Notifiers.getInstance();
+  final NotifierType _reminderEntriesNotifierType =
+      NotifierType.reminderEntries;
   List<ReminderEntry> _currentReminderEntries = [];
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
@@ -28,6 +32,17 @@ class ReminderEntryVM {
       List<ReminderEntry> reminderEntryList) async {
     _currentReminderEntries = reminderEntryList;
     await NotificationHandler.getInstance().init(reminderEntryList);
+
+    for (ReminderEntry reminderEntry in _currentReminderEntries) {
+      _notifiers.addNotifierValue(
+        _reminderEntriesNotifierType,
+        reminderEntry.toMap(),
+      );
+    }
+
+    print("Reminder Entries - ${_toListOfMap()}");
+    print(
+        "Reminder Entries Notifier - ${_notifiers.getReminderEntriesNotifier().value}");
   }
 
   /// **Create ReminderEntry** (`C` in CRUD)
@@ -48,7 +63,8 @@ class ReminderEntryVM {
       Map<String, dynamic> reminderEntryJson) async {
     // By default, when a reminderEntry is created, its status is true
     reminderEntryJson = {...reminderEntryJson, REMINDER_ENTRY_STATUS: true};
-    ReminderEntry _reminderEntry = ReminderEntry.createFromJson(reminderEntryJson);
+    ReminderEntry _reminderEntry =
+        ReminderEntry.createFromJson(reminderEntryJson);
     _reminderEntry.id = _general.getBoxItemNewId(_boxType);
     _currentReminderEntries.add(_reminderEntry);
     _general.addBoxItem(_boxType, _reminderEntry.id, _reminderEntry);
@@ -56,7 +72,14 @@ class ReminderEntryVM {
     // Create new reminder entry will add notification
     Task _task = TaskVM.getInstance().retrieveTaskById(_reminderEntry.taskId);
     await NotificationHandler.getInstance().createNotification(
-        _reminderEntry.id, _task.name, _reminderEntry.reminderTime);
+      _reminderEntry.id,
+      _task.name,
+      _reminderEntry.reminderTime,
+    );
+
+    print("Reminder Entries - ${_toListOfMap()}");
+    print(
+        "Reminder Entries Notifier - ${_notifiers.getReminderEntriesNotifier().value}");
     return _reminderEntry;
   }
 
@@ -119,6 +142,10 @@ class ReminderEntryVM {
     _currentReminderEntries[_index] = _updatedReminderEntry;
     _general.updateBoxItem(
         _boxType, _updatedReminderEntry.id, _updatedReminderEntry);
+
+    print("Reminder Entries - ${_toListOfMap()}");
+    print(
+        "Reminder Entries Notifier - ${_notifiers.getReminderEntriesNotifier().value}");
     return _updatedReminderEntry;
   }
 
@@ -129,6 +156,10 @@ class ReminderEntryVM {
     _currentReminderEntries
         .removeWhere((reminderEntry) => reminderEntry.id == id);
     _general.deleteBoxItem(_boxType, id);
+
+    print("Reminder Entries - ${_toListOfMap()}");
+    print(
+        "Reminder Entries Notifier - ${_notifiers.getReminderEntriesNotifier().value}");
   }
 
   /// Private function to convert `List of ReminderEntry` to `List of Map`
