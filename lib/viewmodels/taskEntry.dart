@@ -31,8 +31,13 @@ class TaskEntryVM {
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
   /// to insert the data stored.
-  void setCurrentTaskEntries(List<TaskEntry> taskEntryList) =>
-      _currentTaskEntries = taskEntryList;
+  void setCurrentTaskEntries(List<TaskEntry> taskEntryList) {
+    _currentTaskEntries = taskEntryList;
+
+    print("Task Entry - ${_toListOfMap()}");
+    print(
+        "Tasks Notifier (ID:Checked) - ${_notifiers.getTasksInIdCheckedNotifier().value}");
+  }
 
   /// **Create TaskEntry** (`C` in CRUD)
   ///
@@ -66,6 +71,10 @@ class TaskEntryVM {
       await NotificationHandler.getInstance()
           .cancelNotification(_reminderEntry.id);
     }
+
+    print("Task Entry - ${_toListOfMap()}");
+    print(
+        "Tasks Notifier (ID:Checked) - ${_notifiers.getTasksInIdCheckedNotifier().value}");
     return _taskEntry;
   }
 
@@ -125,6 +134,9 @@ class TaskEntryVM {
     _currentTaskEntries[_index] = _updatedTaskEntry;
     _general.updateBoxItem(_boxType, _updatedTaskEntry.id, _updatedTaskEntry);
 
+    print("Task Entry - ${_toListOfMap()}");
+    print(
+        "Tasks Notifier (ID:Checked) - ${_notifiers.getTasksInIdCheckedNotifier().value}");
     return _updatedTaskEntry;
   }
 
@@ -139,6 +151,10 @@ class TaskEntryVM {
     _general.deleteBoxItem(_boxType, id);
     UserVM.getInstance().deductPoint(
         TaskVM.getInstance().retrieveTaskById(removedTaskEntry.taskId).points);
+
+    print("Task Entry - ${_toListOfMap()}");
+    print(
+        "Tasks Notifier (ID:Checked) - ${_notifiers.getTasksInIdCheckedNotifier().value}");
   }
 
   /// **Delete TaskEntry** (`D` in CRUD)

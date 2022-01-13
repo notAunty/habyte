@@ -33,8 +33,7 @@ class TaskVM {
     _currentTasks = taskList;
 
     for (Task task in _currentTasks) {
-      _notifiers
-          .addNotifierValue(_tasksNotifierType, task.toMap());
+      _notifiers.addNotifierValue(_tasksNotifierType, task.toMap());
       TaskEntry? latestTaskEntry =
           TaskEntryVM.getInstance().getLatestTaskEntryByTaskId(task.id);
       if (latestTaskEntry.id == NULL_STRING_PLACEHOLDER) {
@@ -45,7 +44,11 @@ class TaskVM {
             latestTaskEntry != null && isToday(latestTaskEntry.completedDate)
       });
     }
-    print(_toListOfMap());
+
+    print("Tasks - ${_toListOfMap()}");
+    print("Tasks Notifier - ${_notifiers.getTasksNotifier().value}");
+    print(
+        "Tasks Notifier (ID:Checked) - ${_notifiers.getTasksInIdCheckedNotifier().value}");
   }
 
   /// **Create Task** (`C` in CRUD)
@@ -72,7 +75,10 @@ class TaskVM {
     _notifiers
         .addNotifierValue(_tasksInIdCheckedNotifierType, {_task.id: false});
 
-    print(_toListOfMap());
+    print("Tasks - ${_toListOfMap()}");
+    print("Tasks Notifier - ${_notifiers.getTasksNotifier().value}");
+    print(
+        "Tasks Notifier (ID:Checked) - ${_notifiers.getTasksInIdCheckedNotifier().value}");
     return _task;
   }
 
@@ -122,10 +128,12 @@ class TaskVM {
     _currentTasks[_index] = _updatedTask;
     _general.updateBoxItem(_boxType, _updatedTask.id, _updatedTask);
 
-    _notifiers.updateNotifierValue(
-        _tasksNotifierType, {_updatedTask.id: _updatedTask});
+    _notifiers.updateNotifierValue(_tasksNotifierType, _updatedTask.toMap());
 
-    print(_toListOfMap());
+    print("Tasks - ${_toListOfMap()}");
+    print("Tasks Notifier - ${_notifiers.getTasksNotifier().value}");
+    print(
+        "Tasks Notifier (ID:Checked) - ${_notifiers.getTasksInIdCheckedNotifier().value}");
     return _updatedTask;
   }
 
@@ -136,9 +144,13 @@ class TaskVM {
     _currentTasks.removeWhere((task) => task.id == id);
     _general.deleteBoxItem(_boxType, id);
 
-    print(_toListOfMap());
     _notifiers.removeOrDeductNotifierValue(_tasksNotifierType, id);
     _notifiers.removeOrDeductNotifierValue(_tasksInIdCheckedNotifierType, id);
+
+    print("Tasks - ${_toListOfMap()}");
+    print("Tasks Notifier - ${_notifiers.getTasksNotifier().value}");
+    print(
+        "Tasks Notifier (ID:Checked) - ${_notifiers.getTasksInIdCheckedNotifier().value}");
   }
 
   /// Private function to convert `List of Task` to `List of Map`

@@ -30,7 +30,6 @@ class RewardVM {
   /// to insert the data stored.
   void setCurrentRewards(List<Reward> rewardList) {
     _currentRewards = rewardList;
-    print(_toListOfMap());
     Map<String, List<Map<String, dynamic>>> splitRewards =
         _splitAvailableRedeemedInListOfMap();
     if (splitRewards[REWARD_AVAILABLE] != null) {
@@ -45,6 +44,12 @@ class RewardVM {
             _redeemedRewardsNotifierType, splitRewards[REWARD_REDEEMED]![i]);
       }
     }
+
+    print("Rewards - ${_toListOfMap()}");
+    print(
+        "Rewards Notifier (Available) - ${_notifiers.getAvailableRewardsNotifier().value}");
+    print(
+        "Rewards Notifier (Redeemed) - ${_notifiers.getRedeemedRewardsNotifier().value}");
   }
 
   /// **Create Reward** (`C` in CRUD)
@@ -67,6 +72,11 @@ class RewardVM {
 
     _notifiers.addNotifierValue(_availableRewardsNotifierType, _reward.toMap());
 
+    print("Rewards - ${_toListOfMap()}");
+    print(
+        "Rewards Notifier (Available) - ${_notifiers.getAvailableRewardsNotifier().value}");
+    print(
+        "Rewards Notifier (Redeemed) - ${_notifiers.getRedeemedRewardsNotifier().value}");
     return _reward;
   }
 
@@ -162,6 +172,11 @@ class RewardVM {
     _notifiers.updateNotifierValue(
         _availableRewardsNotifierType, _updatedReward.toMap());
 
+    print("Rewards - ${_toListOfMap()}");
+    print(
+        "Rewards Notifier (Available) - ${_notifiers.getAvailableRewardsNotifier().value}");
+    print(
+        "Rewards Notifier (Redeemed) - ${_notifiers.getRedeemedRewardsNotifier().value}");
     return _updatedReward;
   }
 
@@ -175,6 +190,11 @@ class RewardVM {
 
     _notifiers.removeOrDeductNotifierValue(
         _availableRewardsNotifierType, deletedReward.toMap());
+    print("Rewards - ${_toListOfMap()}");
+    print(
+        "Rewards Notifier (Available) - ${_notifiers.getAvailableRewardsNotifier().value}");
+    print(
+        "Rewards Notifier (Redeemed) - ${_notifiers.getRedeemedRewardsNotifier().value}");
   }
 
   /// Call this function when user redeem the reward
@@ -186,8 +206,7 @@ class RewardVM {
     Reward redeemedReward = updateReward(id, {REWARD_AVAILABLE: false});
 
     print(_toListOfMap());
-    _notifiers.removeOrDeductNotifierValue(
-        _availableRewardsNotifierType, id);
+    _notifiers.removeOrDeductNotifierValue(_availableRewardsNotifierType, id);
     _notifiers.addNotifierValue(
         _redeemedRewardsNotifierType, redeemedReward.toMap());
     return true;
