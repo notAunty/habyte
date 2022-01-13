@@ -28,7 +28,7 @@ class DashboardTaskList extends StatelessWidget {
               itemCount: taskList.length,
               itemBuilder: (context, index) {
                 // Reverse it, view from the latest to the oldest
-                String currentId = taskList[index][TASK_ID];
+                String currentId = taskList[taskList.length - 1 - index][TASK_ID];
                 return AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
                   opacity: tasksInIdChecked[currentId]! ? 0.5 : 1.0,
@@ -43,7 +43,7 @@ class DashboardTaskList extends StatelessWidget {
                           : Image.asset('assets/check/unchecked.png'),
                     ),
                     title: Text(
-                      taskList[index][TASK_NAME],
+                      taskList[taskList.length - 1 - index][TASK_NAME],
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           decoration: tasksInIdChecked[currentId]!
                               ? TextDecoration.lineThrough
