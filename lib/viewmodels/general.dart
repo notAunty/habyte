@@ -46,7 +46,6 @@ class General {
         Map<String, dynamic>.from(_mainBox.get(BOX_USER) ?? {});
     if (userJson.isEmpty) return false;
     UserVM.getInstance().setCurrentUser(userJson);
-    print(userJson);
 
     List<TaskEntry> taskEntryList = _taskEntryBox.values.toList();
     if (taskEntryList.isNotEmpty) {
