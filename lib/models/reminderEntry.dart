@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habyte/utils/date_time.dart';
 import 'package:hive/hive.dart';
 import 'package:habyte/views/constant/constants.dart';
 
@@ -23,11 +24,13 @@ class ReminderEntry {
   ReminderEntry();
 
   ReminderEntry.createFromJson(Map<String, dynamic> json)
-      : status = json[REMINDER_ENTRY_STATUS],
+      : taskId = json[REMINDER_ENTRY_TASK_ID],
+        status = json[REMINDER_ENTRY_STATUS],
         reminderTime = json[REMINDER_ENTRY_TIME];
 
   ReminderEntry.fromJson(Map<String, dynamic> json)
-      : taskId = json[REMINDER_ENTRY_TASK_ID],
+      : id = json[REMINDER_ENTRY_ID],
+        taskId = json[REMINDER_ENTRY_TASK_ID],
         status = json[REMINDER_ENTRY_STATUS],
         reminderTime = json[REMINDER_ENTRY_TIME];
 

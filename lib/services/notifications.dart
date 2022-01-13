@@ -18,7 +18,11 @@ import 'package:timezone/data/latest.dart' as tz;
 class NotificationHandler {
   static final NotificationHandler _notificationHandler =
       NotificationHandler._internal();
-  NotificationHandler._internal();
+  NotificationHandler._internal() {
+    _configureLocalTimeZone();
+
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  }
 
   /// Get the `NotificationHandler`
   factory NotificationHandler.getInstance() => _notificationHandler;
@@ -26,9 +30,6 @@ class NotificationHandler {
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   Future init(List<ReminderEntry> reminderEntries) async {
-    _configureLocalTimeZone();
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon');

@@ -20,7 +20,10 @@ class ReminderEntryAdapter extends TypeAdapter<ReminderEntry> {
       ..id = fields[0] as String
       ..taskId = fields[1] as String
       ..status = fields[2] as bool
-      ..reminderTime = fields[3] as TimeOfDay;
+      // Since hive doesnt support TimeOfDay, 
+      // & we store it as DateTime,
+      // so we need to convert it back to TimeOfDay
+      ..reminderTime = dateTimeToTimeOfDay(fields[3]);
   }
 
   @override
@@ -34,7 +37,9 @@ class ReminderEntryAdapter extends TypeAdapter<ReminderEntry> {
       ..writeByte(2)
       ..write(obj.status)
       ..writeByte(3)
-      ..write(obj.reminderTime);
+      // Since hive doesnt support TimeOfDay, 
+      // so we store it as DateTime instead
+      ..write(timeOfDayToDateTime(obj.reminderTime));
   }
 
   @override
