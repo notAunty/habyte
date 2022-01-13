@@ -46,37 +46,26 @@ class TaskList extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-          padding: const EdgeInsets.only(bottom: TOP_PADDING * 4),
-          child: ValueListenableBuilder<List<Map<String, dynamic>>>(
-            valueListenable: _notifiers.getTasksNotifier(),
-            builder: (context, taskList, child) {
-              return ListView.separated(
-                primary: false,
-                shrinkWrap: true,
-                itemCount: taskList.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 8.0),
-                itemBuilder: (context, index) {
-                  return TaskItem(
-                    task: taskList[index],
-                    onEdit: editTask,
-                    onDelete: deleteTask,
-                  );
-                },
-              );
-            },
-          )
-          // Column(
-          //   crossAxisAlignment: CrossAxisAlignment.stretch,
-          //   children: taskList
-          //       .map((task) => TaskItem(
-          //             task: task,
-          //             onEdit: onClickEdit,
-          //             onDelete: deleteTask,
-          //           ))
-          //       .toList(),
-          // ),
-          ),
+        padding: const EdgeInsets.only(bottom: TOP_PADDING * 4),
+        child: ValueListenableBuilder<List<Map<String, dynamic>>>(
+          valueListenable: _notifiers.getTasksNotifier(),
+          builder: (context, taskList, child) {
+            return ListView.separated(
+              primary: false,
+              shrinkWrap: true,
+              itemCount: taskList.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 8.0),
+              itemBuilder: (context, index) {
+                return TaskItem(
+                  task: taskList[taskList.length - 1 - index],
+                  onEdit: editTask,
+                  onDelete: deleteTask,
+                );
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }

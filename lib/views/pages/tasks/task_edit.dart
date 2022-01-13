@@ -45,7 +45,9 @@ class TaskEdit extends StatelessWidget {
     return toReturn;
   }
 
-  Map<String, dynamic> getReminderEntryDetailsFromControllers() => {
+  Map<String, dynamic> getReminderEntryDetailsFromControllers(String taskId) =>
+      {
+        REMINDER_ENTRY_TASK_ID: taskId,
         REMINDER_ENTRY_TIME: _reminderTod,
         REMINDER_ENTRY_STATUS: _reminderBool,
       };
@@ -56,17 +58,17 @@ class TaskEdit extends StatelessWidget {
 
     if (taskId != null) {
       _task = _taskVM.retrieveTaskById(taskId!);
-      _reminderEntry = _reminderEntryVM.retrieveReminderEntryByTaskId(taskId!);
       _nameController = TextEditingController(text: _task.name);
       _pointsController = TextEditingController(text: _task.points.toString());
       _startDateController = TextEditingController(
           text: dateFormatterWithYYYYMMDD(_task.startDate));
-      _endDateController = TextEditingController(
-          text: dateFormatterWithYYYYMMDD(_task.endDate!));
+      _endDateController =
+          TextEditingController(text: dateFormatterWithYYYYMMDD(_task.endDate));
 
       _startDate = _task.startDate;
       _endDate = _task.endDate;
 
+      _reminderEntry = _reminderEntryVM.retrieveReminderEntryByTaskId(taskId!);
       if (_reminderEntry.id != NULL_STRING_PLACEHOLDER) {
         _reminderTodController = TextEditingController(
           text: timeOfDayFormatter(_reminderEntry.reminderTime),
@@ -74,6 +76,10 @@ class TaskEdit extends StatelessWidget {
 
         _reminderBool = _reminderEntry.status;
         _reminderTod = _reminderEntry.reminderTime;
+      } else {
+        _reminderTodController = TextEditingController();
+        _reminderBool = false;
+        _reminderTod = null;
       }
     } else {
       _nameController = TextEditingController();
@@ -101,22 +107,42 @@ class TaskEdit extends StatelessWidget {
                   ? {
                       if (_reminderEntry.id != NULL_STRING_PLACEHOLDER &&
                           _reminderTod == null)
-                        context.read<GlobalScaffold>().showDefaultSnackbar(
-                            message:
-                                "Cannot set NULL value to existing reminder"),
-                      _taskVM.updateTask(
-                          taskId!, getTaskDetailsFromControllers()),
-                      _reminderEntryVM.updateReminderEntry(
-                        _reminderEntry.id,
-                        getReminderEntryDetailsFromControllers(),
-                      ),
+                        {
+                          context.read<GlobalScaffold>().showDefaultSnackbar(
+                              message:
+                                  "Cannot set NULL value to existing reminder"),
+                        }
+                      else
+                        _task = _taskVM.updateTask(
+                          taskId!,
+                          getTaskDetailsFromControllers(),
+                        ),
+                      if (_reminderTod != null)
+                        {
+                          if (_reminderEntry.id != NULL_STRING_PLACEHOLDER)
+                            {
+                              _reminderEntryVM.updateReminderEntry(
+                                _reminderEntry.id,
+                                getReminderEntryDetailsFromControllers(
+                                  _task.id,
+                                ),
+                              ),
+                            }
+                          else
+                            _reminderEntryVM.createReminderEntry(
+                              getReminderEntryDetailsFromControllers(
+                                _task.id,
+                              ),
+                            ),
+                        },
                       Navigator.of(context).pop(),
                     }
                   : {
-                      _taskVM.createTask(getTaskDetailsFromControllers()),
+                      _task =
+                          _taskVM.createTask(getTaskDetailsFromControllers()),
                       if (_reminderTod != null)
                         _reminderEntryVM.createReminderEntry(
-                          getReminderEntryDetailsFromControllers(),
+                          getReminderEntryDetailsFromControllers(_task.id),
                         ),
                       Navigator.of(context).pop(),
                     }
@@ -184,32 +210,43 @@ class TaskEdit extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              Row(
-                children: [
-                  Text(
-                    'Reminder',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  Switch(
-                    onChanged: (value) => _reminderBool = !_reminderBool,
-                    value: _reminderBool,
-                  ),
-                ],
-              ),
-              Container(
-                child: _reminderBool
-                    ? CustomTextField(
-                        readOnly: true,
-                        controller: _reminderTodController,
-                        onTap: () async {
-                          Map<String, dynamic> reminderTodMap =
-                              await showTimeInput(context);
-                          _reminderTod = reminderTodMap['timeOfDay'];
-                          _reminderTodController.text =
-                              reminderTodMap['timeOfDayInputText'];
-                        },
-                      )
-                    : const SizedBox(height: 8),
+              StatefulBuilder(
+                builder: (context, setState) {
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Reminder',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                          Switch(
+                            onChanged: (value) => setState(
+                              () => _reminderBool = !_reminderBool,
+                            ),
+                            value: _reminderBool,
+                          ),
+                        ],
+                      ),
+                      Container(
+                        child: _reminderBool
+                            ? CustomTextField(
+                                maxWords: -1,
+                                readOnly: true,
+                                controller: _reminderTodController,
+                                onTap: () async {
+                                  Map<String, dynamic> reminderTodMap =
+                                      await showTimeInput(context);
+                                  _reminderTod = reminderTodMap['timeOfDay'];
+                                  _reminderTodController.text =
+                                      reminderTodMap['timeOfDayInputText'];
+                                },
+                              )
+                            : const SizedBox(height: 8),
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),

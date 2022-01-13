@@ -25,7 +25,7 @@ class TasksPage extends StatelessWidget {
                 children: [
                   Text(
                     'Tasks List',
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headline4,
                   ),
                   IconButton(
                     onPressed: () {
