@@ -54,6 +54,7 @@ const REMINDER_ENTRY_ID = "id";
 const REMINDER_ENTRY_TASK_ID = "taskId";
 const REMINDER_ENTRY_STATUS = "status";
 const REMINDER_ENTRY_TIME = "reminderTime";
+const REMINDER_ENTRY_TEMP_OFF_DATE = "tempOffDate";
 
 // TaskEntry Keys
 const TASK_ENTRY_ID = "id";
