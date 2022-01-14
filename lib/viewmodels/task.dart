@@ -3,6 +3,7 @@ import 'package:habyte/models/taskEntry.dart';
 import 'package:habyte/utils/date_time.dart';
 import 'package:habyte/viewmodels/general.dart';
 import 'package:habyte/viewmodels/notifiers.dart';
+import 'package:habyte/viewmodels/reminderEntry.dart';
 import 'package:habyte/viewmodels/taskEntry.dart';
 import 'package:habyte/views/constant/constants.dart';
 
@@ -146,6 +147,8 @@ class TaskVM {
 
     _notifiers.removeOrDeductNotifierValue(_tasksNotifierType, id);
     _notifiers.removeOrDeductNotifierValue(_tasksInIdCheckedNotifierType, id);
+
+    ReminderEntryVM.getInstance().deleteReminderEntry(id);
 
     print("Tasks - ${_toListOfMap()}");
     print("Tasks Notifier - ${_notifiers.getTasksNotifier().value}");

@@ -1,6 +1,7 @@
 import 'package:habyte/models/reminderEntry.dart';
 import 'package:habyte/models/task.dart';
 import 'package:habyte/services/notifications.dart';
+import 'package:habyte/utils/date_time.dart';
 import 'package:habyte/viewmodels/general.dart';
 import 'package:habyte/viewmodels/notifiers.dart';
 import 'package:habyte/viewmodels/task.dart';
@@ -21,9 +22,12 @@ class ReminderEntryVM {
 
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.reminderEntry;
+  final TaskVM _taskVM = TaskVM.getInstance();
   final Notifiers _notifiers = Notifiers.getInstance();
   final NotifierType _reminderEntriesNotifierType =
       NotifierType.reminderEntries;
+  final NotificationHandler _notificationHandler =
+      NotificationHandler.getInstance();
   List<ReminderEntry> _currentReminderEntries = [];
 
   /// Everytime login, `retrievePreviousLogin()` in general need to call this
@@ -31,7 +35,7 @@ class ReminderEntryVM {
   Future<void> setCurrentReminderEntries(
       List<ReminderEntry> reminderEntryList) async {
     _currentReminderEntries = reminderEntryList;
-    await NotificationHandler.getInstance().init(reminderEntryList);
+    await _notificationHandler.init(reminderEntryList);
 
     for (ReminderEntry reminderEntry in _currentReminderEntries) {
       _notifiers.addNotifierValue(
@@ -61,20 +65,30 @@ class ReminderEntryVM {
   /// from there
   Future<ReminderEntry> createReminderEntry(
       Map<String, dynamic> reminderEntryJson) async {
-    // By default, when a reminderEntry is created, its status is true
-    reminderEntryJson = {...reminderEntryJson, REMINDER_ENTRY_STATUS: true};
+    // By default, when a reminderEntry is created, its status is true & tempOffDay is NULL
+    reminderEntryJson = {
+      ...reminderEntryJson,
+      REMINDER_ENTRY_STATUS: true,
+      REMINDER_ENTRY_TEMP_OFF_DATE: null,
+    };
     ReminderEntry _reminderEntry =
         ReminderEntry.createFromJson(reminderEntryJson);
     _reminderEntry.id = _general.getBoxItemNewId(_boxType);
     _currentReminderEntries.add(_reminderEntry);
     _general.addBoxItem(_boxType, _reminderEntry.id, _reminderEntry);
 
-    // Create new reminder entry will add notification
-    Task _task = TaskVM.getInstance().retrieveTaskById(_reminderEntry.taskId);
-    await NotificationHandler.getInstance().createNotification(
-      _reminderEntry.id,
-      _task.name,
-      _reminderEntry.reminderTime,
+    // Create new reminder entry will add notification if it's today
+    Task _task = _taskVM.retrieveTaskById(_reminderEntry.taskId);
+    if (isToday(_task.startDate) || _task.startDate.isBefore(DateTime.now())) {
+      await _notificationHandler.createNotification(
+        _reminderEntry.id,
+        _task.name,
+        _reminderEntry.reminderTime,
+      );
+    }
+    _notifiers.addNotifierValue(
+      _reminderEntriesNotifierType,
+      _reminderEntry.toMap(),
     );
 
     print("Reminder Entries - ${_toListOfMap()}");
@@ -125,13 +139,14 @@ class ReminderEntryVM {
   /// Below are the fields that can be updated:
   /// - `REMINDER_ENTRY_TASK_ID`
   /// - `REMINDER_ENTRY_TIME`
+  /// - `REMINDER_ENTRY_TEMP_OFF_DATE`
   ///
   /// Return the updated reminderEntry
   ///
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
-  ReminderEntry updateReminderEntry(
-      String id, Map<String, dynamic> jsonToUpdate) {
+  Future<ReminderEntry> updateReminderEntry(
+      String id, Map<String, dynamic> jsonToUpdate) async {
     int _index = _currentReminderEntries
         .indexWhere((reminderEntry) => reminderEntry.id == id);
     // if (_index == -1) // do some alert
@@ -143,6 +158,43 @@ class ReminderEntryVM {
     _general.updateBoxItem(
         _boxType, _updatedReminderEntry.id, _updatedReminderEntry);
 
+    _notifiers.updateNotifierValue(
+        _reminderEntriesNotifierType, _updatedReminderEntry.toMap());
+
+
+    /// IF status == true:
+    ///   IF off reminder today:
+    ///     cancel today reminder
+    ///   ELSE:
+    ///     IF task is change to start today OR before today:
+    ///       update the current notification time
+    ///     ELSE:
+    ///       cancel today reminder
+    /// ELSE:
+    ///   cancel today reminder
+    if (_updatedReminderEntry.status) {
+      if (_updatedReminderEntry.tempOffDate != null &&
+          isToday(_updatedReminderEntry.tempOffDate)) {
+        await _notificationHandler.cancelNotification(_updatedReminderEntry.id);
+      } else {
+        Task currentTask =
+            _taskVM.retrieveTaskById(_updatedReminderEntry.taskId);
+        if (isToday(currentTask.startDate) ||
+            currentTask.startDate.isBefore(DateTime.now())) {
+          await _notificationHandler.updateNotification(
+            _updatedReminderEntry.id,
+            currentTask.name,
+            _updatedReminderEntry.reminderTime,
+          );
+        } else {
+          await _notificationHandler
+              .cancelNotification(_updatedReminderEntry.id);
+        }
+      }
+    } else {
+      await _notificationHandler.cancelNotification(_updatedReminderEntry.id);
+    }
+
     print("Reminder Entries - ${_toListOfMap()}");
     print(
         "Reminder Entries Notifier - ${_notifiers.getReminderEntriesNotifier().value}");
@@ -151,11 +203,19 @@ class ReminderEntryVM {
 
   /// **Delete ReminderEntry** (`D` in CRUD)
   ///
-  /// Call this function when need to delete reminderEntry
-  void deleteReminderEntry(String id) {
-    _currentReminderEntries
-        .removeWhere((reminderEntry) => reminderEntry.id == id);
-    _general.deleteBoxItem(_boxType, id);
+  /// Call this function when need to delete reminderEntry when deleting task
+  Future<void> deleteReminderEntry(String taskId) async {
+    ReminderEntry removedReminderEntry = _currentReminderEntries.singleWhere(
+      (reminderEntry) => reminderEntry.taskId == taskId,
+    );
+    _general.deleteBoxItem(_boxType, removedReminderEntry.id);
+
+    _notifiers.removeOrDeductNotifierValue(
+      _reminderEntriesNotifierType,
+      removedReminderEntry.id,
+    );
+
+    await _notificationHandler.cancelNotification(removedReminderEntry.id);
 
     print("Reminder Entries - ${_toListOfMap()}");
     print(
