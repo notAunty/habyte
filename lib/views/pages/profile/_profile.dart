@@ -21,37 +21,35 @@ class ProfilePage extends StatelessWidget {
       builder: (context, userName, userAbout) {
         return Scaffold(
           body: SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: SIDE_PADDING, vertical: TOP_PADDING),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const ProfileHeader(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const ProfilePictureHolder(radius: 64),
-                        const SizedBox(height: TOP_PADDING),
-                        Text(
-                          userName,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: TOP_PADDING),
-                    ProfileAbout(about: userAbout,),
-                    const SizedBox(height: TOP_PADDING),
-                    const Divider(),
-                    const SizedBox(height: TOP_PADDING),
-                    const ProfileSettings(),
-                    const Divider(),
-                    const SizedBox(height: TOP_PADDING),
-                    ProfileReminders(),
-                  ],
-                ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: SIDE_PADDING, vertical: TOP_PADDING),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const ProfileHeader(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const ProfilePictureHolder(radius: 64),
+                      const SizedBox(height: TOP_PADDING),
+                      Text(
+                        userName,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: TOP_PADDING),
+                  ProfileAbout(about: userAbout,),
+                  const SizedBox(height: TOP_PADDING),
+                  const Divider(),
+                  const SizedBox(height: TOP_PADDING),
+                  const ProfileSettings(),
+                  const Divider(),
+                  const SizedBox(height: TOP_PADDING),
+                  ProfileReminders(),
+                ],
               ),
             ),
           ),
