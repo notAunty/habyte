@@ -23,13 +23,14 @@ class ReminderEntryAdapter extends TypeAdapter<ReminderEntry> {
       // Since hive doesnt support TimeOfDay, 
       // & we store it as DateTime,
       // so we need to convert it back to TimeOfDay
-      ..reminderTime = dateTimeToTimeOfDay(fields[3]);
+      ..reminderTime = dateTimeToTimeOfDay(fields[3])
+      ..tempOffDate = fields[4];
   }
 
   @override
   void write(BinaryWriter writer, ReminderEntry obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -39,7 +40,9 @@ class ReminderEntryAdapter extends TypeAdapter<ReminderEntry> {
       ..writeByte(3)
       // Since hive doesnt support TimeOfDay, 
       // so we store it as DateTime instead
-      ..write(timeOfDayToDateTime(obj.reminderTime));
+      ..write(timeOfDayToDateTime(obj.reminderTime))
+      ..writeByte(4)
+      ..write(obj.tempOffDate);
   }
 
   @override
