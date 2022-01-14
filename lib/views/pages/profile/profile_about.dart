@@ -13,7 +13,7 @@ class ProfileAbout extends StatelessWidget {
       children: [
         Text('About'.toUpperCase(), style: Theme.of(context).textTheme.overline),
         const SizedBox(height: TOP_PADDING),
-        Text(about),
+        Text(about != "null" ? about : "About is currently empty"),
       ],
     );
   }
