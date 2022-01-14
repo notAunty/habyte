@@ -3,9 +3,10 @@ import 'package:habyte/utils/date_time.dart';
 import 'package:intl/intl.dart';
 
 Future<Map<String, dynamic>> showCalendar(BuildContext context,
-    {DateTime? startDate}) async {
+    {required DateTime? startDate, bool isStartDate=true}) async {
   Map<String, dynamic> toReturn = {};
-  DateTime dateRange = startDate ?? DateTime.now();
+  DateTime dateRange =
+      isStartDate ? DateTime.now() : startDate ?? DateTime.now();
 
   await showDatePicker(
     context: context,
@@ -25,7 +26,8 @@ Future<Map<String, dynamic>> showCalendar(BuildContext context,
     },
   ).then((date) {
     toReturn['date'] = date;
-    toReturn['dateInputText'] = date != null ? DateFormat('yyyy-MM-dd').format(date) : '';
+    toReturn['dateInputText'] =
+        date != null ? DateFormat('yyyy-MM-dd').format(date) : '';
     // if (endDate != null && endDate!.compareTo(startDate!) < 0) {
     //   endDate = null;
     //   endDateInput.text = '';
@@ -35,11 +37,12 @@ Future<Map<String, dynamic>> showCalendar(BuildContext context,
   return toReturn;
 }
 
-Future<Map<String, dynamic>> showTimeInput(BuildContext context) async {
+Future<Map<String, dynamic>> showTimeInput(BuildContext context,
+    {TimeOfDay? tod}) async {
   Map<String, dynamic> toReturn = {};
   await showTimePicker(
     context: context,
-    initialTime: const TimeOfDay(hour: 8, minute: 0),
+    initialTime: tod ?? TimeOfDay.now(),
     initialEntryMode: TimePickerEntryMode.dial,
     builder: (context, child) {
       return Theme(
@@ -52,8 +55,9 @@ Future<Map<String, dynamic>> showTimeInput(BuildContext context) async {
       );
     },
   ).then((time) {
-    toReturn['timeOfDay'] = time;
-    toReturn['timeOfDayInputText'] = time != null ? timeOfDayFormatter(time) : '';
+    toReturn['timeOfDay'] = time ?? TimeOfDay.now();
+    toReturn['timeOfDayInputText'] =
+        timeOfDayFormatter(time ?? TimeOfDay.now());
   });
 
   return toReturn;
