@@ -52,6 +52,21 @@ class TaskEdit extends StatelessWidget {
         REMINDER_ENTRY_STATUS: _reminderBool,
       };
 
+  void showErrorMessage(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Ok"),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isValid() => _formKey.currentState!.validate();
@@ -78,6 +93,7 @@ class TaskEdit extends StatelessWidget {
         _reminderTod = _reminderEntry.reminderTime;
       } else {
         _reminderTodController = TextEditingController();
+
         _reminderBool = false;
         _reminderTod = null;
       }
@@ -88,8 +104,9 @@ class TaskEdit extends StatelessWidget {
       _endDateController = TextEditingController();
       _reminderTodController = TextEditingController();
 
-      _reminderBool = false;
+      _startDate = null;
       _endDate = null;
+      _reminderBool = false;
       _reminderTod = null;
     }
 
@@ -108,43 +125,63 @@ class TaskEdit extends StatelessWidget {
                       if (_reminderEntry.id != NULL_STRING_PLACEHOLDER &&
                           _reminderTod == null)
                         {
-                          context.read<GlobalScaffold>().showDefaultSnackbar(
-                              message:
-                                  "Cannot set NULL value to existing reminder"),
+                          showErrorMessage(
+                            context,
+                            "Cannot set NULL value to existing reminder",
+                          )
                         }
                       else
-                        _task = _taskVM.updateTask(
-                          taskId!,
-                          getTaskDetailsFromControllers(),
-                        ),
-                      if (_reminderTod != null)
                         {
-                          if (_reminderEntry.id != NULL_STRING_PLACEHOLDER)
+                          _task = _taskVM.updateTask(
+                            taskId!,
+                            getTaskDetailsFromControllers(),
+                          ),
+                          if (_reminderBool && _reminderTod == null)
                             {
-                              _reminderEntryVM.updateReminderEntry(
-                                _reminderEntry.id,
-                                getReminderEntryDetailsFromControllers(
-                                  _task.id,
+                              showErrorMessage(
+                                  context, "Reminder time cannot be NULL"),
+                            }
+                          else if (_reminderTod != null)
+                            {
+                              if (_reminderEntry.id != NULL_STRING_PLACEHOLDER)
+                                {
+                                  _reminderEntryVM.updateReminderEntry(
+                                    _reminderEntry.id,
+                                    getReminderEntryDetailsFromControllers(
+                                      _task.id,
+                                    ),
+                                  ),
+                                }
+                              else
+                                _reminderEntryVM.createReminderEntry(
+                                  getReminderEntryDetailsFromControllers(
+                                    _task.id,
+                                  ),
                                 ),
-                              ),
+                              Navigator.of(context).pop(),
                             }
                           else
-                            _reminderEntryVM.createReminderEntry(
-                              getReminderEntryDetailsFromControllers(
-                                _task.id,
-                              ),
-                            ),
-                        },
-                      Navigator.of(context).pop(),
+                            Navigator.of(context).pop(),
+                        }
                     }
                   : {
                       _task =
                           _taskVM.createTask(getTaskDetailsFromControllers()),
-                      if (_reminderTod != null)
-                        _reminderEntryVM.createReminderEntry(
-                          getReminderEntryDetailsFromControllers(_task.id),
-                        ),
-                      Navigator.of(context).pop(),
+                      if (_reminderBool)
+                        {
+                          if (_reminderTod == null)
+                            {
+                              showErrorMessage(
+                                  context, "Reminder time cannot be NULL"),
+                            }
+                          else
+                            _reminderEntryVM.createReminderEntry(
+                              getReminderEntryDetailsFromControllers(_task.id),
+                            ),
+                          Navigator.of(context).pop(),
+                        }
+                      else
+                        Navigator.of(context).pop(),
                     }
               : {},
           child: const Text('Done'),
@@ -185,10 +222,16 @@ class TaskEdit extends StatelessWidget {
                   readOnly: true,
                   controller: _startDateController,
                   onTap: () async {
-                    Map<String, dynamic> startDateMap =
-                        await showCalendar(context);
+                    Map<String, dynamic> startDateMap = await showCalendar(
+                      context,
+                      startDate: _startDate,
+                    );
                     _startDate = startDateMap['date'];
                     _startDateController.text = startDateMap['dateInputText'];
+                    if (_startDate == null) {
+                      _endDate = null;
+                      _endDateController.text = '';
+                    }
                   },
                 ),
               ),
@@ -200,12 +243,17 @@ class TaskEdit extends StatelessWidget {
                   controller: _endDateController,
                   readOnly: true,
                   onTap: () async {
-                    Map<String, dynamic> endDateMap = await showCalendar(
-                      context,
-                      startDate: _startDate,
-                    );
-                    _endDate = endDateMap['date'];
-                    _endDateController.text = endDateMap['dateInputText'];
+                    if (_startDate == null) {
+                      showErrorMessage(
+                          context, "Please select start date first.");
+                    } else {
+                      Map<String, dynamic> endDateMap = await showCalendar(
+                          context,
+                          startDate: _startDate,
+                          isStartDate: false);
+                      _endDate = endDateMap['date'];
+                      _endDateController.text = endDateMap['dateInputText'];
+                    }
                   },
                 ),
               ),
@@ -236,7 +284,10 @@ class TaskEdit extends StatelessWidget {
                                 controller: _reminderTodController,
                                 onTap: () async {
                                   Map<String, dynamic> reminderTodMap =
-                                      await showTimeInput(context);
+                                      await showTimeInput(
+                                    context,
+                                    tod: _reminderTod,
+                                  );
                                   _reminderTod = reminderTodMap['timeOfDay'];
                                   _reminderTodController.text =
                                       reminderTodMap['timeOfDayInputText'];

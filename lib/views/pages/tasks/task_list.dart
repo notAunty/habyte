@@ -3,7 +3,7 @@ import 'package:habyte/viewmodels/notifiers.dart';
 import 'package:habyte/viewmodels/task.dart';
 import 'package:habyte/views/constant/sizes.dart';
 import 'package:habyte/views/pages/tasks/task_edit.dart';
-import 'package:habyte/views/widgets/task_item.dart';
+import 'package:habyte/views/pages/tasks/task_item.dart';
 
 class TaskList extends StatelessWidget {
   TaskList({Key? key}) : super(key: key);
