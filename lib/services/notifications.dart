@@ -33,7 +33,7 @@ class NotificationHandler {
   Future init(List<ReminderEntry> reminderEntries) async {
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
     await flutterLocalNotificationsPlugin.initialize(
       const InitializationSettings(android: initializationSettingsAndroid),
       onSelectNotification: (payload) => main(),
