@@ -8,14 +8,9 @@ import 'package:habyte/views/pages/rewards/reward_item.dart';
 import 'package:habyte/views/pages/share/initiate_share_card.dart';
 import 'package:habyte/views/widgets/share_reward_card.dart';
 
-class RewardList extends StatefulWidget {
-  const RewardList({Key? key}) : super(key: key);
+class RewardList extends StatelessWidget {
+  RewardList({Key? key}) : super(key: key);
 
-  @override
-  State<RewardList> createState() => _RewardListState();
-}
-
-class _RewardListState extends State<RewardList> {
   final RewardVM _rewardVM = RewardVM.getInstance();
   final Notifiers _notifiers = Notifiers.getInstance();
 
@@ -26,7 +21,7 @@ class _RewardListState extends State<RewardList> {
         isUpdate: true,
         rewardId: rewardId,
       ),
-    ).then((_) => setState(() {}));
+    );
   }
 
   void onTapReward(context, String rewardId, String name, int point) {
@@ -80,14 +75,13 @@ class _RewardListState extends State<RewardList> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.only(bottom: TOP_PADDING * 3),
-        child: ValueListenableBuilder<Object>(
+        child: ValueListenableBuilder<List<Map<String, dynamic>>>(
           valueListenable: _notifiers.getAvailableRewardsNotifier(),
           builder: (context, availableRewardlist, _) {
             return ListView.separated(
               primary: false,
               shrinkWrap: true,
-              itemCount:
-                  (availableRewardlist as List<Map<String, dynamic>>).length,
+              itemCount: availableRewardlist.length,
               separatorBuilder: (context, index) => const SizedBox(height: 8.0),
               padding: const EdgeInsets.symmetric(
                 vertical: 16,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habyte/views/constant/colors.dart';
-import 'package:habyte/views/widgets/task_item.dart';
+import 'package:habyte/views/pages/tasks/task_item.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class ViewTask extends StatefulWidget {

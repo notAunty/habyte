@@ -5,6 +5,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
 import 'package:habyte/views/constant/colors.dart';
+import 'package:habyte/views/pages/tasks/add_tasks.dart';
 import 'package:habyte/views/widgets/animated_indexed_stack.dart';
 
 import 'package:habyte/views/pages/dashboard/_dashboard.dart';
@@ -52,7 +53,7 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     _onFabClicked = [
       null,
-      null, // TODO: add task onClicked goes here
+      onAddTasksPressed, // TODO: add task onClicked goes here
       onAddRewardsPressed,
       null,
     ];

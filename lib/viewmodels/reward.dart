@@ -30,7 +30,6 @@ class RewardVM {
   /// to insert the data stored.
   void setCurrentRewards(List<Reward> rewardList) {
     _currentRewards = rewardList;
-    print(_toListOfMap());
     Map<String, List<Map<String, dynamic>>> splitRewards =
         _splitAvailableRedeemedInListOfMap();
     if (splitRewards[REWARD_AVAILABLE] != null) {
@@ -45,6 +44,12 @@ class RewardVM {
             _redeemedRewardsNotifierType, splitRewards[REWARD_REDEEMED]![i]);
       }
     }
+
+    print("Rewards - ${_toListOfMap()}");
+    print(
+        "Rewards Notifier (Available) - ${_notifiers.getAvailableRewardsNotifier().value}");
+    print(
+        "Rewards Notifier (Redeemed) - ${_notifiers.getRedeemedRewardsNotifier().value}");
   }
 
   /// **Create Reward** (`C` in CRUD)
@@ -60,13 +65,18 @@ class RewardVM {
   /// **Remark:** Above keys are gotten from `constant.dart`. Kindly import
   /// from there
   Reward createReward(Map<String, dynamic> rewardJson) {
-    Reward _reward = Reward.fromJson(rewardJson);
+    Reward _reward = Reward.createFromJson(rewardJson);
     _reward.id = _general.getBoxItemNewId(_boxType);
     _currentRewards.add(_reward);
     _general.addBoxItem(_boxType, _reward.id, _reward);
 
     _notifiers.addNotifierValue(_availableRewardsNotifierType, _reward.toMap());
 
+    print("Rewards - ${_toListOfMap()}");
+    print(
+        "Rewards Notifier (Available) - ${_notifiers.getAvailableRewardsNotifier().value}");
+    print(
+        "Rewards Notifier (Redeemed) - ${_notifiers.getRedeemedRewardsNotifier().value}");
     return _reward;
   }
 
@@ -133,7 +143,7 @@ class RewardVM {
   /// Parameter required: `id` from `Reward`.
   Reward retrieveRewardById(String id) => _currentRewards.singleWhere(
         (reward) => reward.id == id,
-        orElse: () => Reward().nullClass(),
+        orElse: () => Reward.nullClass(),
       );
 
   /// **Update Reward** (`U` in CRUD)
@@ -156,13 +166,17 @@ class RewardVM {
       ..._currentRewards[_index].toMap(),
       ...jsonToUpdate,
     });
-    _updatedReward.id = id;
     _currentRewards[_index] = _updatedReward;
     _general.updateBoxItem(_boxType, _updatedReward.id, _updatedReward);
 
     _notifiers.updateNotifierValue(
         _availableRewardsNotifierType, _updatedReward.toMap());
 
+    print("Rewards - ${_toListOfMap()}");
+    print(
+        "Rewards Notifier (Available) - ${_notifiers.getAvailableRewardsNotifier().value}");
+    print(
+        "Rewards Notifier (Redeemed) - ${_notifiers.getRedeemedRewardsNotifier().value}");
     return _updatedReward;
   }
 
@@ -176,6 +190,11 @@ class RewardVM {
 
     _notifiers.removeOrDeductNotifierValue(
         _availableRewardsNotifierType, deletedReward.toMap());
+    print("Rewards - ${_toListOfMap()}");
+    print(
+        "Rewards Notifier (Available) - ${_notifiers.getAvailableRewardsNotifier().value}");
+    print(
+        "Rewards Notifier (Redeemed) - ${_notifiers.getRedeemedRewardsNotifier().value}");
   }
 
   /// Call this function when user redeem the reward
@@ -187,8 +206,7 @@ class RewardVM {
     Reward redeemedReward = updateReward(id, {REWARD_AVAILABLE: false});
 
     print(_toListOfMap());
-    _notifiers.removeOrDeductNotifierValue(
-        _availableRewardsNotifierType, redeemedReward.toMap());
+    _notifiers.removeOrDeductNotifierValue(_availableRewardsNotifierType, id);
     _notifiers.addNotifierValue(
         _redeemedRewardsNotifierType, redeemedReward.toMap());
     return true;

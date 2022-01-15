@@ -16,14 +16,13 @@ class RewardListRedeemed extends StatelessWidget {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.only(bottom: TOP_PADDING * 3),
-        child: ValueListenableBuilder<Object>(
+        child: ValueListenableBuilder<List<Map<String, dynamic>>>(
           valueListenable: _notifiers.getRedeemedRewardsNotifier(),
           builder: (context, redeemedRewardlist, _) {
             return ListView.separated(
               primary: false,
               shrinkWrap: true,
-              itemCount:
-                  (redeemedRewardlist as List<Map<String, dynamic>>).length,
+              itemCount: redeemedRewardlist.length,
               separatorBuilder: (context, index) => const SizedBox(height: 8.0),
               padding: const EdgeInsets.symmetric(
                 vertical: 16,

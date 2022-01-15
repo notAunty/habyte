@@ -25,8 +25,10 @@ String getDayOfMonthSuffix(int dayNum) {
 String dateFormatter(DateTime dt) =>
     DateFormat("d'${getDayOfMonthSuffix(dt.day)}' MMMM yyyy").format(dt);
 
-String dateFormatterWithYYYYMMDD(DateTime dt) =>
-    DateFormat("yyyy-MM-dd").format(dt);
+String dateFormatterWithYYYYMMDD(DateTime? dt) {
+  if (dt == null) return '';
+  return DateFormat("yyyy-MM-dd").format(dt);
+}
 
 String timeOfDayFormatter(TimeOfDay tod) {
   final now = DateTime.now();
@@ -41,4 +43,12 @@ bool isToday(DateTime? date) {
   DateTime now = DateTime.now();
   DateTime nowWithoutHourMinute = DateTime(now.year, now.month, now.day);
   return dateWithoutHourMinute.isAtSameMomentAs(nowWithoutHourMinute);
+}
+
+DateTime timeOfDayToDateTime(TimeOfDay tod) {
+  return DateTime(1969, 1, 1, tod.hour, tod.minute);
+}
+
+TimeOfDay dateTimeToTimeOfDay(DateTime dateTime) {
+  return TimeOfDay.fromDateTime(dateTime);
 }

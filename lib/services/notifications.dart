@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:habyte/main.dart';
 import 'package:habyte/models/reminderEntry.dart';
+import 'package:habyte/models/task.dart';
 import 'package:habyte/models/taskEntry.dart';
 import 'package:habyte/utils/date_time.dart';
 import 'package:habyte/viewmodels/task.dart';
@@ -18,7 +19,11 @@ import 'package:timezone/data/latest.dart' as tz;
 class NotificationHandler {
   static final NotificationHandler _notificationHandler =
       NotificationHandler._internal();
-  NotificationHandler._internal();
+  NotificationHandler._internal() {
+    _configureLocalTimeZone();
+
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  }
 
   /// Get the `NotificationHandler`
   factory NotificationHandler.getInstance() => _notificationHandler;
@@ -26,9 +31,6 @@ class NotificationHandler {
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   Future init(List<ReminderEntry> reminderEntries) async {
-    _configureLocalTimeZone();
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon');
@@ -40,21 +42,34 @@ class NotificationHandler {
     await flutterLocalNotificationsPlugin.cancelAll();
     for (ReminderEntry reminderEntry in reminderEntries) {
       if (reminderEntry.status) {
-        TaskEntry? latestTaskEntry = TaskEntryVM.getInstance()
-            .getLatestTaskEntryByTaskId(reminderEntry.taskId);
-        if (latestTaskEntry.id == NULL_STRING_PLACEHOLDER) {
-          latestTaskEntry = null;
+        Task task = TaskVM.getInstance().retrieveTaskById(reminderEntry.taskId);
+
+        if (reminderEntry.tempOffDate != null &&
+            isToday(reminderEntry.tempOffDate)) {
+          print("${task.name} is off today, so no notification assigned");
+          continue;
         }
-        if (latestTaskEntry != null) {
-          // If same year, same month, same day, then means already done for that day
-          if (isToday(latestTaskEntry.completedDate)) {
-            continue;
+        if (isToday(task.startDate) ||
+            task.startDate.isBefore(DateTime.now())) {
+          TaskEntry? latestTaskEntry = TaskEntryVM.getInstance()
+              .getLatestTaskEntryByTaskId(reminderEntry.taskId);
+          if (latestTaskEntry.id == NULL_STRING_PLACEHOLDER) {
+            latestTaskEntry = null;
           }
-        }
-        await createNotification(
+          if (latestTaskEntry != null) {
+            // If same year, same month, same day, then means already done for that day
+            if (isToday(latestTaskEntry.completedDate)) {
+              continue;
+            }
+          }
+          await createNotification(
             reminderEntry.id,
-            TaskVM.getInstance().retrieveTaskById(reminderEntry.taskId).name,
-            reminderEntry.reminderTime);
+            task.name,
+            reminderEntry.reminderTime,
+          );
+        } else {
+          print("${task.name} is not yet start, so no notification assigned");
+        }
       }
     }
     // await createNotification('T0003', 'Testing Title', 'Testing Body', const TimeOfDay(hour: 17, minute: 13));

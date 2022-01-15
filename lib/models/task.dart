@@ -23,8 +23,15 @@ class Task {
 
   Task();
 
-  Task.fromJson(Map<String, dynamic> json)
+  Task.createFromJson(Map<String, dynamic> json)
       : name = json[TASK_NAME],
+        points = json[TASK_POINTS],
+        startDate = json[TASK_START_DATE],
+        endDate = json[TASK_END_DATE];
+
+  Task.fromJson(Map<String, dynamic> json)
+      : id = json[TASK_ID],
+        name = json[TASK_NAME],
         points = json[TASK_POINTS],
         startDate = json[TASK_START_DATE],
         endDate = json[TASK_END_DATE];
@@ -37,9 +44,9 @@ class Task {
         TASK_END_DATE: endDate
       };
 
-  Task nullClass() => Task()
-    ..id = NULL_STRING_PLACEHOLDER
-    ..name = NULL_STRING_PLACEHOLDER
-    ..points = NULL_INT_PLACEHOLDER
-    ..startDate = DateTime.now();
+  Task.nullClass()
+      : id = NULL_STRING_PLACEHOLDER,
+        name = NULL_STRING_PLACEHOLDER,
+        points = NULL_INT_PLACEHOLDER,
+        startDate = DateTime.now();
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:habyte/models/user.dart';
 import 'package:habyte/viewmodels/general.dart';
 import 'package:habyte/viewmodels/notifiers.dart';
@@ -23,7 +22,8 @@ class UserVM {
   final General _general = General.getInstance();
   final BoxType _boxType = BoxType.main;
   final Notifiers _notifiers = Notifiers.getInstance();
-  final NotifierType _nameNotifierType = NotifierType.userNme;
+  final NotifierType _nameNotifierType = NotifierType.userName;
+  final NotifierType _aboutNotifierType = NotifierType.userAbout;
   final NotifierType _scoreNotifierType = NotifierType.userScore;
   final NotifierType _pointNotifierType = NotifierType.userPoint;
   final String _key = BOX_USER;
@@ -37,8 +37,16 @@ class UserVM {
     _tempUserJson = _currentUser!.toMap();
     _notifiers.updateNotifierValue(_nameNotifierType,
         '${_currentUser!.firstName} ${_currentUser!.lastName}');
+    _notifiers.updateNotifierValue(
+        _aboutNotifierType, _currentUser!.about.toString());
     _notifiers.updateNotifierValue(_scoreNotifierType, _currentUser!.scores);
     _notifiers.updateNotifierValue(_pointNotifierType, _currentUser!.points);
+
+    print("User - $userJson");
+    print("User Notifier (Name) - ${_notifiers.getNameNotifier().value}");
+    print("User Notifier (About) - ${_notifiers.getAboutNotifier().value}");
+    print("User Notifier (Score) - ${_notifiers.getScoreNotifier().value}");
+    print("User Notifier (Point) - ${_notifiers.getPointNotifier().value}");
   }
 
   /// Add temp user data, since multiple pages for user registration
@@ -70,8 +78,11 @@ class UserVM {
     setCurrentUser(_tempUserJson);
     _general.addBoxItem(_boxType, _key, _tempUserJson);
 
-    _notifiers.updateNotifierValue(_nameNotifierType,
-        '${_tempUserJson[USER_FIRST_NAME]} ${_tempUserJson[USER_LAST_NAME]}');
+    print("User - ${_currentUser!.toMap()}");
+    print("User Notifier (Name) - ${_notifiers.getNameNotifier().value}");
+    print("User Notifier (About) - ${_notifiers.getAboutNotifier().value}");
+    print("User Notifier (Score) - ${_notifiers.getScoreNotifier().value}");
+    print("User Notifier (Point) - ${_notifiers.getPointNotifier().value}");
   }
 
   /// **Retrieve User** (`R` in CRUD)
@@ -97,6 +108,14 @@ class UserVM {
 
     _notifiers.updateNotifierValue(_nameNotifierType,
         '${_currentUser!.firstName} ${_currentUser!.lastName}');
+    _notifiers.updateNotifierValue(
+        _aboutNotifierType, _currentUser!.about.toString());
+
+    print("User - ${_currentUser!.toMap()}");
+    print("User Notifier (Name) - ${_notifiers.getNameNotifier().value}");
+    print("User Notifier (About) - ${_notifiers.getAboutNotifier().value}");
+    print("User Notifier (Score) - ${_notifiers.getScoreNotifier().value}");
+    print("User Notifier (Point) - ${_notifiers.getPointNotifier().value}");
   }
 
   /// **Delete User** (`D` in CRUD)
@@ -110,6 +129,13 @@ class UserVM {
     _general.deleteBoxItem(_boxType, _key);
 
     _notifiers.updateNotifierValue(_nameNotifierType, '');
+    _notifiers.updateNotifierValue(_aboutNotifierType, '');
+
+    print("User - ${_currentUser!.toMap()}");
+    print("User Notifier (Name) - ${_notifiers.getNameNotifier().value}");
+    print("User Notifier (About) - ${_notifiers.getAboutNotifier().value}");
+    print("User Notifier (Score) - ${_notifiers.getScoreNotifier().value}");
+    print("User Notifier (Point) - ${_notifiers.getPointNotifier().value}");
   }
 
   /// This function is used to add score whenever user done taskEntry.

@@ -20,8 +20,14 @@ class Reward {
 
   Reward();
 
-  Reward.fromJson(Map<String, dynamic> json)
+  Reward.createFromJson(Map<String, dynamic> json)
       : name = json[REWARD_NAME],
+        points = json[REWARD_POINTS],
+        available = json[REWARD_AVAILABLE];
+
+  Reward.fromJson(Map<String, dynamic> json)
+      : id = json[REWARD_ID],
+        name = json[REWARD_NAME],
         points = json[REWARD_POINTS],
         available = json[REWARD_AVAILABLE];
 
@@ -32,9 +38,9 @@ class Reward {
         REWARD_AVAILABLE: available
       };
 
-  Reward nullClass() => Reward()
-    ..id = NULL_STRING_PLACEHOLDER
-    ..name = NULL_STRING_PLACEHOLDER
-    ..points = NULL_INT_PLACEHOLDER
-    ..available = NULL_BOOL_PLACEHOLDER;
+  Reward.nullClass()
+      : id = NULL_STRING_PLACEHOLDER,
+        name = NULL_STRING_PLACEHOLDER,
+        points = NULL_INT_PLACEHOLDER,
+        available = NULL_BOOL_PLACEHOLDER;
 }

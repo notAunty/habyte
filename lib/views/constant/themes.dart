@@ -135,7 +135,7 @@ final lightTheme = ThemeData(
     ),
     overline: TextStyle(
       fontFamily: "Poppins",
-      color: BLACK_01,
+      color: BLACK_02,
       height: 1.15,
     ),
   ),

@@ -6,9 +6,9 @@ import 'package:habyte/views/constant/constants.dart';
 import 'package:habyte/views/widgets/text_fields.dart';
 
 class EditProfilePage extends StatelessWidget {
-  EditProfilePage({Key? key, required this.setState}) : super(key: key);
+  EditProfilePage({Key? key}) : super(key: key);
+  // EditProfilePage({Key? key, required this.setState}) : super(key: key);
 
-  final Function setState;
   final GlobalKey<FormState> _formKey = GlobalKey();
   final UserVM _userVM = UserVM.getInstance();
 
@@ -81,10 +81,8 @@ class EditProfilePage extends StatelessWidget {
                   child: ElevatedButton(
                     child: const Text('Done'),
                     onPressed: () {
-                      setState(() {
-                        _userVM.updateUser(_userVM.retrieveTempUserJson());
-                        Navigator.pop(context);
-                      });
+                      _userVM.updateUser(_userVM.retrieveTempUserJson());
+                      Navigator.pop(context);
                     },
                   ),
                 ),
