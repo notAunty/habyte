@@ -184,12 +184,10 @@ class RewardVM {
   ///
   /// Call this function when need to delete reward
   void deleteReward(String id) {
-    int index = _currentRewards.indexWhere((reward) => reward.id == id);
-    Reward deletedReward = _currentRewards.removeAt(index);
+    _currentRewards.removeWhere((reward) => reward.id == id);
     _general.deleteBoxItem(_boxType, id);
 
-    _notifiers.removeOrDeductNotifierValue(
-        _availableRewardsNotifierType, deletedReward.toMap());
+    _notifiers.removeOrDeductNotifierValue(_availableRewardsNotifierType, id);
     print("Rewards - ${_toListOfMap()}");
     print(
         "Rewards Notifier (Available) - ${_notifiers.getAvailableRewardsNotifier().value}");

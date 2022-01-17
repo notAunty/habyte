@@ -42,7 +42,10 @@ class RewardEdit extends StatelessWidget {
       actions: <Widget>[
         if (isUpdate)
           TextButton(
-            onPressed: () => _rewardVM.deleteReward(rewardId!),
+            onPressed: () {
+              _rewardVM.deleteReward(rewardId!);
+              Navigator.of(context).pop();
+            },
             child: Text(
               'Delete',
               style: const TextStyle().copyWith(color: Colors.red),
