@@ -55,11 +55,6 @@ class CustomTextField extends StatelessWidget {
       autovalidateMode: alwaysValidate
           ? AutovalidateMode.always
           : AutovalidateMode.onUserInteraction,
-
-      // validator: (v) => (maxWords > 0 && v.split(' ').length > maxWords)
-      //   ? 'Text length is greater than $maxWords words.'
-      //   : null,
-
       validator: (String? str) {
         try {
           if (isRequired && (str == null || str.isEmpty)) {
@@ -113,12 +108,12 @@ class CustomTextField extends StatelessWidget {
       onChanged: onChanged,
       onTap: onTap,
       onEditingComplete: onEditingComplete,
-      buildCounter: (context,
-              {required currentLength, required isFocused, maxLength}) =>
-          (!isNumeric && maxWords > 0)
-              ? Text(
-                  '${controller.text.split(RegExp(r'\s')).length}/$maxWords word')
-              : Container(),
+      // buildCounter: (context,
+      //         {required currentLength, required isFocused, maxLength}) =>
+      //     (!isNumeric && maxWords > 0)
+      //         ? Text(
+      //             '${controller.text.split(RegExp(r'\s')).length}/$maxWords word')
+      //         : Container(),
     );
   }
 }
